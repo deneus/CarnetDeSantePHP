@@ -6,6 +6,7 @@ use Cloutier\PhpIpfsApi\IPFS;
 
 // PRE REQUIS
 // run > ipfs daemon (https://ipfs.io/docs/getting-started/)
+// web interface http://localhost:5001/webui
 
 // https://github.com/cloutier/php-ipfs-api
 // connect to ipfs daemon API server
