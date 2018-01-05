@@ -1,5 +1,8 @@
 {
     "require": {
         "cloutier/php-ipfs-api": "^0.0.6"
+    },
+    "autoload": {
+        "psr-4": {"HealthChain\\": "src/"}
     }
 }

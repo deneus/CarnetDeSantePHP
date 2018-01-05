@@ -1,8 +1,16 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css"
+              integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
+    </head>
+
+<body>
 <?php
 
 require __DIR__ . '/vendor/autoload.php';
 
 use Cloutier\PhpIpfsApi\IPFS;
+use HealthChain\modules\Home ;
 
 // PRE REQUIS
 // run > ipfs daemon (https://ipfs.io/docs/getting-started/)
@@ -10,6 +18,7 @@ use Cloutier\PhpIpfsApi\IPFS;
 
 // https://github.com/cloutier/php-ipfs-api
 // connect to ipfs daemon API server
+$GLOBALS['ipfs'] = new IPFS("localhost", "8080", "5001");
 $ipfs = new IPFS("localhost", "8080", "5001"); // leaving out the arguments will default to these values
 
 // Adds content to IPFS.
@@ -47,4 +56,14 @@ foreach ($obj as $e) {
 // print_r($ipfs->id());
 
 
+
+// --------------------------------------------------
+// Router.
+$page = new Home();
+$html = $page->outputHtml();
+echo $html;
+
 ?>
+</body>
+</html>
+
