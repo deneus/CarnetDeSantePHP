@@ -11,10 +11,13 @@ class Home implements ApplicationView
 
     private $ipfs;
 
+    private $hashes;
+
     public function __construct()
     {
         global $ipfs;
         $this->ipfs = $ipfs;
+        $this->hashes = $this->generateTestHashes();
     }
 
     /**
@@ -72,9 +75,7 @@ class Home implements ApplicationView
          </thead>';
         $html .= '<tbody>';
 
-        $testHash = $this->generateTestHashes();
-
-        foreach ($testHash as $hash) {
+        foreach ($this->hashes as $hash) {
             $who = 'TBD';
             $date = new \DateTime();
             // Remove 'a831rwxi1a3gzaorw1w2z49dlsor' at the end of the cat.
