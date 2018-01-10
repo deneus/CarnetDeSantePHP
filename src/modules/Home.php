@@ -78,12 +78,21 @@ class Home implements ApplicationView
         foreach ($this->hashes as $hash) {
             $who = 'TBD';
             $date = new \DateTime();
-            // Remove 'a831rwxi1a3gzaorw1w2z49dlsor' at the end of the cat.
-            // I still don't know why this key is displayed.
-            $comment = $this->ipfs->cat($hash);
-            $lastSpace = strrpos($comment, " ");
-            $comment = substr($comment, 0, $lastSpace);
 
+            $size = $this->ipfs->size($hash);
+            if ($size > 1000) {
+                // It's a file.
+                $comment = '<img src="data:image/jpeg;base64,'.base64_encode($this->ipfs->cat($hash)).'"/>';
+            }
+            else {
+                // It's some text.
+                // Remove 'a831rwxi1a3gzaorw1w2z49dlsor' at the end of the cat.
+                // I still don't know why this key is displayed.
+                $comment = $this->ipfs->cat($hash);
+                $lastSpace = strrpos($comment, " ");
+                $comment = substr($comment, 0, $lastSpace);
+            }
+            
             $html .= '<tr>';
             $html .= '<td>' . $who . '</td>';
             $html .= '<td>' . $date->format('d/m/o') . '</td>';
@@ -112,7 +121,21 @@ class Home implements ApplicationView
             //$loremIpsum = simplexml_load_file('http://www.lipsum.com/feed/xml?amount=1&what=paras&start=0')->lipsum;
             // Version 2.
             // Speed up the process of loading elements by avoiding calling lipsum feed.
-            $filename = 'tests/hash'.mt_rand(1,8).'.txt';
+
+            $typeNumber = mt_rand(1,2);
+            switch ($typeNumber) {
+                case 1:
+                    $name = 'hash';
+                    $extension = '.txt';
+                    break;
+                case 2:
+                    $name = 'image';
+                    $extension = '.jpg';
+                    break;
+            }
+
+
+            $filename = 'tests/'.$name.mt_rand(1,8).$extension;
             $text = file_get_contents($filename);
             $hash[] = $this->ipfs->add($text);
         }
