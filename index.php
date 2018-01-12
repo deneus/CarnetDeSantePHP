@@ -3,14 +3,33 @@
 require __DIR__ . '/vendor/autoload.php';
 
 use Cloutier\PhpIpfsApi\IPFS;
+use HealthChain\modules\accessDelegation;
 use HealthChain\modules\Home ;
+use HealthChain\modules\newEntry;
 
 $GLOBALS['ipfs'] = new IPFS("localhost", "8080", "5001");
 
 // --------------------------------------------------
-// @todo: Routing mecanism.
 // Router.
-$page = new Home();
+if (!isset($_GET['q'])) {
+    $_GET['q'] = 'home';
+}
+switch ($_GET['q']) {
+    case 'newEntry':
+        $page = new newEntry();
+        break;
+
+    case 'accessDelegation':
+        $page = new accessDelegation();
+        break;
+
+    case 'home':
+    default;
+        $page = new home();
+        break;
+
+}
+
 $content = $page->outputHtmlContent();
 $header = $page->outputHtmlHeader();
 
@@ -71,13 +90,16 @@ foreach ($obj as $e) {
         <link  rel="stylesheet" href="src/lib/dynatable/jquery.dynatable.css" §>
         <script type="application/javascript" src="src/lib/dynatable/vendor/jquery-1.7.2.min.js"></script>
         <script type="application/javascript" src="src/lib/dynatable/jquery.dynatable.js" ></script>
+        <!-- dropzone -->
+        <link  rel="stylesheet" href="src/layout/css/dropzone.css" §>
+        <script src="src/layout/js/dropzone.js"></script>
+        <!-- custom -->
+        <link rel="stylesheet" href="src/layout/css/global.css" />
     </head>
 
 <body>
 
-    <header class="row bg-info pt-5 pb-5 mb-3">
-        <?php echo $header; ?>
-    </header>
+    <?php echo $header; ?>
 
     <div class="row no-gutters ">
         <div class="col-10 offset-1">

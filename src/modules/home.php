@@ -2,10 +2,12 @@
 
 namespace HealthChain\modules;
 
+use DateTime;
 use HealthChain\interfaces\ApplicationView;
 use HealthChain\layout\LayoutTrait;
+use HealthChain\modules\classes\Entry;
 
-class Home implements ApplicationView
+class home implements ApplicationView
 {
     use LayoutTrait;
 
@@ -68,21 +70,24 @@ class Home implements ApplicationView
         $html = '<table id="listOfNotes" class="table table-sm table-hover table-striped">';
         $html .= '<thead class="thead-dark">
             <tr>
-                <th scope="col">Who</th>
-                <th scope="col">Date</th>
-                <th scope="col">Comment</th>
+                <th class="col-1">Date</th>
+                <th class="col-2">Who</th>
+                <th class="col-5">Comment</th>
+                <th class="col-2">Attachments</th>
             </tr>
          </thead>';
         $html .= '<tbody>';
 
         foreach ($this->hashes as $hash) {
-            $who = 'TBD';
-            $date = new \DateTime();
+
+            $entry = new Entry();
+            $entry->who = 'TBD';
+            $entry->date = new DateTime();
 
             $size = $this->ipfs->size($hash);
             if ($size > 1000) {
                 // It's a file.
-                $comment = '<img src="data:image/jpeg;base64,'.base64_encode($this->ipfs->cat($hash)).'"/>';
+                $entry->comment = '<img src="data:image/jpeg;base64,'.base64_encode($this->ipfs->cat($hash)).'"/>';
             }
             else {
                 // It's some text.
@@ -90,13 +95,14 @@ class Home implements ApplicationView
                 // I still don't know why this key is displayed.
                 $comment = $this->ipfs->cat($hash);
                 $lastSpace = strrpos($comment, " ");
-                $comment = substr($comment, 0, $lastSpace);
+                $entry->comment = substr($comment, 0, $lastSpace);
             }
-            
+
             $html .= '<tr>';
-            $html .= '<td>' . $who . '</td>';
-            $html .= '<td>' . $date->format('d/m/o') . '</td>';
-            $html .= '<td>' . $comment . '</td>';
+            $html .= '<td>' . $entry->renderDate() . '</td>';
+            $html .= '<td>' . $entry->who . '</td>';
+            $html .= '<td>' . $entry->comment . '</td>';
+            $html .= '<td>' . $entry->renderAttachments() . '</td>';
             $html .= '</tr>';
         }
 

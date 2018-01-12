@@ -1,0 +1,9 @@
+.dropzone {
+    border: 2px dashed #0087F7;
+    border-radius: 5px;
+    background: #F2F2F2;
+    min-height: 150px;
+    padding: 54px 54px;
+    box-sizing: border-box;
+    text-align: center;
+}
