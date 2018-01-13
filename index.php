@@ -6,6 +6,7 @@ use Cloutier\PhpIpfsApi\IPFS;
 use HealthChain\modules\accessDelegation;
 use HealthChain\modules\Home ;
 use HealthChain\modules\newEntry;
+use HealthChain\modules\Register;
 
 $GLOBALS['ipfs'] = new IPFS("localhost", "8080", "5001");
 
@@ -22,7 +23,12 @@ switch ($_GET['q']) {
     case 'accessDelegation':
         $page = new accessDelegation();
         break;
-
+    case 'login':
+        //TODO APU
+        break;
+    case 'register':
+        $page = new Register();
+        break;
     case 'home':
     default;
         $page = new home();

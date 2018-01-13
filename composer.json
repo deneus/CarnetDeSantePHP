@@ -1,6 +1,7 @@
 {
     "require": {
-        "cloutier/php-ipfs-api": "^0.0.6"
+        "cloutier/php-ipfs-api": "^0.0.6",
+        "neo-php/neo-php": "dev-master"
     },
     "autoload": {
         "psr-4": {"HealthChain\\": "src/"}

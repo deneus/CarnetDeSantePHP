@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "1f68bbcecd37d2029ac0932f77005886",
+    "content-hash": "50215c2896a8d769b78432bbd82a0f41",
     "packages": [
         {
             "name": "cloutier/php-ipfs-api",
@@ -48,12 +48,41 @@
                 "ipfs"
             ],
             "time": "2016-09-11T15:34:38+00:00"
+        },
+        {
+            "name": "neo-php/neo-php",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/CityOfZion/neo-php.git",
+                "reference": "816d6350ae0c34237d73777a72ebee0809e93618"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/CityOfZion/neo-php/zipball/816d6350ae0c34237d73777a72ebee0809e93618",
+                "reference": "816d6350ae0c34237d73777a72ebee0809e93618",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "NeoPHP\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Make requests to Neo RPC nodes on the Neo blockchain. Make asset transactions, read data from the Blockchain etc.",
+            "time": "2017-11-26T01:51:46+00:00"
         }
     ],
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "neo-php/neo-php": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],
