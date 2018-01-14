@@ -30,10 +30,6 @@ trait LayoutTrait
         <a class="" href="/HealthChainPHP/?q=accessDelegation">Access Delegation</a>
     </div>
 </nav>
-
-        
-        
-
 EOT;
         return $html;
     }
