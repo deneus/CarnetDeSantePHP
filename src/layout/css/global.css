@@ -32,3 +32,8 @@ body {
 body .table .thead-dark th{
     background-color: #333;
 }
+/*
+.form-group.required .form-control:after {
+    content:"*";
+    color:red;
+}*/

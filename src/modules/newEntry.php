@@ -30,6 +30,8 @@ class newEntry implements ApplicationView
     public function outputHtmlContent()
     {
         $entry = new Entry();
-        return $entry->renderAddForm();
+        $html = $entry->processPost();
+        $html .= $entry->renderAddForm();
+        return $html;
     }
 }
