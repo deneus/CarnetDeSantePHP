@@ -79,24 +79,12 @@ class home implements ApplicationView
         $html .= '<tbody>';
 
         foreach ($this->hashes as $hash) {
-
-            $entry = new Entry();
-            $entry->who = 'TBD';
-            $entry->date = new DateTime();
-
-            $size = $this->ipfs->size($hash);
-            if ($size > 1000) {
-                // It's a file.
-                $entry->comment = '<img src="data:image/jpeg;base64,'.base64_encode($this->ipfs->cat($hash)).'"/>';
+            // The hash is broken.
+            if ($hash === NULL) {
+                continue;
             }
-            else {
-                // It's some text.
-                // Remove 'a831rwxi1a3gzaorw1w2z49dlsor' at the end of the cat.
-                // I still don't know why this key is displayed.
-                $comment = $this->ipfs->cat($hash);
-                $lastSpace = strrpos($comment, " ");
-                $entry->comment = substr($comment, 0, $lastSpace);
-            }
+
+            $entry = new Entry($hash);
 
             $html .= '<tr>';
             $html .= '<td>' . $entry->renderDate() . '</td>';
@@ -128,7 +116,7 @@ class home implements ApplicationView
             // Version 2.
             // Speed up the process of loading elements by avoiding calling lipsum feed.
 
-            $typeNumber = mt_rand(1,2);
+            $typeNumber = mt_rand(1,1);
             switch ($typeNumber) {
                 case 1:
                     $name = 'hash';

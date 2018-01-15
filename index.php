@@ -9,6 +9,7 @@ use HealthChain\modules\newEntry;
 use HealthChain\modules\Register;
 
 $GLOBALS['ipfs'] = new IPFS("localhost", "8080", "5001");
+$GLOBALS['entry_separator']  = '###';
 
 // --------------------------------------------------
 // Router.

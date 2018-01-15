@@ -9,116 +9,105 @@ class Entry
 {
     use MessagesTraits;
 
+    public $ipfs;
+    public $hash;
     public $who;
     public $date;
+    public $size;
     public $comment;
     public $attachments;
-    public $ipfs;
+    public $entry_separator;
 
-    public function __construct()
+    public function __construct($hash)
     {
         global $ipfs;
+        global $entry_separator;
 
-        $this->who = '';
-        $this->date = new DateTime();
-        $this->comment = '';
-        $this->attachments = [];
+        $this->entry_separator = $entry_separator;
+
         $this->ipfs = $ipfs;
+        $this->hash = $hash;
+        //$this->size = $this->ipfs->size($hash);
+        $this->size = 1;
+
+        $content = $this->parseContent($this->hash);
+
+        $this->size = $this->ipfs->size($hash);
+
+        $this->comment = $content['comment'];
+        $this->who = $content['who'];
+
+        $this->date = new DateTime();
+        $this->date->setTimestamp($content['date']);
+
+        $this->attachments = $content['attachments'];
     }
 
+    /**
+     * Render the date.
+     *
+     * @return string
+     *   The html.
+     */
     public function renderDate() {
         return $this->date->format('d/m/o');
     }
 
-    public function renderAttachments() {
-        return '<ul>
-<li>attachement 1</li>
-<li>attachement 2</li>
-</ul>';
-    }
-
-    public function renderAddForm() {
-        $html = <<<EOS
-<form id="new_entry" action="?q=newEntry&action=fields-storage">
-    <div class="form-group required ">
-        <label for="doctor_name">Doctor Name</label>
-        <input type="text" class="form-control" id="doctor_name" placeholder="Dr Schmidt">
-    </div>
-
-    <div class="form-group required ">
-        <label for="doctor_speciality">Speciality</label>
-        <select class="form-control custom-select" id="doctor_speciality">
-            <option value="default">-- Please Choose --</option>
-            <optgroup label="Type of doctor">
-                <option>General Medicine</option>
-                <option>Other</option>
-            </optgroup>
-            <optgroup label="Relatives">
-                <option>Parent</option>
-                <option>Me</option>
-            </optgroup>
-        </select>
-    </div>
-    
-    <div class="form-group required ">
-        <label for="comment">Comment</label>
-        <textarea class="form-control" id="comment" rows="3"></textarea>
-    </div>
-
-    <button type="submit" class="btn btn-primary">Submit</button>
-
-</form>
-
-<form action="?q=newEntry&action=file-upload" class="dropzone" id="my-awesome-dropzone">
-      <div class="fallback" style="border:2px solid red">
-        <input name="file" type="file" multiple />
-      </div>
-</form>
-
-EOS;
-
-        return $html;
-    }
-
-    public function processPost() {
-        $html = '';
-        if (isset($_GET['action'])) {
-            if ($_GET['action'] === 'fields-storage') {
-                $html .= $this->processFields();
-            }
-
-            if ($_GET['action'] === 'file-upload') {
-                $this->processFile();
-            }
-        }
-        return $html;
-    }
-
     /**
+     * Render attachments.
+     *
      * @return string
-     *   The
+     *   The html.
      */
-    public function processFields() {
-        // @todo: pareil qu'avec processFile, comment je lie l'user avec son hash?
+    public function renderAttachments() {
+        if (count($this->attachments) === 0) {
+            return '';
+        }
 
-        if (TRUE) {
-            $this->generateSuccessMessage('Your entry has been saved.');
+        $html = '<ul>';
+        foreach ($this->attachments as $key => $attachment) {
+            $html .='<li><a target="_blank" href="attachment.php?hash=' . trim($attachment) . '">Attachment ' . ($key+1) . '</a></li>';
         }
-        else {
-            $this->generateFailMessage();
-        }
-        return '';
+        $html .= '</ul>';
+
+        return $html;
+
     }
 
     /**
-     * Ajax call to process uploaded files.
+     * Parse ipfs stored content.
+     *
+     * @param string $hash
+     *
+     * @return array
+     *   The stored content.
      */
-    public function processFile() {
-        if (!empty($_FILES)) {
-            $filename = $_FILES['file']['tmp_name'];
-            $text = file_get_contents($filename);
-            $hash = $this->ipfs->add($text);
-            // todo: comment lier le hash de l'entré avec les hash des documents ?
+    public function parseContent($hash) {
+        // Date ### Doctor ### Speciality ### Comment ### Attachments_1 ### Attachments_2 ###
+        $array = explode($this->entry_separator, $this->ipfs->cat($hash));
+        array_pop($array);
+        $output = [
+            'date' => trim($array[0]),
+            'who' => $this->formatWho($array),
+            'comment' => trim($array[3]),
+            'attachments' => array_slice($array, 4),
+        ];
+        return $output;
+    }
+
+    /**
+     * Format who.
+     *
+     * @param $array
+     *
+     * @return string
+     *   Who formatted.
+     */
+    private function formatWho($array) {
+        $output = trim($array[1]) . ' <br /><i>' . trim($array[2]) .'</i>';
+        if ($array[2] === '') {
+            $output = trim($array[1]);
         }
+        return $output;
     }
 }
