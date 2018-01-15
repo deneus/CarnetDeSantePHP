@@ -3,9 +3,9 @@
 require __DIR__ . '/vendor/autoload.php';
 
 use Cloutier\PhpIpfsApi\IPFS;
-use HealthChain\modules\accessDelegation;
-use HealthChain\modules\Home ;
-use HealthChain\modules\newEntry;
+use HealthChain\modules\pages\accessDelegation;
+use HealthChain\modules\pages\Home ;
+use HealthChain\modules\pages\NewEntry;
 use HealthChain\modules\Register;
 
 $GLOBALS['ipfs'] = new IPFS("localhost", "8080", "5001");
@@ -18,11 +18,11 @@ if (!isset($_GET['q'])) {
 }
 switch ($_GET['q']) {
     case 'newEntry':
-        $page = new newEntry();
+        $page = new NewEntry();
         break;
 
     case 'accessDelegation':
-        $page = new accessDelegation();
+        $page = new AccessDelegation();
         break;
     case 'login':
         //TODO APU
@@ -32,7 +32,7 @@ switch ($_GET['q']) {
         break;
     case 'home':
     default;
-        $page = new home();
+        $page = new Home();
         break;
 
 }

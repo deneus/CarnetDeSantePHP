@@ -1,12 +1,11 @@
 <?php
 
-namespace HealthChain\modules;
+namespace HealthChain\modules\pages;
 
 use HealthChain\interfaces\ApplicationView;
 use HealthChain\layout\LayoutTrait;
-use HealthChain\modules\classes\Entry;
 
-class newEntry implements ApplicationView
+class NewEntry implements ApplicationView
 {
     use LayoutTrait;
 

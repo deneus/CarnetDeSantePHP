@@ -1,11 +1,11 @@
 <?php
 
-namespace HealthChain\modules;
+namespace HealthChain\modules\pages;
 
 use HealthChain\interfaces\ApplicationView;
 use HealthChain\layout\LayoutTrait;
 
-class accessDelegation implements ApplicationView
+class AccessDelegation implements ApplicationView
 {
 
     use LayoutTrait;

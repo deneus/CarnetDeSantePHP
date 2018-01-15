@@ -1,13 +1,13 @@
 <?php
 
-namespace HealthChain\modules;
+namespace HealthChain\modules\pages;
 
 use DateTime;
 use HealthChain\interfaces\ApplicationView;
 use HealthChain\layout\LayoutTrait;
 use HealthChain\modules\classes\Entry;
 
-class home implements ApplicationView
+class Home implements ApplicationView
 {
     use LayoutTrait;
 
