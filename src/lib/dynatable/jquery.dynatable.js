@@ -1597,7 +1597,7 @@
       // Loop through all items in array
       $.each(arrayOrObject, function(key, value) {
         var result = isArray ? test(item, value) : test(item, key, value);
-        // If a single item tests false, go ahead and break the array by returning false
+        // If a single item test false, go ahead and break the array by returning false
         // and return false as result,
         // otherwise, continue with next iteration in loop
         // (if we make it through all iterations without overriding match with false,
