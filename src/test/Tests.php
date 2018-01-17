@@ -20,28 +20,28 @@ class Tests {
      */
     public function generateTestHashes($numberOfHash = 15)
     {
+        $nbAttachments = 3;
+        $attachments = $this->generateAttachments(3) ;
+
         $hash = [];
         for ($i = 0; $i < $numberOfHash; $i++) {
 
-            // Version 1.
-            //$loremIpsum = simplexml_load_file('http://www.lipsum.com/feed/xml?amount=1&what=paras&start=0')->lipsum;
-            // Version 2.
-            // Speed up the process of loading elements by avoiding calling lipsum feed.
+            $filename = 'src/test/hash'.mt_rand(1,8).'.txt';
+            $text = file_get_contents($filename);
+            $customAttachments = array_slice($attachments, 0, mt_rand(0, $nbAttachments));
+            $text .= implode('###', $customAttachments);
+            $text .= '###';
+            $hash[] = $this->ipfs->add($text);
+        }
 
-            $typeNumber = mt_rand(1,1);
-            switch ($typeNumber) {
-                case 1:
-                    $name = 'hash';
-                    $extension = '.txt';
-                    break;
-                case 2:
-                    $name = 'image';
-                    $extension = '.jpg';
-                    break;
-            }
+        return $hash;
+    }
 
+    private function generateAttachments($nbAttachments) {
+        $hash = [];
 
-            $filename = 'src/test/'.$name.mt_rand(1,8).$extension;
+        for ($i=0; $i<$nbAttachments; $i++){
+            $filename = 'src/test/image'.mt_rand(1,8).'.jpg';
             $text = file_get_contents($filename);
             $hash[] = $this->ipfs->add($text);
         }

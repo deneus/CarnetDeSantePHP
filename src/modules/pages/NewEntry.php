@@ -116,6 +116,7 @@ EOS;
             $text = file_get_contents($filename);
             $hash = $this->ipfs->add($text);
             // todo denis: créer le fichier correctement en respectant la syntaxe.
+            // todo denis: s'assurer qu'on upload uniquement des JPG.
         }
     }
 }
