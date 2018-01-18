@@ -16,31 +16,27 @@ class Entry
     public $size;
     public $comment;
     public $attachments;
-    public $entry_separator;
 
     public function __construct($hash)
     {
         global $ipfs;
-        global $entry_separator;
-
-        $this->entry_separator = $entry_separator;
 
         $this->ipfs = $ipfs;
         $this->hash = $hash;
-        //$this->size = $this->ipfs->size($hash);
-        $this->size = 1;
 
-        $content = $this->parseContent($this->hash);
+        $text = $this->ipfs->cat($this->hash);
+        $text = str_replace('a831rwxi1a3gzaorw1w2z49dlsor', '', $text);
 
+        $json = json_decode($text);
         $this->size = $this->ipfs->size($hash);
 
-        $this->comment = $content['comment'];
-        $this->who = $content['who'];
+        $this->comment = $json->comment;
+        $this->who = $json->who;
 
         $this->date = new DateTime();
-        $this->date->setTimestamp($content['date']);
+        $this->date->setTimestamp($json->date);
 
-        $this->attachments = $content['attachments'];
+        $this->attachments = $json->attachments;
     }
 
     /**
@@ -66,7 +62,7 @@ class Entry
 
         $html = '<ul>';
         foreach ($this->attachments as $key => $attachment) {
-            $html .='<li><a target="_blank" href="attachment.php?hash=' . trim($attachment) . '">Attachment ' . ($key+1) . '</a></li>';
+            $html .='<li><a target="_blank" href="attachment.php?hash='.$attachment->hash.'&type='.$attachment->mimetype.'">'.$attachment->type.'</a></li>';
         }
         $html .= '</ul>';
 
@@ -75,38 +71,17 @@ class Entry
     }
 
     /**
-     * Parse ipfs stored content.
-     *
-     * @param string $hash
-     *
-     * @return array
-     *   The stored content.
-     */
-    public function parseContent($hash) {
-        // Date ### Doctor ### Speciality ### Comment ### Attachments_1 ### Attachments_2 ###
-        $array = explode($this->entry_separator, $this->ipfs->cat($hash));
-        array_pop($array);
-        $output = [
-            'date' => trim($array[0]),
-            'who' => $this->formatWho($array),
-            'comment' => trim($array[3]),
-            'attachments' => array_slice($array, 4),
-        ];
-        return $output;
-    }
-
-    /**
-     * Format who.
+     * Render who.
      *
      * @param $array
      *
      * @return string
      *   Who formatted.
      */
-    private function formatWho($array) {
-        $output = trim($array[1]) . ' <br /><i>' . trim($array[2]) .'</i>';
-        if ($array[2] === '') {
-            $output = trim($array[1]);
+    public function renderWho() {
+        $output = $this->who->name . ' <br /><i>' . $this->who->speciality .'</i>';
+        if ($this->who->speciality === '') {
+            $output = $this->who->name;
         }
         return $output;
     }

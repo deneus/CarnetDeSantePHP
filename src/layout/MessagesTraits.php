@@ -17,7 +17,7 @@ trait MessagesTraits
     public function generateSuccessMessage($message) {
         $html = <<<EOT
 <div class="alert alert-success">
-    $message.
+    $message
 </div>
 EOT;
 

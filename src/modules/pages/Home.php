@@ -86,7 +86,7 @@ class Home implements ApplicationView
 
             $html .= '<tr>';
             $html .= '<td>' . $entry->renderDate() . '</td>';
-            $html .= '<td>' . $entry->who . '</td>';
+            $html .= '<td>' . $entry->renderWho() . '</td>';
             $html .= '<td>' . $entry->comment . '</td>';
             $html .= '<td>' . $entry->renderAttachments() . '</td>';
             $html .= '</tr>';

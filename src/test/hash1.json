@@ -1,0 +1,11 @@
+{
+    "date" : "1516011491",
+    "who": {
+        "name": "Doctor Y",
+        "speciality" : "General medicine"
+    },
+    "comment" : "Curabitur at finibus turpis. Donec a ornare odio. Aliquam est tellus.",
+    "attachments" : [
+    ]
+}
+

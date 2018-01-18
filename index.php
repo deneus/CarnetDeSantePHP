@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 require __DIR__ . '/vendor/autoload.php';
 
 use Cloutier\PhpIpfsApi\IPFS;
@@ -9,7 +11,7 @@ use HealthChain\modules\pages\NewEntry;
 use HealthChain\modules\Register;
 
 $GLOBALS['ipfs'] = new IPFS("localhost", "8080", "5001");
-$GLOBALS['entry_separator']  = '###';
+$GLOBALS['instance_id'] = 'a831rwxi1a3gzaorw1w2z49dlsor';
 
 // --------------------------------------------------
 // Router.

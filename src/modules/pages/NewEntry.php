@@ -4,10 +4,12 @@ namespace HealthChain\modules\pages;
 
 use HealthChain\interfaces\ApplicationView;
 use HealthChain\layout\LayoutTrait;
+use HealthChain\layout\MessagesTraits;
 
 class NewEntry implements ApplicationView
 {
     use LayoutTrait;
+    use MessagesTraits;
 
     /**
      * Generate the header html to output.
@@ -37,7 +39,7 @@ class NewEntry implements ApplicationView
         $html = '';
         if (isset($_GET['action'])) {
             if ($_GET['action'] === 'fields-storage') {
-                $html .= $this->processFields();
+                $html .= $this->processForm();
             }
 
             if ($_GET['action'] === 'file-upload') {
@@ -49,7 +51,7 @@ class NewEntry implements ApplicationView
 
     public function renderAddForm() {
         $html = <<<EOS
-<form id="new_entry" action="?q=newEntry&action=fields-storage">
+<form id="new_entry" method="post" action="?q=newEntry&action=fields-storage">
     <div class="form-group required ">
         <label for="doctor_name">Doctor Name</label>
         <input type="text" class="form-control" id="doctor_name" placeholder="Dr Schmidt">
@@ -95,26 +97,38 @@ EOS;
      * @return string
      *   The
      */
-    public function processFields() {
+    public function processForm() {
         // @todo denis: pareil qu'avec processFile, comment je lie l'user avec son hash?
 
+        foreach($_SESSION['uploaded_file'] as $file) {
+
+        }
+        $_SESSION['uploaded_file'] = '';
+
         if (TRUE) {
-            $this->generateSuccessMessage('Your entry has been saved.');
+            $html = $this->generateSuccessMessage('Your entry has been saved!');
         }
         else {
-            $this->generateFailMessage();
+            $html = $this->generateFailMessage();
         }
-        return '';
+        return $html;
     }
 
     /**
      * Ajax call to process uploaded files.
      */
     public function processFile() {
+        global $ipfs;
+
         if (!empty($_FILES)) {
+
             $filename = $_FILES['file']['tmp_name'];
             $text = file_get_contents($filename);
-            $hash = $this->ipfs->add($text);
+            $hash = $ipfs->add($text);
+
+            $_SESSION['uploaded_file'][] = $hash;
+
+            $t = 1;
             // todo denis: créer le fichier correctement en respectant la syntaxe.
             // todo denis: s'assurer qu'on upload uniquement des JPG.
         }
