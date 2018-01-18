@@ -99,7 +99,8 @@ foreach ($obj as $e) {
         <script type="application/javascript" src="src/lib/dynatable/jquery.dynatable.js" ></script>
         <!-- dropzone -->
         <link  rel="stylesheet" href="src/layout/css/dropzone.css" §>
-        <script src="src/layout/js/dropzone.js"></script>
+        <script src="src/layout/js/lib/dropzone.js"></script>
+        <script src="src/layout/js/scripts.js"></script>
         <!-- custom -->
         <link rel="stylesheet" href="src/layout/css/global.css" />
     </head>
