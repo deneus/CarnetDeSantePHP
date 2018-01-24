@@ -22,36 +22,39 @@ class Tests {
      */
     public function generateTestHashes($numberOfHash = 15)
     {
-        $attachments = $this->generateAttachments() ;
+
+        $directory = 'src/test';
+        $scanned_directory = array_diff(scandir($directory), array('..', '.'));
 
         $hash = [];
-        for ($i = 1; $i < 5; $i++) {
+        foreach ($scanned_directory as $file) {
 
-            $filename = 'src/test/hash'.$i.'.json';
-            $text = file_get_contents($filename);
-            /* @var $json StdClass */
-            $json = json_decode($text);
+            if(explode('.', $file)[1] === 'json') {
+                $filename = $directory .'/'.$file;
+                $text = file_get_contents($filename);
+                /* @var $json StdClass */
+                $json = json_decode($text);
 
-            // reset attachments.
-            $json->attachments = [];
+                $fullEntry = json_encode($json);
 
-            for ($j=0;$j<mt_rand(0,3);$j++) {
-                $json->attachments[$j] = $attachments[mt_rand(1,8)] ;
+                $hash[] = $this->ipfs->add($fullEntry);
             }
 
-            $fullEntry = json_encode($json);
-
-            $hash[] = $this->ipfs->add($fullEntry);
         }
 
         return $hash;
     }
 
+    /**
+     * Generate some random attachments.
+     * 
+     * @return array
+     */
     private function generateAttachments() {
         $hash = [];
 
         for($i=1; $i<9; $i++) {
-            $filename = 'src/test/image'.$i.'.jpg';
+            $filename = 'src/test/images/image'.$i.'.jpg';
             $text = file_get_contents($filename);
             $hash[$i] = [
                 'hash' => $this->ipfs->add($text),

@@ -9,19 +9,29 @@ class Entry
 {
     use MessagesTraits;
 
-    public $ipfs;
-    public $hash;
+    private $ipfs;
+    private $hash;
     public $who;
     public $date;
-    public $size;
+    private $size;
     public $comment;
     public $attachments;
 
-    public function __construct($hash)
-    {
+    public function __construct() {
         global $ipfs;
 
         $this->ipfs = $ipfs;
+        $this->attachments = [];
+        $this->who = new EntryWho();
+    }
+
+    /**
+     * Populate an entry from an hash.
+     *
+     * @param $hash
+     */
+    public function getEntryFromHash($hash)
+    {
         $this->hash = $hash;
 
         $text = $this->ipfs->cat($this->hash);
@@ -33,8 +43,8 @@ class Entry
         $this->comment = $json->comment;
         $this->who = $json->who;
 
-        $this->date = new DateTime();
-        $this->date->setTimestamp($json->date);
+        $date = new DateTime();
+        $this->date = $date->setTimestamp($json->date);
 
         $this->attachments = $json->attachments;
     }
@@ -46,7 +56,10 @@ class Entry
      *   The html.
      */
     public function renderDate() {
-        return $this->date->format('d/m/o');
+        $html = $this->date->format('d/m/o');
+        $html .= '<br /> at ';
+        $html .= $this->date->format('G:i');
+        return $html;
     }
 
     /**
@@ -73,8 +86,6 @@ class Entry
     /**
      * Render who.
      *
-     * @param $array
-     *
      * @return string
      *   Who formatted.
      */
@@ -84,5 +95,33 @@ class Entry
             $output = $this->who->name;
         }
         return $output;
+    }
+
+    /**
+     * Set entry date to now().
+     */
+    public function setDateToNow() {
+        $date = new DateTime();
+        $this->date = $date->getTimestamp();
+    }
+
+    /**
+     * Store the entry in ipfs.
+     *
+     * @return mixed
+     */
+    public function storeEntry() {
+        // Store the entry locally. >> DEBUG PURPOSE.
+        $json = json_encode($this);
+        $fileName = 'src/test/' . $this->date . '.json';
+        $myFile = fopen($fileName, 'w+');
+        fwrite($myFile, $json);
+        fclose($myFile);
+
+        // Store the entry in ipfs.
+        $json = json_encode($this);
+        $hash = $this->ipfs->add($json);
+
+        return $hash;
     }
 }
