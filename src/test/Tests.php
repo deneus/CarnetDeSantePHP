@@ -29,7 +29,11 @@ class Tests {
         $hash = [];
         foreach ($scanned_directory as $file) {
 
-            if(explode('.', $file)[1] === 'json') {
+            $explode = explode('.', $file);
+
+            if(count($explode) === 2 &&
+                $explode[1] === 'json') {
+
                 $filename = $directory .'/'.$file;
                 $text = file_get_contents($filename);
                 /* @var $json StdClass */
@@ -47,7 +51,7 @@ class Tests {
 
     /**
      * Generate some random attachments.
-     * 
+     *
      * @return array
      */
     private function generateAttachments() {

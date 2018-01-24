@@ -6,11 +6,13 @@ use HealthChain\interfaces\ApplicationView;
 use HealthChain\layout\LayoutTrait;
 use HealthChain\layout\MessagesTraits;
 use HealthChain\modules\classes\Entry;
+use HealthChain\modules\traits\PostTrait;
 
 class NewEntry implements ApplicationView
 {
     use LayoutTrait;
     use MessagesTraits;
+    use PostTrait;
 
     public $ipfs;
     public $entry;
@@ -48,10 +50,12 @@ class NewEntry implements ApplicationView
     }
 
     public function processPost() {
+        $post = $this->sanitize($_POST);
+
         $html = '';
         if (isset($_GET['action'])) {
             if ($_GET['action'] === 'fields-storage') {
-                $html .= $this->processForm();
+                $html .= $this->processForm($post);
             }
 
             if ($_GET['action'] === 'file-upload') {
@@ -109,15 +113,20 @@ EOS;
 
 
     /**
+     * Process the post.
+     *
+     * @param $post
+     *   The sanitized POST.
+     *
      * @return string
-     *   The
+     *   The message in html.
      */
-    public function processForm() {
+    public function processForm($post) {
 
         $this->entry->setDateToNow();
-        $this->entry->who->name = $_POST['doctor_name'];
-        $this->entry->who->speciality = $_POST['doctor_speciality'];
-        $this->entry->comment = $_POST['comment'];
+        $this->entry->who->name = $post['doctor_name'];
+        $this->entry->who->speciality = $post['doctor_speciality'];
+        $this->entry->comment = $post['comment'];
 
         if (!empty($_SESSION['uploaded_file'])) {
             foreach($_SESSION['uploaded_file'] as $file) {
