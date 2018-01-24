@@ -22,7 +22,7 @@ trait PostTrait
         $this->_validatePost($post);
         $values = [];
         foreach($post as $key => $value) {
-            $values[htmlspecialchars($key)] = $values[htmlspecialchars($value)];
+            $values[htmlspecialchars($key)] = htmlspecialchars($value);
         }
         return $values;
     }
