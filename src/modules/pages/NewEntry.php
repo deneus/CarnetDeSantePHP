@@ -5,11 +5,25 @@ namespace HealthChain\modules\pages;
 use HealthChain\interfaces\ApplicationView;
 use HealthChain\layout\LayoutTrait;
 use HealthChain\layout\MessagesTraits;
+use HealthChain\modules\classes\Entry;
+use HealthChain\modules\traits\PostTrait;
 
 class NewEntry implements ApplicationView
 {
     use LayoutTrait;
     use MessagesTraits;
+    use PostTrait;
+
+    public $ipfs;
+    public $entry;
+
+    public function __construct()
+    {
+        global $ipfs;
+
+        $this->ipfs = $ipfs;
+        $this->entry = new Entry();
+    }
 
     /**
      * Generate the header html to output.
@@ -36,30 +50,35 @@ class NewEntry implements ApplicationView
     }
 
     public function processPost() {
+        $post = $this->sanitize($_POST);
+
         $html = '';
         if (isset($_GET['action'])) {
             if ($_GET['action'] === 'fields-storage') {
-                $html .= $this->processForm();
+                $html .= $this->processForm($post);
             }
 
             if ($_GET['action'] === 'file-upload') {
-                $this->processFile();
+                $this->processFile($_FILES['file']);
             }
+        }
+        else {
+            $_SESSION['uploaded_file'] = NULL;
         }
         return $html;
     }
 
     public function renderAddForm() {
         $html = <<<EOS
-<form id="new_entry" method="post" action="?q=newEntry&action=fields-storage">
+<form action="?q=newEntry&action=fields-storage"  id="new_entry" method="post">
     <div class="form-group required ">
         <label for="doctor_name">Doctor Name</label>
-        <input type="text" class="form-control" id="doctor_name" placeholder="Dr Schmidt">
+        <input type="text" class="form-control" id="doctor_name" name="doctor_name" placeholder="Dr Schmidt">
     </div>
 
     <div class="form-group required ">
         <label for="doctor_speciality">Speciality</label>
-        <select class="form-control custom-select" id="doctor_speciality">
+        <select class="form-control custom-select" id="doctor_speciality" name="doctor_speciality">
             <option value="default">-- Please Choose --</option>
             <optgroup label="Type of doctor">
                 <option>General Medicine</option>
@@ -74,7 +93,7 @@ class NewEntry implements ApplicationView
     
     <div class="form-group required ">
         <label for="comment">Comment</label>
-        <textarea class="form-control" id="comment" rows="3"></textarea>
+        <textarea class="form-control" id="comment" name="comment" rows="3"></textarea>
     </div>
 
     <button type="submit" class="btn btn-primary">Submit</button>
@@ -82,7 +101,7 @@ class NewEntry implements ApplicationView
 </form>
 
 <form action="?q=newEntry&action=file-upload" class="dropzone" id="my-awesome-dropzone">
-      <div class="fallback" style="border:2px solid red">
+      <div class="fallback">
         <input name="file" type="file" multiple />
       </div>
 </form>
@@ -94,18 +113,31 @@ EOS;
 
 
     /**
+     * Process the post.
+     *
+     * @param $post
+     *   The sanitized POST.
+     *
      * @return string
-     *   The
+     *   The message in html.
      */
-    public function processForm() {
-        // @todo denis: pareil qu'avec processFile, comment je lie l'user avec son hash?
+    public function processForm($post) {
 
-        foreach($_SESSION['uploaded_file'] as $file) {
+        $this->entry->setDateToNow();
+        $this->entry->who->name = $post['doctor_name'];
+        $this->entry->who->speciality = $post['doctor_speciality'];
+        $this->entry->comment = $post['comment'];
+
+        if (!empty($_SESSION['uploaded_file'])) {
+            foreach($_SESSION['uploaded_file'] as $file) {
+                $this->entry->attachments[] = $file;
+            }
+            $_SESSION['uploaded_file'] = '';
 
         }
-        $_SESSION['uploaded_file'] = '';
+        $hash = $this->entry->storeEntry();
 
-        if (TRUE) {
+        if ($hash !== NULL) {
             $html = $this->generateSuccessMessage('Your entry has been saved!');
         }
         else {
@@ -115,22 +147,19 @@ EOS;
     }
 
     /**
-     * Ajax call to process uploaded files.
+     * Ajax call to process uploaded files. Add files into session.
+     * @param $file
      */
-    public function processFile() {
-        global $ipfs;
+    public function processFile($file) {
 
-        if (!empty($_FILES)) {
+        if ($file !== NULL) {
+            $textFromImage = file_get_contents($file['tmp_name']);
 
-            $filename = $_FILES['file']['tmp_name'];
-            $text = file_get_contents($filename);
-            $hash = $ipfs->add($text);
-
-            $_SESSION['uploaded_file'][] = $hash;
-
-            $t = 1;
-            // todo denis: créer le fichier correctement en respectant la syntaxe.
-            // todo denis: s'assurer qu'on upload uniquement des JPG.
+            $_SESSION['uploaded_file'][] = [
+                'hash' => $this->ipfs->add($textFromImage),
+                'mimetype' => $file['type'],
+                'type' => 'prescription',
+            ];
         }
     }
 }

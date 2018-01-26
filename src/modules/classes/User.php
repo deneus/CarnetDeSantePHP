@@ -3,13 +3,13 @@
 namespace HealthChain\modules\classes;
 
 
-use HealthChain\modules\traits\Post;
+use HealthChain\modules\traits\PostTrait;
 use NeoPHP\NeoWallet;
 use NeoPHP\NeoPHP;
 
 class User
 {
-    use Post;
+    use PostTrait;
 
     private $_formValues;
     private $_user;

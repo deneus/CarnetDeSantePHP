@@ -82,7 +82,8 @@ class Home implements ApplicationView
                 continue;
             }
 
-            $entry = new Entry($hash);
+            $entry = new Entry();
+            $entry->getEntryFromHash($hash);
 
             $html .= '<tr>';
             $html .= '<td>' . $entry->renderDate() . '</td>';
