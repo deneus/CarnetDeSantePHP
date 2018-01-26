@@ -50,6 +50,9 @@ body .table th {
     border-radius: 0 0 0 0.5em;
 }
 
+body .dynatable-active-page{
+    background-color: #17a2b8;
+}
 /************************
 FORM SECTION
 ************************/
