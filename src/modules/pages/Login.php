@@ -1,6 +1,6 @@
 <?php
 
-namespace HealthChain\modules;
+namespace HealthChain\modules\pages;
 use HealthChain\interfaces\ApplicationView;
 use HealthChain\layout\LayoutTrait;
 

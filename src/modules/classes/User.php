@@ -13,6 +13,8 @@ class User
 
     private $_formValues;
     private $_user;
+    const TYPE_USER_PATIENT= 0;
+    const TYPE_USER_DOCTOR= 1;
 
     public function __construct()
     {
@@ -50,6 +52,8 @@ class User
         $walletValues = ['NEP2' => $newWallet->isNEP2() /*, 'encryptedKey' => $newWallet->getEncryptedKey()*/,
             'WIF' => $newWallet->getWIF(), 'Address' => $newWallet->getAddress(), 'PrivateKEY' => $newWallet->getPrivateKey(),
             'PublicKey' => $newWallet->getPublicKey()];
+
+
         var_dump($walletValues);
         var_dump($newWallet);
     }
