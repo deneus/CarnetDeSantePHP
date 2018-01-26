@@ -1,13 +1,9 @@
-Dropzone.options.myAwesomeDropzone = {
-    //maxFilesize: 2, // MB
-    acceptedFiles: '.jpg',
-};
+
 
 ( function ( $ ) {
     // Initialize Slidebars
     var controller = new slidebars();
     controller.init();
-    $('.close-menu').css('display', 'none');
 
     $('.open-menu').on('click', function (event){
         event.stopPropagation();
@@ -28,8 +24,3 @@ Dropzone.options.myAwesomeDropzone = {
     }) ;
 
 } ) ( jQuery );
-
-$( document ).ready(function() {
-    // Documentation; https://www.dynatable.com/
-    var dynatable = $("#listOfNotes").dynatable();
-});

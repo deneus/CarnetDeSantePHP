@@ -100,7 +100,7 @@ class NewEntry implements ApplicationView
 
 </form>
 
-<form action="?q=newEntry&action=file-upload" class="dropzone" id="my-awesome-dropzone">
+<form action="?q=newEntry&action=file-upload" class="dropzone mt-4" id="my-awesome-dropzone">
       <div class="fallback">
         <input name="file" type="file" multiple />
       </div>

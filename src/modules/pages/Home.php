@@ -46,7 +46,8 @@ class Home implements ApplicationView
      * @return string
      *   The html.
      */
-    private function generateFilters() {
+    private function generateFilters()
+    {
         $html = '
         <script type="application/javascript">
         $( document ).ready(function() {
@@ -55,7 +56,7 @@ class Home implements ApplicationView
         });
         </script>';
 
-        return $html;
+        return '';
     }
 
     /**
