@@ -8,7 +8,7 @@ use Cloutier\PhpIpfsApi\IPFS;
 use HealthChain\modules\pages\accessDelegation;
 use HealthChain\modules\pages\Home ;
 use HealthChain\modules\pages\NewEntry;
-use HealthChain\modules\Register;
+use HealthChain\modules\pages\Register;
 
 $GLOBALS['ipfs'] = new IPFS("localhost", "8080", "5001");
 $GLOBALS['instance_id'] = 'a831rwxi1a3gzaorw1w2z49dlsor';
