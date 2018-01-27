@@ -162,4 +162,8 @@ EOS;
             ];
         }
     }
+
+    public function outputTitle() {
+        return 'New Entry';
+    }
 }

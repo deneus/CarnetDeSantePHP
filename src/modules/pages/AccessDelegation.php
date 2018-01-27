@@ -31,4 +31,8 @@ class AccessDelegation implements ApplicationView
     {
         // TODO: Implement outputHtmlContent() method.
     }
+
+    public function outputTitle() {
+        return 'Access Delegation';
+    }
 }

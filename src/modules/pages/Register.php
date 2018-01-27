@@ -58,4 +58,8 @@ class Register implements ApplicationView
             echo 'An error occured when trying to create the account. Please retry later';
         }
     }
+
+    public function outputTitle() {
+        return 'Register';
+    }
 }

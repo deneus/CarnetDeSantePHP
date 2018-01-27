@@ -17,6 +17,9 @@ body .mm-panels > .mm-panel > .mm-listview {
 body .mm-panel::before {
     height: 0;
 }
+.mm-menu {
+    font-size: 1.1em;
+}
 
 /************************
 TABLE SECTION

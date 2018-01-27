@@ -100,7 +100,8 @@ class Home implements ApplicationView
         return $html;
     }
 
+    public function outputTitle() {
+        return 'Home';
+    }
 }
 
-
-?>

@@ -20,4 +20,11 @@ interface ApplicationView {
      */
     public function outputHtmlContent() ;
 
+    /**
+     * Generate the title of the page.
+     *
+     * @return String
+     *   The HTML to output.
+     */
+    public function outputTitle() ;
 }

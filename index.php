@@ -39,6 +39,7 @@ switch ($_GET['q']) {
 
 }
 
+$title = $page->outputTitle();
 $content = $page->outputHtmlContent();
 $header = $page->outputHtmlHeader();
 
@@ -93,7 +94,7 @@ foreach ($obj as $e) {
 <!DOCTYPE html>
 <html>
     <head>
-        <title>????</title>
+        <title><?php echo $title; ?> | Your Health Booklet</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
         <!-- Bootstrap -->
@@ -114,7 +115,7 @@ foreach ($obj as $e) {
 <body>
 
     <div canvas="container" class="overflow-x-hidden">
-
+        <!-- header -->
         <div class="header bg-info pt-2 pb-2 mb-5">
             <div class="ml-3 float-left">
                 <div class="open-menu"><i class="fa fa-bars fa-3x"></i></div>
@@ -124,23 +125,27 @@ foreach ($obj as $e) {
                 <h1 class="font-weight-bold">Your Health Booklet!</h1>
             </div>
         </div>
+        <!-- end: header -->
 
+        <!-- content -->
         <div class="row no-gutters ">
             <div class="col-10 offset-1">
                 <?php echo $content; ?>
             </div>
         </div>
+        <!-- end: content -->
 
+        <!-- footer -->
         <footer class="row bg-info mt-5 pt-3 pb-3 text-right">
             <div class="col-10 offset-1 font-italic">
                 <div>Proudly developed by deneus and Pug. </div>
                 <div>Produced in, 2018.</div>
             </div>
         </footer>
-
-
+        <!-- end footer -->
     </div>
 
+    <!-- navigation -->
     <nav off-canvas="main-menu left shift" id="menu" class="mm-menu mm-menu_offcanvas mm-menu_opened">
         <div class="mm-panels">
             <div id="panel-menu" class="mm-panel mm-panel_opened">
@@ -156,6 +161,7 @@ foreach ($obj as $e) {
             </div>
         </div>
     </nav>
+    <!-- end: navigation -->
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="src/lib/dynatable/jquery.dynatable.js"></script>
