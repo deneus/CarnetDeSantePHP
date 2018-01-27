@@ -49,7 +49,9 @@ body .table th {
 .table tr:last-of-type td:last-of-type{
     border-radius: 0 0 0 0.5em;
 }
-
+body .table-striped tbody tr:nth-of-type(2n+1) {
+    background-color: #f3f3f3;
+}
 body .dynatable-active-page{
     background-color: #17a2b8;
 }
