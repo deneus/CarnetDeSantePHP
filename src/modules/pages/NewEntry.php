@@ -72,12 +72,12 @@ class NewEntry implements ApplicationView
         $html = <<<EOS
 <form action="?q=newEntry&action=fields-storage"  id="new_entry" method="post">
     <div class="form-group required ">
-        <label for="doctor_name">Doctor Name</label>
+        <label for="doctor_name">Doctor Name *</label>
         <input type="text" class="form-control" id="doctor_name" name="doctor_name" placeholder="Dr Schmidt">
     </div>
 
     <div class="form-group required ">
-        <label for="doctor_speciality">Speciality</label>
+        <label for="doctor_speciality">Speciality *</label>
         <select class="form-control custom-select" id="doctor_speciality" name="doctor_speciality">
             <option value="default">-- Please Choose --</option>
             <optgroup label="Type of doctor">
@@ -92,8 +92,13 @@ class NewEntry implements ApplicationView
     </div>
     
     <div class="form-group required ">
-        <label for="comment">Comment</label>
+        <label for="comment">Comment *</label>
         <textarea class="form-control" id="comment" name="comment" rows="3"></textarea>
+    </div>
+    
+    <div>
+        <i>Fields marked with a (*) are mandatory.</i>
+        <br /><br />
     </div>
 
     <button type="submit" class="btn btn-primary">Submit</button>
@@ -122,6 +127,11 @@ EOS;
      *   The message in html.
      */
     public function processForm($post) {
+         if (!$this->isPostFull($post)) {
+             $html = $this->generateFailMessage('All fields are mandatory.');
+             return $html;
+         }
+
 
         $this->entry->setDateToNow();
         $this->entry->who->name = $post['doctor_name'];
@@ -165,5 +175,9 @@ EOS;
 
     public function outputTitle() {
         return 'New Entry';
+    }
+
+    public function isPostFull($post) {
+        return !($post['doctor_name'] === '' || $post['doctor_speciality'] === 'default' || $post['comment']);
     }
 }
