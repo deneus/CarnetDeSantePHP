@@ -1,2 +1,4 @@
 RewriteEngine On    # Turn on the rewriting engine
 RewriteRule    ^register.html/?$   ?q=register        [NC,L]
+RewriteRule    ^registerPost.html/?$   ?q=registerPost        [NC,L]
+SetEnv BLOCKCHAIN_ENV dev

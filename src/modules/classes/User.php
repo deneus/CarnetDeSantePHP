@@ -44,18 +44,23 @@ class User
      * Register a new NEO wallet used for the dAPP
      * @return : TODO
      */
-    public function register()
+    public function register($passphrase)
     {
         //FIXME: Error due to an unknown constant. Had to intialise this class
         $neoPHP = new NeoPHP();
         $newWallet = new NeoWallet();
-        $walletValues = ['NEP2' => $newWallet->isNEP2() /*, 'encryptedKey' => $newWallet->getEncryptedKey()*/,
-            'WIF' => $newWallet->getWIF(), 'Address' => $newWallet->getAddress(), 'PrivateKEY' => $newWallet->getPrivateKey(),
-            'PublicKey' => $newWallet->getPublicKey()];
+        //FIXME: Max execution time. For now no encryption
+        //$newWallet->encryptWallet($passphrase);
 
-
-        var_dump($walletValues);
-        var_dump($newWallet);
+        $html = '<p> Your login is your unique identifier</p>';
+        $html .= '<p> Your backup code is used if you lost your password.';
+        $html .= '<br /> Those informations are private and should never be shared with everyone.';
+        $html .= '<br /> We will never ask you such information by email or in the phone.';
+        $html .= '<br /> Please save carefully the following information.';
+        $html .= '<ul>';
+       // $html .= '<li>Your Login: ' .$newWallet->getEncryptedKey() .'</li>';
+        $html .= '<li>Your Login: ' . $newWallet->getWIF() . '</li>';
+        return $html;
     }
 
     public function getListDocs()

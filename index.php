@@ -30,7 +30,10 @@ switch ($_GET['q']) {
         //TODO APU
         break;
     case 'register':
-        $page = new Register();
+        $page = new Register(Register::ACTION_DISPLAY_FORM);
+        break;
+    case 'registerPost':
+        $page = new Register(Register::ACTION_SUBMIT_FORM);
         break;
     case 'home':
     default;

@@ -8,12 +8,23 @@ use HealthChain\modules\classes\User;
 class Register implements ApplicationView
 {
     use LayoutTrait;
+
+    const ACTION_DISPLAY_FORM = 'display';
+    const ACTION_SUBMIT_FORM = 'submit';
+
+    protected $_action;
+
     /**
      * Generate the header html to output.
      *
      * @return mixed
      *   The HTML to output.
      */
+
+    public function __construct($action)
+    {
+        $this->_action = $action;
+    }
     public function outputHtmlHeader()
     {
         return $this->generateHeader('Health Booklet - Register.');
@@ -30,6 +41,7 @@ class Register implements ApplicationView
         $html .= '<li><input type="radio" name="type" value="'.User::TYPE_USER_DOCTOR.'"> Doctor</li>';
         $html .= '<li><input type="radio" name="type" placeholder="Date of birth" /></li>';
         $html .= '<li><input type="password" name="passphrase" placeholder="Your password" /></li>';
+        $html .= '<li><input type="submit" value="register"</li>';
         $html .= '<ul>';
         return $html;
     }
@@ -42,17 +54,29 @@ class Register implements ApplicationView
      */
     public function outputHtmlContent()
     {
-        echo $this->_formRegister();
+        switch($this->_action){
+            case self::ACTION_SUBMIT_FORM:
+                return $this->registerPost();
+            break;
+            case self::ACTION_DISPLAY_FORM:
+            default:
+                return $this->_formRegister();
+            break;
+        }
+
     }
 
     public function registerPost()
     {
         try{
             $user = new User();
+            //TODO: Adding form validator in here
+            //TODO: Sanitize post
+            $passphrase = $_POST['passphrase'];
             $html = '<h2> Thank you for registering into HealthChain </h2>';
             $html .= 'Your access: ';
-            echo $html;
-            echo $user->register();
+            $html .= $user->register($passphrase);
+            return $html;
         }
         catch (\Exception $e){
             echo 'An error occured when trying to create the account. Please retry later';
