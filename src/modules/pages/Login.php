@@ -29,4 +29,8 @@ class Login implements ApplicationView
     {
         //TODO renderAddFormLogin;
     }
+
+    public function outputTitle() {
+        return 'Login';
+    }
 }

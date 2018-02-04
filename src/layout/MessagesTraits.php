@@ -35,12 +35,12 @@ EOT;
      */
     public function generateFailMessage($message = null) {
         if ($message === NULL) {
-            $message = 'A problem occured, please contact the administrator';
+            $message = 'A problem occured, please contact the administrator.';
         }
 
         $html = <<<EOT
 <div class="alert alert-danger">
-    $message.
+    $message
 </div>
 EOT;
 
@@ -59,7 +59,7 @@ EOT;
     public function generateInfoMessage($message) {
         $html = <<<EOT
 <div class="alert alert-info">
-    $message.
+    $message
 </div>
 EOT;
 
