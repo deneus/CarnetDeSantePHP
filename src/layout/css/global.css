@@ -61,6 +61,9 @@ body .dynatable-active-page{
 /************************
 FORM SECTION
 ************************/
+button {
+    box-shadow: 2px 2px 1px 0px #cccccc;
+}
 #dynatable-query-search-listOfNotes,
 #dynatable-per-page-listOfNotes {
     padding: .375rem .75rem;
@@ -83,4 +86,11 @@ FORM SECTION
 
 body .dynatable-search {
     margin-bottom: 2em;
+}
+
+.registerForm {
+    background-color: #ffffff;
+    margin:0 auto;
+    padding: 1em;
+    box-shadow: 10px 10px 5px 0px rgba(19,135,151, 1);
 }

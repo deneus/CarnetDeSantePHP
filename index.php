@@ -60,6 +60,7 @@ switch ($query) {
 }
 
 $title = $page->outputTitle();
+$cssClass = $page->cssClassForContent();
 $content = $page->outputHtmlContent();
 $header = $page->outputHtmlHeader();
 
@@ -127,16 +128,17 @@ foreach ($obj as $e) {
         <!-- menu -->
         <link rel="stylesheet" href="src/layout/css/slidebars.css">
         <link rel="stylesheet" href="src/layout/css/jquery.mmenu.all.css">
-        <link rel="stylesheet" href="src/layout/css/font-awesome.css">
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <link rel="stylesheet" href="/resources/demos/style.css">
         <!-- custom -->
         <link rel="stylesheet" href="src/layout/css/global.css" />
     </head>
 
-<body>
+<body class="page-<?php echo strtolower($title); ?>">
 
-    <div canvas="container" class="overflow-x-hidden">
+    <div canvas="container" class="overflow-x-hidden  <?php echo $cssClass ?>">
         <!-- header -->
-        <div class="header bg-info pt-2 pb-2 mb-5">
+        <div class="header bg-info pt-2 pb-2">
             <div class="ml-3 float-left">
                 <div class="open-menu"><i class="fa fa-bars fa-3x"></i></div>
                 <div class="close-menu"><i class="fa fa-times fa-3x"></i></div>
@@ -148,7 +150,7 @@ foreach ($obj as $e) {
         <!-- end: header -->
 
         <!-- content -->
-        <div class="row no-gutters ">
+        <div class="row no-gutters pt-5 pb-5">
             <div class="col-10 offset-1">
                 <?php echo $content; ?>
             </div>
@@ -156,10 +158,10 @@ foreach ($obj as $e) {
         <!-- end: content -->
 
         <!-- footer -->
-        <footer class="row bg-info mt-5 pt-3 pb-3 text-right">
+        <footer class="row bg-info pt-3 pb-3 text-right">
             <div class="col-10 offset-1 font-italic">
                 <div>Proudly developed by deneus and Pug. </div>
-                <div>Produced in, 2018.</div>
+                <div>Produced in 2018.</div>
             </div>
         </footer>
         <!-- end footer -->
@@ -177,6 +179,7 @@ foreach ($obj as $e) {
                     <li class="mm-listitem"><a href="/HealthChainPHP/"><i class="fa fa-home mr-3"></i>Home</a></li>
                     <li class="mm-listitem"><a href="/HealthChainPHP/?q=newEntry"><i class="fa fa-plus mr-3"></i>New entry</a></li>
                     <li class="mm-listitem"><a href="/HealthChainPHP/?q=accessDelegation"><i class="fa fa-user-md mr-3"></i>Access delegation</a></li>
+                    <li class="mm-listitem"><a href="/HealthChainPHP/?q=signOut"><i class="fa fa-sign-out-alt mr-3"></i>Sign out</a></li>
                 </ul>
             </div>
         </div>
@@ -185,9 +188,11 @@ foreach ($obj as $e) {
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="src/lib/dynatable/jquery.dynatable.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src="src/layout/js/lib/dropzone.js"></script>
     <script src="src/layout/js/slidebars.js"></script>
     <script src="src/layout/js/scripts.js"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
 
 </body>
 </html>

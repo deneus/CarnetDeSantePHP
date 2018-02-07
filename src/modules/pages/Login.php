@@ -53,4 +53,8 @@ class Login implements ApplicationView
     {
         return 'Login';
     }
+
+    public function cssClassForContent() {
+        return '';
+    }
 }

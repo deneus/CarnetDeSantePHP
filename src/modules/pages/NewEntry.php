@@ -180,4 +180,8 @@ EOS;
     public function isPostFull($post) {
         return !($post['doctor_name'] === '' || $post['doctor_speciality'] === 'default' || $post['comment']);
     }
+
+    public function cssClassForContent() {
+        return '';
+    }
 }
