@@ -70,20 +70,23 @@ class Register implements ApplicationView
     </div>
 
     <div class="row">
-        <div class="col-9">
+        <div class="col-10 offset-1">
             <i>Fields marked with a (*) are mandatory.</i>
             <br /><br />
         </div>
     </div>
     
-    
-    <div class="text-right">
-        <button type="submit" class="btn btn-primary">Submit</button>
+    <div class="row">
+        <div class="col-10 offset-1">
+            <button type="submit" class="btn btn-primary col-12">Register</button>
+        </div>
     </div>
     
-    <div class="text-center">
-        <br />
-        You already have an account? Please <a href="/HealthChainPHP/?q=login"">sign in</a>.
+    <div class="row">
+        <div class="col-10 offset-1 text-center">
+            <br />
+            You already have an account? Please <a href="/HealthChainPHP/?q=login"">sign in</a>.
+        </div>
     </div>
 </form>
 EOS;
