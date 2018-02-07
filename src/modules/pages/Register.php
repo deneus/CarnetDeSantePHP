@@ -33,17 +33,55 @@ class Register implements ApplicationView
 
     protected function _formRegister()
     {
-        $html = '<form action="registerPost.html" method="post"><ul>';
-        $html .= '<li><input type="text" name="firstname" placeholder="First name" /></li>';
-        $html .= '<li><input type="text" name="lastname" placeholder="Last name" /></li>';
-        $html .= '<li><input type="text" name="dob" placeholder="Date of birth" /></li>';
-        $html .= '<li><input type="radio" name="type" value="'.User::TYPE_USER_PATIENT.'"> Patient</li>';
-        $html .= '<li><input type="radio" name="type" value="'.User::TYPE_USER_DOCTOR.'"> Doctor</li>';
-        $html .= '<li><input type="radio" name="type" placeholder="Date of birth" /></li>';
-        $html .= '<li><input type="password" name="passphrase" placeholder="Your password" /></li>';
-        $html .= '<li><input type="submit" value="register"</li>';
-        $html .= '<ul>';
+        $typePatient = User::TYPE_USER_PATIENT;
+        $typeDoctor = User::TYPE_USER_DOCTOR;
+
+        $html = <<<EOS
+<form action="registerPost.html" method="post" class="registerForm col-md-8 col-lg-6">
+    <div class="form-group required ">
+        <label for="first_name">First Name *</label>
+        <input type="text" class="form-control" id="first_name" name="firstname" placeholder="First Name">
+    </div>
+    
+    <div class="form-group required ">
+        <label for="last_name">First Name *</label>
+        <input type="text" class="form-control" id="last_name" name="lastname" placeholder="Last Name">
+    </div>
+
+    <div class="form-group required ">
+        <label for="last_name">Date of birth</label>
+        <input type="text" class="form-control" id="dob" name="dob" placeholder="Date of Birth">
+    </div>
+    
+    <div class="form-group required ">
+        <label for="type">Type of registration *</label>
+        <select class="form-control custom-select" id="type" name="type">
+            <option value="-1">-- Please select --</option>
+            <option value="$typePatient">Patient</option>
+            <option value="$typeDoctor">Doctor</option>
+        </select>
+    </div>    
+
+    <div class="form-group required ">
+        <label for="pass_phrase">Your password *</label>
+        <input type="password" class="form-control" id="pass_phrase" name="passphrase" placeholder="Your password">
+    </div>
+
+    <div>
+        <i>Fields marked with a (*) are mandatory.</i>
+        <br /><br />
+    </div>
+    
+    <div class="text-right">
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+    
+        
+</form>
+EOS;
+
         return $html;
+
     }
 
     /**
@@ -85,5 +123,9 @@ class Register implements ApplicationView
 
     public function outputTitle() {
         return 'Register';
+    }
+
+    public function cssClassForContent() {
+        return 'bg-info';
     }
 }

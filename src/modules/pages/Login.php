@@ -33,4 +33,8 @@ class Login implements ApplicationView
     public function outputTitle() {
         return 'Login';
     }
+
+    public function cssClassForContent() {
+        return '';
+    }
 }

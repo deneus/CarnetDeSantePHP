@@ -43,6 +43,7 @@ switch ($_GET['q']) {
 }
 
 $title = $page->outputTitle();
+$cssClass = $page->cssClassForContent();
 $content = $page->outputHtmlContent();
 $header = $page->outputHtmlHeader();
 
@@ -115,11 +116,11 @@ foreach ($obj as $e) {
         <link rel="stylesheet" href="src/layout/css/global.css" />
     </head>
 
-<body>
+<body class="page-<?php echo strtolower($title); ?>">
 
-    <div canvas="container" class="overflow-x-hidden">
+    <div canvas="container" class="overflow-x-hidden  <?php echo $cssClass ?>">
         <!-- header -->
-        <div class="header bg-info pt-2 pb-2 mb-5">
+        <div class="header bg-info pt-2 pb-2">
             <div class="ml-3 float-left">
                 <div class="open-menu"><i class="fa fa-bars fa-3x"></i></div>
                 <div class="close-menu"><i class="fa fa-times fa-3x"></i></div>
@@ -131,7 +132,7 @@ foreach ($obj as $e) {
         <!-- end: header -->
 
         <!-- content -->
-        <div class="row no-gutters ">
+        <div class="row no-gutters pt-5 pb-5">
             <div class="col-10 offset-1">
                 <?php echo $content; ?>
             </div>
@@ -139,10 +140,10 @@ foreach ($obj as $e) {
         <!-- end: content -->
 
         <!-- footer -->
-        <footer class="row bg-info mt-5 pt-3 pb-3 text-right">
+        <footer class="row bg-info pt-3 pb-3 text-right">
             <div class="col-10 offset-1 font-italic">
                 <div>Proudly developed by deneus and Pug. </div>
-                <div>Produced in, 2018.</div>
+                <div>Produced in 2018.</div>
             </div>
         </footer>
         <!-- end footer -->

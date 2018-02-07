@@ -103,5 +103,9 @@ class Home implements ApplicationView
     public function outputTitle() {
         return 'Home';
     }
+
+    public function cssClassForContent() {
+        return '';
+    }
 }
 

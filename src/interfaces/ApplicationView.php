@@ -27,4 +27,11 @@ interface ApplicationView {
      *   The HTML to output.
      */
     public function outputTitle() ;
+
+    /**
+     * Return the CSS class for the content of the page.
+     *
+     * @return mixed
+     */
+    public function cssClassForContent();
 }
