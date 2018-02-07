@@ -76,7 +76,10 @@ class Register implements ApplicationView
         <button type="submit" class="btn btn-primary">Submit</button>
     </div>
     
-        
+    <div class="text-center">
+        <br />
+        You already have an account? Please <a href="/HealthChainPHP/?q=login"">sign in</a>.
+    </div>
 </form>
 EOS;
 
