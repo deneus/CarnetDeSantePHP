@@ -38,24 +38,26 @@ class Register implements ApplicationView
 
         $html = <<<EOS
 <form action="registerPost.html" method="post" class="registerForm col-md-8 col-lg-6">
+    <h2 class="text-center pb-3">Create an account</h2>
+
     <div class="form-group required row">
-        <label for="full_name" class="col-sm-2 text-center mt-2"><i class="fa fa-user-plus"></i> *</label>
-        <input type="text" class="form-control col-sm-9" id="full_name" name="fullname" placeholder="First Name Last Name">
+        <label for="full_name" class="col-2 text-center mt-2"><i class="fa fa-user-plus"></i> *</label>
+        <input type="text" class="form-control col-9" id="full_name" name="fullname" placeholder="First Name Last Name">
     </div>
     
     <div class="form-group required row">
-        <label for="email" class="col-sm-2 text-center mt-2"><i class="fa fa-envelope"></i> *</label>
-        <input type="text" class="form-control col-sm-9" id="email" name="email" placeholder="email">
+        <label for="email" class="col-2 text-center mt-2"><i class="fa fa-envelope"></i> *</label>
+        <input type="text" class="form-control col-9" id="email" name="email" placeholder="email">
     </div>
 
     <div class="form-group required row">
-        <label for="dob" class="col-sm-2 text-center mt-2"><i class="fa fa-calendar-alt"></i> *</label>
-        <input type="text" class="form-control col-sm-9" id="dob" name="dob" placeholder="Date of Birth">
+        <label for="dob" class="col-2 text-center mt-2"><i class="fa fa-calendar-alt"></i> *</label>
+        <input type="text" class="form-control col-9" id="dob" name="dob" placeholder="Date of Birth">
     </div>
     
     <div class="form-group required row">
-        <label for="type" class="col-sm-2 text-center mt-2"><i class="fa fa-user"></i> / <i class="fa fa-user-md"></i> *</label>
-        <select class="form-control custom-select col-sm-9" id="type" name="type">
+        <label for="type" class="col-2 text-center mt-2"><i class="fa fa-user"></i> / <i class="fa fa-user-md"></i> *</label>
+        <select class="form-control custom-select col-9" id="type" name="type">
             <option value="-1">-- Please select --</option>
             <option value="$typePatient">Patient</option>
             <option value="$typeDoctor">Doctor</option>
@@ -63,12 +65,12 @@ class Register implements ApplicationView
     </div>    
 
     <div class="form-group required row">
-        <label for="pass_phrase" class="col-sm-2 text-center mt-2"><i class="fa fa-lock"></i> *</label>
-        <input type="password" class="form-control col-sm-9" id="pass_phrase" name="passphrase" placeholder="Your password">
+        <label for="pass_phrase" class="col-2 text-center mt-2"><i class="fa fa-lock"></i> *</label>
+        <input type="password" class="form-control col-9" id="pass_phrase" name="passphrase" placeholder="Your password">
     </div>
 
     <div class="row">
-        <div class="col-sm-9 offset-sm-0">
+        <div class="col-9">
             <i>Fields marked with a (*) are mandatory.</i>
             <br /><br />
         </div>
