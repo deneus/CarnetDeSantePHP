@@ -111,6 +111,8 @@ foreach ($obj as $e) {
         <!-- menu -->
         <link rel="stylesheet" href="src/layout/css/slidebars.css">
         <link rel="stylesheet" href="src/layout/css/jquery.mmenu.all.css">
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <link rel="stylesheet" href="/resources/demos/style.css">
         <!-- custom -->
         <link rel="stylesheet" href="src/layout/css/global.css" />
     </head>
@@ -169,6 +171,7 @@ foreach ($obj as $e) {
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="src/lib/dynatable/jquery.dynatable.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src="src/layout/js/lib/dropzone.js"></script>
     <script src="src/layout/js/slidebars.js"></script>
     <script src="src/layout/js/scripts.js"></script>

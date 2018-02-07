@@ -32,4 +32,6 @@ Dropzone.options.myAwesomeDropzone = {
 $( document ).ready(function() {
     // Documentation; https://www.dynatable.com/
     var dynatable = $("#listOfNotes").dynatable();
+
+    $( "#dob" ).datepicker();
 });
