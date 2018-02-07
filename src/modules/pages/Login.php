@@ -3,10 +3,13 @@
 namespace HealthChain\modules\pages;
 use HealthChain\interfaces\ApplicationView;
 use HealthChain\layout\LayoutTrait;
+use HealthChain\modules\classes\User;
+use HealthChain\modules\traits\PostTrait;
 
 class Login implements ApplicationView
 {
     use LayoutTrait;
+    use PostTrait;
 
     /**
      * Generate the header html to output.
@@ -27,10 +30,27 @@ class Login implements ApplicationView
      */
     public function outputHtmlContent()
     {
-        //TODO renderAddFormLogin;
+        $html = '<form action="loginPost.html" method="post">';
+        $html .= '<ul>';
+        $html .= '<li><label for="login">Enter your key: </label><input type="password" id="login" name="login" placeholder="Your key" /></li>';
+        $html .= '<li><input type="submit" /></li>';
+        $html .= '</ul>';
+        $html .= '</form>';
+        return $html;
     }
 
-    public function outputTitle() {
+    public function loginPost($post)
+    {
+        //TODO: Add proper error management
+        $loggedIn = false;
+        if(isset($post['login'])){
+            $user = new User();
+            $user->login($post['login']);
+        }
+    }
+
+    public function outputTitle()
+    {
         return 'Login';
     }
 }

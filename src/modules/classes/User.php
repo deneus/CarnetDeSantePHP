@@ -18,12 +18,16 @@ class User
 
     public function __construct()
     {
+        //FIXME: Error due to an unknown constant. Had to intialise this class
+        $neoPHP = new NeoPHP();
+        $this->_user = false;
         if(isset($_SESSION['user']) && !empty($_SESSION['user'])){
             $this->_user = $_SESSION['user'];
         }
-        if(isset($_POST) && !empty($_POST)){
+        //TODO: Proper sanitize
+        /*if(isset($_POST) && !empty($_POST)){
             $this->_formValues = $this->sanitize($_POST);
-        }
+        }*/
     }
 
     /**
@@ -34,10 +38,17 @@ class User
      */
     public function login($privateKey, $passphrase ='', $useRealPrivateKey = false)
     {
-        //TODO: Load NEO wallet with Public Key
-        if(empty($passphrase)){
-
+        if($this->_user === false) {
+            //TODO: Load NEO wallet with passphrase
+            if (empty($passphrase)) {
+                $wallet = new NeoWallet($privateKey);
+                if ($wallet->getAddress()) {
+                    $_SESSION['user'] = $wallet->getWIF();
+                    $this->_user = $_SESSION['user'];
+                }
+             }
         }
+        return $this->_user !== false;
     }
 
     /**
@@ -46,8 +57,6 @@ class User
      */
     public function register($passphrase)
     {
-        //FIXME: Error due to an unknown constant. Had to intialise this class
-        $neoPHP = new NeoPHP();
         $newWallet = new NeoWallet();
         //FIXME: Max execution time. For now no encryption
         //$newWallet->encryptWallet($passphrase);

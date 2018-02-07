@@ -9,26 +9,43 @@ use HealthChain\modules\pages\accessDelegation;
 use HealthChain\modules\pages\Home ;
 use HealthChain\modules\pages\NewEntry;
 use HealthChain\modules\pages\Register;
+use HealthChain\modules\pages\Login;
 
 $GLOBALS['ipfs'] = new IPFS("localhost", "8080", "5001");
 $GLOBALS['instance_id'] = 'a831rwxi1a3gzaorw1w2z49dlsor';
 
 // --------------------------------------------------
 // Router.
-if (!isset($_GET['q'])) {
-    $_GET['q'] = 'home';
+$pagesWithoutLogin = array('login', 'register', 'registerPost', 'loginPost');
+if(!isset($_SESSION['user']) && (isset($_GET['q']) && !in_array($_GET['q'],$pagesWithoutLogin))){
+    $query = 'login';
 }
-switch ($_GET['q']) {
+else if (!isset($_GET['q'])) {
+    $query = 'home';
+}
+else{
+    $query = htmlspecialchars($_GET['q'], ENT_QUOTES);
+}
+switch ($query) {
     case 'newEntry':
         $page = new NewEntry();
         break;
-
     case 'accessDelegation':
         $page = new AccessDelegation();
         break;
     case 'login':
-        //TODO APU
+        $page = new Login();
         break;
+    case 'loginPost':
+        $login = new Login();
+        $login->loginPost($_POST);
+        if(!isset($_SESSION['user'])){
+            $page = new Login();
+        }
+        else{
+            $page = new Home();
+        }
+    break;
     case 'register':
         $page = new Register(Register::ACTION_DISPLAY_FORM);
         break;
