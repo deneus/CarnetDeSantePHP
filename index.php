@@ -111,7 +111,6 @@ foreach ($obj as $e) {
         <!-- menu -->
         <link rel="stylesheet" href="src/layout/css/slidebars.css">
         <link rel="stylesheet" href="src/layout/css/jquery.mmenu.all.css">
-        <link rel="stylesheet" href="src/layout/css/font-awesome.css">
         <!-- custom -->
         <link rel="stylesheet" href="src/layout/css/global.css" />
     </head>
@@ -161,6 +160,7 @@ foreach ($obj as $e) {
                     <li class="mm-listitem"><a href="/HealthChainPHP/"><i class="fa fa-home mr-3"></i>Home</a></li>
                     <li class="mm-listitem"><a href="/HealthChainPHP/?q=newEntry"><i class="fa fa-plus mr-3"></i>New entry</a></li>
                     <li class="mm-listitem"><a href="/HealthChainPHP/?q=accessDelegation"><i class="fa fa-user-md mr-3"></i>Access delegation</a></li>
+                    <li class="mm-listitem"><a href="/HealthChainPHP/?q=signOut"><i class="fa fa-sign-out-alt mr-3"></i>Sign out</a></li>
                 </ul>
             </div>
         </div>
@@ -172,6 +172,7 @@ foreach ($obj as $e) {
     <script src="src/layout/js/lib/dropzone.js"></script>
     <script src="src/layout/js/slidebars.js"></script>
     <script src="src/layout/js/scripts.js"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
 
 </body>
 </html>
