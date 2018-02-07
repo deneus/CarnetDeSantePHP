@@ -38,39 +38,42 @@ class Register implements ApplicationView
 
         $html = <<<EOS
 <form action="registerPost.html" method="post" class="registerForm col-md-8 col-lg-6">
-    <div class="form-group required ">
-        <label for="first_name">First Name *</label>
-        <input type="text" class="form-control" id="first_name" name="firstname" placeholder="First Name">
+    <div class="form-group required row">
+        <label for="full_name" class="col-sm-2 text-center mt-2"><i class="fa fa-user-plus"></i> *</label>
+        <input type="text" class="form-control col-sm-9" id="full_name" name="fullname" placeholder="First Name Last Name">
     </div>
     
-    <div class="form-group required ">
-        <label for="last_name">First Name *</label>
-        <input type="text" class="form-control" id="last_name" name="lastname" placeholder="Last Name">
+    <div class="form-group required row">
+        <label for="email" class="col-sm-2 text-center mt-2"><i class="fa fa-envelope"></i> *</label>
+        <input type="text" class="form-control col-sm-9" id="email" name="email" placeholder="email">
     </div>
 
-    <div class="form-group required ">
-        <label for="last_name">Date of birth</label>
-        <input type="text" class="form-control" id="dob" name="dob" placeholder="Date of Birth">
+    <div class="form-group required row">
+        <label for="dob" class="col-sm-2 text-center mt-2"><i class="fa fa-calendar-alt"></i> *</label>
+        <input type="text" class="form-control col-sm-9" id="dob" name="dob" placeholder="Date of Birth">
     </div>
     
-    <div class="form-group required ">
-        <label for="type">Type of registration *</label>
-        <select class="form-control custom-select" id="type" name="type">
+    <div class="form-group required row">
+        <label for="type" class="col-sm-2 text-center mt-2"><i class="fa fa-user"></i> / <i class="fa fa-user-md"></i> *</label>
+        <select class="form-control custom-select col-sm-9" id="type" name="type">
             <option value="-1">-- Please select --</option>
             <option value="$typePatient">Patient</option>
             <option value="$typeDoctor">Doctor</option>
         </select>
     </div>    
 
-    <div class="form-group required ">
-        <label for="pass_phrase">Your password *</label>
-        <input type="password" class="form-control" id="pass_phrase" name="passphrase" placeholder="Your password">
+    <div class="form-group required row">
+        <label for="pass_phrase" class="col-sm-2 text-center mt-2"><i class="fa fa-lock"></i> *</label>
+        <input type="password" class="form-control col-sm-9" id="pass_phrase" name="passphrase" placeholder="Your password">
     </div>
 
-    <div>
-        <i>Fields marked with a (*) are mandatory.</i>
-        <br /><br />
+    <div class="row">
+        <div class="col-sm-9 offset-sm-0">
+            <i>Fields marked with a (*) are mandatory.</i>
+            <br /><br />
+        </div>
     </div>
+    
     
     <div class="text-right">
         <button type="submit" class="btn btn-primary">Submit</button>
