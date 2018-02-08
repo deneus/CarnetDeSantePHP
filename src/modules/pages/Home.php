@@ -3,13 +3,12 @@
 namespace HealthChain\modules\pages;
 
 use HealthChain\interfaces\ApplicationView;
-use HealthChain\layout\LayoutTrait;
 use HealthChain\modules\classes\Entry;
 use HealthChain\test\Tests;
 
 class Home implements ApplicationView
 {
-    use LayoutTrait;
+
 
 
     private $hashes;
@@ -31,14 +30,6 @@ class Home implements ApplicationView
 
         return $html;
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function outputHtmlHeader() {
-        return $this->generateHeader('Welcome to your Health Booklet');
-    }
-
 
     /**
      * Generate the filters for the table, in javascript.

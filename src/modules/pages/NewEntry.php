@@ -3,14 +3,12 @@
 namespace HealthChain\modules\pages;
 
 use HealthChain\interfaces\ApplicationView;
-use HealthChain\layout\LayoutTrait;
 use HealthChain\layout\MessagesTraits;
 use HealthChain\modules\classes\Entry;
 use HealthChain\modules\traits\PostTrait;
 
 class NewEntry implements ApplicationView
 {
-    use LayoutTrait;
     use MessagesTraits;
     use PostTrait;
 
@@ -23,17 +21,6 @@ class NewEntry implements ApplicationView
 
         $this->ipfs = $ipfs;
         $this->entry = new Entry();
-    }
-
-    /**
-     * Generate the header html to output.
-     *
-     * @return mixed
-     *   The HTML to output.
-     */
-    public function outputHtmlHeader()
-    {
-        return $this->generateHeader('Health Booklet - Add new entry.');
     }
 
     /**

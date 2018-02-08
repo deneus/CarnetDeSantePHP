@@ -2,13 +2,11 @@
 
 namespace HealthChain\modules\pages;
 use HealthChain\interfaces\ApplicationView;
-use HealthChain\layout\LayoutTrait;
 use HealthChain\modules\classes\User;
 use HealthChain\modules\traits\PostTrait;
 
 class Register implements ApplicationView
 {
-    use LayoutTrait;
     use PostTrait;
 
     const ACTION_DISPLAY_FORM = 'display';
@@ -27,14 +25,11 @@ class Register implements ApplicationView
     {
         $this->_action = $action;
     }
-    public function outputHtmlHeader()
-    {
-        return $this->generateHeader('Health Booklet - Register.');
-    }
-
 
     protected function _formRegister()
     {
+        global $directory;
+
         $typePatient = User::TYPE_USER_PATIENT;
         $typeDoctor = User::TYPE_USER_DOCTOR;
 
@@ -87,7 +82,7 @@ class Register implements ApplicationView
     <div class="row">
         <div class="col-10 offset-1 text-center">
             <br />
-            You already have an account? Please <a href="/HealthChainPHP/login.html">sign in</a>.
+            You already have an account? Please <a href="$directory/login.html">sign in</a>.
         </div>
     </div>
 </form>
@@ -119,6 +114,8 @@ EOS;
 
     public function registerPost()
     {
+        global $directory;
+
         try{
             $user = new User();
             //TODO: Adding form validator in here
@@ -169,7 +166,7 @@ EOS;
     <div class="row">
         <div class="col-10 offset-1 text-center">
             <br />
-            Now it's time to <a href="/HealthChainPHP/login.html">log in</a>.
+            Now it's time to <a href="$directory/login.html">log in</a>.
         </div>
     </div>
 

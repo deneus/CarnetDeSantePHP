@@ -10,42 +10,50 @@ use HealthChain\modules\pages\Home ;
 use HealthChain\modules\pages\NewEntry;
 use HealthChain\modules\pages\Register;
 use HealthChain\modules\pages\Login;
+use HealthChain\modules\pages\Logout;
 
 $GLOBALS['ipfs'] = new IPFS("localhost", "8080", "5001");
 $GLOBALS['instance_id'] = 'a831rwxi1a3gzaorw1w2z49dlsor';
+$GLOBALS['directory'] = '/HealthChainPHP';
 
 // --------------------------------------------------
 // Router.
-
-if(isUserNotConnected()){
-    $query = 'login';
-}
-else if (!isset($_GET['q'])) {
-    $query = 'home';
-}
-
-else{
+$query = '';
+if (isset($_GET['q'])) {
     $query = htmlspecialchars($_GET['q'], ENT_QUOTES);
 }
+
+if (isset($_SESSION['user'])) {
+    $userLoggedIn = TRUE;
+    if ($query === '') {
+        $query = 'home';
+    }
+}
+else {
+    $userLoggedIn = FALSE;
+    $availablePages = [
+        'login',
+        'register',
+        'registerPost',
+        'loginPost',
+    ];
+    if ($query === '') {
+        $query = 'login';
+    }
+    if (!in_array($query,$availablePages) ) {
+        header('Location: '.$directory.'/');
+    }
+}
+
 switch ($query) {
-    case 'newEntry':
-        $page = new NewEntry();
-        break;
-    case 'accessDelegation':
-        $page = new AccessDelegation();
-        break;
+    // Not logged pages.
     case 'login':
         $page = new Login();
         break;
     case 'loginPost':
         $login = new Login();
         $login->loginPost($_POST);
-        if(!isset($_SESSION['user'])){
-            $page = new Login();
-        }
-        else{
-            $page = new Home();
-        }
+        header('Location: '.$directory.'/');
     break;
     case 'register':
         $page = new Register(Register::ACTION_DISPLAY_FORM);
@@ -53,20 +61,27 @@ switch ($query) {
     case 'registerPost':
         $page = new Register(Register::ACTION_SUBMIT_FORM);
         break;
-    case 'home':
-    default;
-        $page = new Home();
-        break;
 
+    // Logged pages.
+    case 'logout':
+        unset($_SESSION['user']);
+        header('Location: '.$directory.'/');
+    case 'newEntry':
+        $page = new NewEntry();
+        break;
+    case 'accessDelegation':
+        $page = new AccessDelegation();
+        break;
+        break;
+    case 'home':
+        $page = new Home();
+    default;
+        break;
 }
 
-$displayNavigation = TRUE;
 $title = $page->outputTitle();
 $cssClass = $page->cssClassForContent();
 $content = $page->outputHtmlContent();
-$header = $page->outputHtmlHeader();
-
-
 
 /*
 // PRE REQUIS
@@ -141,7 +156,7 @@ foreach ($obj as $e) {
     <div canvas="container" class="overflow-x-hidden  <?php echo $cssClass ?>">
         <!-- header -->
         <div class="header bg-info pt-2 pb-2">
-            <?php if ($displayNavigation): ?>
+            <?php if ($userLoggedIn): ?>
             <div class="ml-3 float-left">
                 <div class="open-menu"><i class="fa fa-bars fa-3x"></i></div>
                 <div class="close-menu"><i class="fa fa-times fa-3x"></i></div>
@@ -162,16 +177,27 @@ foreach ($obj as $e) {
         <!-- end: content -->
 
         <!-- footer -->
-        <footer class="row bg-info pt-3 pb-3 text-right">
-            <div class="col-10 offset-1 font-italic">
-                <div>Proudly developed by deneus and Pug. </div>
-                <div>Produced in 2018.</div>
-            </div>
+        <footer class="row bg-info pt-3 pb-3 no-gutters">
+            <?php if ($userLoggedIn) : ?>
+                <div class="col-10 offset-1 text-right">
+                    <div>Proudly developed by deneus and Pug. </i></div>
+                    <div><i class="far fa-copyright"></i> 2018 All right reserved</div>
+                </div>
+            <?php else : ?>
+                <div class="col-10 offset-1 text-center">
+                    <div class="margin-0-auto col-md-8 col-lg-6">
+                        <div>Proudly developed by deneus and Pug. </i></div>
+                        <div><i class="far fa-copyright"></i> 2018 All right reserved</div>
+                    </div>
+                </div>
+            <?php endif ?>
+
+
         </footer>
         <!-- end footer -->
     </div>
 
-    <?php if ($displayNavigation): ?>
+    <?php if ($userLoggedIn): ?>
     <!-- navigation -->
     <nav off-canvas="main-menu left shift" id="menu" class="mm-menu mm-menu_offcanvas mm-menu_opened">
         <div class="mm-panels">
@@ -181,10 +207,10 @@ foreach ($obj as $e) {
                 </div>
 
                 <ul class="mm-listview">
-                    <li class="mm-listitem"><a href="/HealthChainPHP/"><i class="fa fa-home mr-3"></i>Home</a></li>
-                    <li class="mm-listitem"><a href="/HealthChainPHP/?q=newEntry"><i class="fa fa-plus mr-3"></i>New entry</a></li>
-                    <li class="mm-listitem"><a href="/HealthChainPHP/?q=accessDelegation"><i class="fa fa-user-md mr-3"></i>Access delegation</a></li>
-                    <li class="mm-listitem"><a href="/HealthChainPHP/?q=signOut"><i class="fa fa-sign-out-alt mr-3"></i>Sign out</a></li>
+                    <li class="mm-listitem"><a href="<?php echo $directory; ?>/home.html"><i class="fa fa-home mr-3"></i>Home</a></li>
+                    <li class="mm-listitem"><a href="<?php echo $directory; ?>/newEntry.html"><i class="fa fa-plus mr-3"></i>New entry</a></li>
+                    <li class="mm-listitem"><a href="<?php echo $directory; ?>/?q=accessDelegation"><i class="fa fa-user-md mr-3"></i>Access delegation</a></li>
+                    <li class="mm-listitem"><a href="<?php echo $directory; ?>/logout.html"><i class="fa fa-sign-out-alt mr-3"></i>Sign out</a></li>
                 </ul>
             </div>
         </div>
@@ -203,10 +229,3 @@ foreach ($obj as $e) {
 
 </body>
 </html>
-
-<?php
-
-function isUserNotConnected() {
-    $pagesWithoutLogin = array('login', 'register', 'registerPost', 'loginPost');
-    return !isset($_SESSION['user']) && (isset($_GET['q']) && !in_array($_GET['q'],$pagesWithoutLogin));
-}

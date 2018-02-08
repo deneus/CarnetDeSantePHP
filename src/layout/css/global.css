@@ -97,6 +97,7 @@ body .dynatable-search {
     box-shadow: 10px 10px 5px 0px rgba(19,135,151, 1);
 }
 
-.qrcode {
+.qrcode,
+.margin-0-auto{
     margin: 0 auto;
 }

@@ -2,25 +2,12 @@
 
 namespace HealthChain\modules\pages;
 use HealthChain\interfaces\ApplicationView;
-use HealthChain\layout\LayoutTrait;
 use HealthChain\modules\classes\User;
 use HealthChain\modules\traits\PostTrait;
 
 class Login implements ApplicationView
 {
-    use LayoutTrait;
     use PostTrait;
-
-    /**
-     * Generate the header html to output.
-     *
-     * @return mixed
-     *   The HTML to output.
-     */
-    public function outputHtmlHeader()
-    {
-        return $this->generateHeader('Health Booklet - Login.');
-    }
 
     /**
      * Generate the content html to output.
@@ -30,6 +17,7 @@ class Login implements ApplicationView
      */
     public function outputHtmlContent()
     {
+        global $directory;
         $html = <<<EOS
 <form action="loginPost.html" method="post" class="loginForm col-md-8 col-lg-6" autocomplete="off">
     <h2 class="text-center pb-3">Log in</h2>
@@ -50,7 +38,7 @@ class Login implements ApplicationView
     <div class="row">
         <div class="col-10 offset-1 text-center">
             <br />
-            You don't have an account? Please <a href="/HealthChainPHP/register.html">register</a>.
+            You don't have an account? Please <a href="$directory/register.html">register</a>.
         </div>
     </div>
 </form>    
