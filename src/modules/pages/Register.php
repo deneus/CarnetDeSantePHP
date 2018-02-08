@@ -85,7 +85,7 @@ class Register implements ApplicationView
     <div class="row">
         <div class="col-10 offset-1 text-center">
             <br />
-            You already have an account? Please <a href="/HealthChainPHP/?q=login"">sign in</a>.
+            You already have an account? Please <a href="/HealthChainPHP/?q=login">sign in</a>.
         </div>
     </div>
 </form>

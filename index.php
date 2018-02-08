@@ -117,19 +117,19 @@ foreach ($obj as $e) {
     <head>
         <title><?php echo $title; ?> | Your Health Booklet</title>
         <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
         <!-- Bootstrap -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css"
               integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
         <!-- Dynatable -->
-        <link  rel="stylesheet" href="src/lib/dynatable/jquery.dynatable.css" §>
+        <link  rel="stylesheet" href="src/lib/dynatable/jquery.dynatable.css" />
         <!-- dropzone -->
-        <link  rel="stylesheet" href="src/layout/css/dropzone.css" §>
+        <link  rel="stylesheet" href="src/layout/css/dropzone.css" />
         <!-- menu -->
-        <link rel="stylesheet" href="src/layout/css/slidebars.css">
-        <link rel="stylesheet" href="src/layout/css/jquery.mmenu.all.css">
-        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-        <link rel="stylesheet" href="/resources/demos/style.css">
+        <link rel="stylesheet" href="src/layout/css/slidebars.css" />
+        <link rel="stylesheet" href="src/layout/css/jquery.mmenu.all.css" />
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
+        <link rel="stylesheet" href="/resources/demos/style.css" />
         <!-- custom -->
         <link rel="stylesheet" href="src/layout/css/global.css" />
     </head>

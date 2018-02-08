@@ -50,10 +50,10 @@ class Login implements ApplicationView
     <div class="row">
         <div class="col-10 offset-1 text-center">
             <br />
-            You don't have an account? Please <a href="/HealthChainPHP/?q=register"">register</a>.
+            You don't have an account? Please <a href="/HealthChainPHP/?q=register">register</a>.
         </div>
     </div>
-    
+</form>    
 EOS;
 
         return $html;
