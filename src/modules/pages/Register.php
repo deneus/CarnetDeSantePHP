@@ -148,17 +148,19 @@ EOS;
                 <br /> Please save carefully the following information.</p>
             </div>
             
-            <div class="row">
+            <div class="row border highlight-background pt-2 pb-2">
                 <label for="login" class="col-2 text-center mt-2"><i class="fa fa-key"></i></label>
-                <div id="userKey" class="col-10" style="word-wrap: break-word;"><b>$userKey</b></div>
-                <button id="copyToClipboardBtn" class="btn btn-success col-12" data-clipboard-target="#userKey">Copy to clipboard</button>
+                <div id="userKey" class="col-10" style="word-wrap: break-word;"><b>$userKey</b><br /><br></div>
+                <br />
+                <br />
+                <button id="copyToClipboardBtn" class="btn btn-success col-10 offset-1" data-clipboard-target="#userKey">Copy to clipboard</button>
             </div>
 
             <div class="row">
                 <div>
                     <br/>Your key is also available as a QRCode for storage purpose.
                 </div>
-                <div class="qrcode">
+                <div class="margin-0-auto">
                     <img src="data:image/png;base64, $qrCode">
                 </div>
             </div>

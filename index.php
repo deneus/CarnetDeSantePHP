@@ -155,7 +155,7 @@ foreach ($obj as $e) {
 
     <div canvas="container" class="overflow-x-hidden  <?php echo $cssClass ?>">
         <!-- header -->
-        <div class="header bg-info pt-2 pb-2">
+        <div class="text-white bg-info pt-2 pb-2">
             <?php if ($userLoggedIn): ?>
             <div class="ml-3 float-left">
                 <div class="open-menu"><i class="fa fa-bars fa-3x"></i></div>
