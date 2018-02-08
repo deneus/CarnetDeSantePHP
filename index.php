@@ -16,13 +16,14 @@ $GLOBALS['instance_id'] = 'a831rwxi1a3gzaorw1w2z49dlsor';
 
 // --------------------------------------------------
 // Router.
-$pagesWithoutLogin = array('login', 'register', 'registerPost', 'loginPost');
-if(!isset($_SESSION['user']) && (isset($_GET['q']) && !in_array($_GET['q'],$pagesWithoutLogin))){
+
+if(isUserNotConnected()){
     $query = 'login';
 }
 else if (!isset($_GET['q'])) {
     $query = 'home';
 }
+
 else{
     $query = htmlspecialchars($_GET['q'], ENT_QUOTES);
 }
@@ -59,6 +60,7 @@ switch ($query) {
 
 }
 
+$displayNavigation = TRUE;
 $title = $page->outputTitle();
 $cssClass = $page->cssClassForContent();
 $content = $page->outputHtmlContent();
@@ -139,10 +141,12 @@ foreach ($obj as $e) {
     <div canvas="container" class="overflow-x-hidden  <?php echo $cssClass ?>">
         <!-- header -->
         <div class="header bg-info pt-2 pb-2">
+            <?php if ($displayNavigation): ?>
             <div class="ml-3 float-left">
                 <div class="open-menu"><i class="fa fa-bars fa-3x"></i></div>
                 <div class="close-menu"><i class="fa fa-times fa-3x"></i></div>
             </div>
+            <?php endif ?>
             <div style="text-align: center">
                 <h1 class="font-weight-bold">Your Health Booklet!</h1>
             </div>
@@ -167,6 +171,7 @@ foreach ($obj as $e) {
         <!-- end footer -->
     </div>
 
+    <?php if ($displayNavigation): ?>
     <!-- navigation -->
     <nav off-canvas="main-menu left shift" id="menu" class="mm-menu mm-menu_offcanvas mm-menu_opened">
         <div class="mm-panels">
@@ -185,11 +190,13 @@ foreach ($obj as $e) {
         </div>
     </nav>
     <!-- end: navigation -->
+    <?php endif ?>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="src/lib/dynatable/jquery.dynatable.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src="src/layout/js/lib/dropzone.js"></script>
+    <script src="src/layout/js/lib/clipboard.js"></script>
     <script src="src/layout/js/slidebars.js"></script>
     <script src="src/layout/js/scripts.js"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
@@ -197,3 +204,9 @@ foreach ($obj as $e) {
 </body>
 </html>
 
+<?php
+
+function isUserNotConnected() {
+    $pagesWithoutLogin = array('login', 'register', 'registerPost', 'loginPost');
+    return !isset($_SESSION['user']) && (isset($_GET['q']) && !in_array($_GET['q'],$pagesWithoutLogin));
+}

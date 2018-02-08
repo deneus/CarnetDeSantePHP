@@ -34,4 +34,6 @@ $( document ).ready(function() {
     var dynatable = $("#listOfNotes").dynatable();
 
     $( "#dob" ).datepicker();
+
+    new Clipboard('#copyToClipboardBtn')
 });

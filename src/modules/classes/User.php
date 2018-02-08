@@ -61,15 +61,7 @@ class User
         //FIXME: Max execution time. For now no encryption
         //$newWallet->encryptWallet($passphrase);
 
-        $html = '<p> Your login is your unique identifier</p>';
-        $html .= '<p> Your backup code is used if you lost your password.';
-        $html .= '<br /> Those informations are private and should never be shared with everyone.';
-        $html .= '<br /> We will never ask you such information by email or in the phone.';
-        $html .= '<br /> Please save carefully the following information.';
-        $html .= '<ul>';
-       // $html .= '<li>Your Login: ' .$newWallet->getEncryptedKey() .'</li>';
-        $html .= '<li>Your Login: ' . $newWallet->getWIF() . '</li>';
-        return $html;
+        return $newWallet->getWIF();
     }
 
     public function getListDocs()
