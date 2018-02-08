@@ -37,7 +37,7 @@ class Register implements ApplicationView
         $typeDoctor = User::TYPE_USER_DOCTOR;
 
         $html = <<<EOS
-<form action="registerPost.html" method="post" class="registerForm col-md-8 col-lg-6">
+<form action="registerPost.html" method="post" class="registerForm col-md-8 col-lg-6" autocomplete="off">
     <h2 class="text-center pb-3">Create an account</h2>
 
     <div class="form-group required row">
