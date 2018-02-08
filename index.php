@@ -177,7 +177,7 @@ foreach ($obj as $e) {
         <!-- end: content -->
 
         <!-- footer -->
-        <footer class="row bg-info pt-3 pb-3 no-gutters">
+        <footer class="row bg-info pt-3 pb-3 no-gutters small">
             <?php if ($userLoggedIn) : ?>
                 <div class="col-10 offset-1 text-right">
                     <div>Proudly developed by deneus and Pug. </i></div>
