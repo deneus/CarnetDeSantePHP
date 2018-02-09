@@ -2,17 +2,20 @@
 
 namespace HealthChain\modules\pages;
 use HealthChain\interfaces\ApplicationView;
+use HealthChain\layout\MessagesTraits;
 use HealthChain\modules\classes\User;
 use HealthChain\modules\traits\PostTrait;
 
 class Register implements ApplicationView
 {
     use PostTrait;
+    use MessagesTraits;
 
     const ACTION_DISPLAY_FORM = 'display';
     const ACTION_SUBMIT_FORM = 'submit';
 
     protected $_action;
+    protected $userKey;
 
     /**
      * Generate the header html to output.
@@ -26,7 +29,13 @@ class Register implements ApplicationView
         $this->_action = $action;
     }
 
-    protected function _formRegister()
+    /**
+     * Render the registration form.
+     *
+     * @return string
+     *   The html.
+     */
+    protected function renderRegistrationForm()
     {
         global $directory;
 
@@ -39,7 +48,7 @@ class Register implements ApplicationView
 
     <div class="form-group required row">
         <label for="full_name" class="col-2 text-center mt-2"><i class="fa fa-user-plus"></i> *</label>
-        <input type="text" class="form-control col-9" id="full_name" name="fullname" placeholder="First Name Last Name">
+        <input type="text" class="form-control col-9" id="full_name" name="fullName" placeholder="First Name Last Name">
     </div>
     
     <div class="form-group required row">
@@ -63,7 +72,7 @@ class Register implements ApplicationView
 
     <div class="form-group required row">
         <label for="pass_phrase" class="col-2 text-center mt-2"><i class="fa fa-lock"></i> *</label>
-        <input type="password" class="form-control col-9" id="pass_phrase" name="passphrase" placeholder="Your password">
+        <input type="password" class="form-control col-9" id="pass_phrase" name="passPhrase" placeholder="Your password">
     </div>
 
     <div class="row">
@@ -97,41 +106,96 @@ EOS;
      *
      * @return String
      *   The HTML to output.
+     *
+     * @throws \Exception
      */
     public function outputHtmlContent()
     {
+        $post = $this->sanitize($_POST);
+        $html = $this->processPost($post);
+
         switch($this->_action){
             case self::ACTION_SUBMIT_FORM:
-                return $this->registerPost();
+                $html .= $this->renderRegistrationComplete();
             break;
             case self::ACTION_DISPLAY_FORM:
             default:
-                return $this->_formRegister();
+                $html .= $this->renderRegistrationForm();
             break;
         }
-
+        return $html;
     }
 
-    public function registerPost()
+    /**
+     * Process the post.
+     *
+     * @param $post
+     *   The sanitized POST.
+     *
+     * @return string
+     *   The html.
+     */
+    public function processPost($post)
     {
+        if ($_GET['q'] === 'registerPost') {
+            try{
+
+                if (!$this->isPostFull($post)) {
+                    $html = $this->generateFailMessage('All fields are mandatory.');
+                    $this->_action = self::ACTION_DISPLAY_FORM;
+                    return $html;
+                }
+                if (!$this->isDateValid($post['dob'])) {
+                    $html = $this->generateFailMessage('The date of birth field should follow the format dd/mm/yyyy.');
+                    $this->_action = self::ACTION_DISPLAY_FORM;
+                    return $html;
+                }
+
+                // Generate user key.
+                $user = new User();
+                $user->createUser($post);
+                $this->userKey = $user->register($user->passPhrase);
+
+                /*
+                 * Generate QRCode.
+                 * I used Google api to do it, for security reason, I need to process it as follow.
+                 * @todo denis: the QrCode is a path to the site + the key, not just the key.
+                 */
+                $this->qrCode = base64_encode(file_get_contents('https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl='.$this->userKey.'&choe=UTF-8'));
+
+                $user->key = $this->qrCode;
+                $user->storeUser();
+            }
+            catch (\Exception $e){
+                echo 'An error occurred when trying to create the account. Please retry later';
+            }
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function outputTitle() {
+        return 'Register';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function cssClassForContent() {
+        return 'bg-info';
+    }
+
+    /**
+     * Render the page registration complete.
+     *
+     * @return string
+     *   The html.
+     */
+    public function renderRegistrationComplete() {
         global $directory;
 
-        try{
-            $user = new User();
-            //TODO: Adding form validator in here
-            $post = $this->sanitize($_POST);
-            $passphrase = $post['passphrase'];
-
-            // Generate user key.
-            $userKey = $user->register($passphrase);
-
-            /*
-             * Generate QRCode.
-             * I used Google api to do it, for security reason, I need to process it as follow.
-             */
-            $qrCode = base64_encode(file_get_contents('https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl='.$userKey.'&choe=UTF-8'));
-
-            $html = <<<EOS
+        $html = <<<EOS
 <div class="registerPost col-md-8 col-lg-6">
     <h2 class="text-center pb-3">Registration complete</h2>
     
@@ -150,7 +214,7 @@ EOS;
             
             <div class="row border highlight-background pt-2 pb-2">
                 <label for="login" class="col-2 text-center mt-2"><i class="fa fa-key"></i></label>
-                <div id="userKey" class="col-10" style="word-wrap: break-word;"><b>$userKey</b><br /><br></div>
+                <div id="userKey" class="col-10" style="word-wrap: break-word;"><b>$this->userKey</b><br /><br></div>
                 <br />
                 <br />
                 <button id="copyToClipboardBtn" class="btn btn-success col-10 offset-1" data-clipboard-target="#userKey">Copy to clipboard</button>
@@ -161,7 +225,7 @@ EOS;
                     <br/>Your key is also available as a QRCode for storage purpose.
                 </div>
                 <div class="margin-0-auto">
-                    <img src="data:image/png;base64, $qrCode">
+                    <img src="data:image/png;base64, $this->qrCode">
                 </div>
             </div>
             
@@ -179,18 +243,49 @@ EOS;
 </div>
 EOS;
 
-            return $html;
-        }
-        catch (\Exception $e){
-            echo 'An error occured when trying to create the account. Please retry later';
-        }
+        return $html;
     }
 
-    public function outputTitle() {
-        return 'Register';
+    /**
+     * Test if the POST is complete.
+     *
+     * @param $post
+     *   The sanitized POST.
+     *
+     * @return bool
+     *   The verification status.
+     */
+    public function isPostFull($post) {
+        return !($post['fullName'] === ''
+            || $post['email'] === ''
+            || $post['dob'] === ''
+            || $post['type'] === ''
+            || $post['passPhrase'] === '');
     }
 
-    public function cssClassForContent() {
-        return 'bg-info';
+
+    /**
+     * Test if the date has a valid format.
+     *
+     * @param $date
+     *   The date to test.
+     *
+     * @return bool
+     *   The verification status.
+     */
+    public function isDateValid($date) {
+        try {
+            $explode = explode('/', $date);
+            $dateTime = new \DateTime();
+            $dateTime->format('d/m/Y');
+            if (!$dateTime->setDate($explode[2], $explode['1'], $explode[0])) {
+                return FALSE;
+            };
+            return TRUE;
+        }
+        catch (\Exception $e) {
+            return FALSE;
+        }
+
     }
 }

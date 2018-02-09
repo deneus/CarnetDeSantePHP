@@ -31,8 +31,9 @@ class Tests {
 
             $explode = explode('.', $file);
 
-            if(count($explode) === 2 &&
-                $explode[1] === 'json') {
+            if(count($explode) === 2
+                && $explode[1] === 'json'
+                && is_int((int)$explode[0]) ) {
 
                 $filename = $directory .'/'.$file;
                 $text = file_get_contents($filename);

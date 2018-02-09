@@ -38,11 +38,16 @@ EOT;
             $message = 'A problem occured, please contact the administrator.';
         }
 
-        $html = <<<EOT
-<div class="alert alert-danger">
+        $extraCss = '';
+        if(!isset($_SESSION['user'])) {
+            $extraCss = 'col-md-8 col-lg-6 margin-0-auto mb-3';
+        }
+
+        $html = <<<EOS
+<div class="alert alert-danger $extraCss">
     $message
 </div>
-EOT;
+EOS;
 
         return $html;
     }

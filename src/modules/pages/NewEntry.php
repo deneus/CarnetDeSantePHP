@@ -28,6 +28,8 @@ class NewEntry implements ApplicationView
      *
      * @return String
      *   The HTML to output.
+     *
+     * @throws \Exception
      */
     public function outputHtmlContent()
     {
@@ -36,6 +38,15 @@ class NewEntry implements ApplicationView
         return $html;
     }
 
+
+    /**
+     * Process all possible post in the page.
+     *
+     * @return string
+     *   The html to output.
+     *
+     * @throws \Exception
+     */
     public function processPost() {
         $post = $this->sanitize($_POST);
 
@@ -55,6 +66,12 @@ class NewEntry implements ApplicationView
         return $html;
     }
 
+    /**
+     * Render the form to add an entry.
+     *
+     * @return string
+     *   The Html.
+     */
     public function renderAddForm() {
         $html = <<<EOS
 <form action="?q=newEntry&action=fields-storage"  id="new_entry" method="post">
@@ -103,7 +120,6 @@ EOS;
         return $html;
     }
 
-
     /**
      * Process the post.
      *
@@ -118,7 +134,6 @@ EOS;
              $html = $this->generateFailMessage('All fields are mandatory.');
              return $html;
          }
-
 
         $this->entry->setDateToNow();
         $this->entry->who->name = $post['doctor_name'];
@@ -160,14 +175,31 @@ EOS;
         }
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function outputTitle() {
         return 'New Entry';
     }
 
+    /**
+     * Test if the POST is complete.
+     *
+     * @param $post
+     *   The sanitized POST.
+     *
+     * @return bool
+     *   The verification status.
+     */
     public function isPostFull($post) {
-        return !($post['doctor_name'] === '' || $post['doctor_speciality'] === 'default' || $post['comment']);
+        return !($post['doctor_name'] === ''
+            || $post['doctor_speciality'] === 'default'
+            || $post['comment']);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function cssClassForContent() {
         return '';
     }

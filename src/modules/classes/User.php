@@ -11,13 +11,25 @@ class User
 {
     use PostTrait;
 
-    private $_formValues;
-    private $_user;
     const TYPE_USER_PATIENT= 0;
     const TYPE_USER_DOCTOR= 1;
 
+    private $_user;
+    protected $ipfs;
+    public $fullName;
+    public $email;
+    public $dob;
+    public $type;
+    public $passPhrase;
+    public $key;
+    public $records;
+
     public function __construct()
     {
+        global $ipfs;
+        $this->ipfs = $ipfs;
+        $this->records = [];
+
         //FIXME: Error due to an unknown constant. Had to intialise this class
         $neoPHP = new NeoPHP();
         $this->_user = false;
@@ -62,6 +74,40 @@ class User
         //$newWallet->encryptWallet($passphrase);
 
         return $newWallet->getWIF();
+    }
+
+    /**
+     * Create a user from registration form post.
+     *
+     * @param $post
+     *   The post data from registration form.
+     */
+    public function createUser($post) {
+        $this->fullName = $post['fullName'];
+        $this->email = $post['email'];
+        $this->dob = $post['dob'];
+        $this->type = $post['type'];
+        $this->passPhrase = $post['passPhrase'];
+    }
+
+    /**
+     * Store the user in ipfs as master document.
+     *
+     * @return mixed
+     */
+    public function storeUser() {
+        // Store the entry locally. >> DEBUG PURPOSE.
+        $json = json_encode($this);
+        $fileName = 'src/test/master.json';
+        $myFile = fopen($fileName, 'w+');
+        fwrite($myFile, $json);
+        fclose($myFile);
+
+        // Store the entry in ipfs.
+        $json = json_encode($this);
+        $hash = $this->ipfs->add($json);
+
+        return $hash;
     }
 
     public function getListDocs()

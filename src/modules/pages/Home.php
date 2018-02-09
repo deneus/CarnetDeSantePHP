@@ -8,9 +8,6 @@ use HealthChain\test\Tests;
 
 class Home implements ApplicationView
 {
-
-
-
     private $hashes;
 
     public function __construct()
