@@ -94,6 +94,7 @@ body .dynatable-search {
 .registerForm,
 .loginForm,
 .registerPost {
+    top: -30em;
     background-color: #ffffff;
     margin:0 auto;
     padding: 1em;

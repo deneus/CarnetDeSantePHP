@@ -223,7 +223,8 @@ foreach ($obj as $e) {
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src="src/layout/js/lib/dropzone.js"></script>
     <script src="src/layout/js/lib/clipboard.js"></script>
-    <script src="src/layout/js/slidebars.js"></script>
+    <script src="src/layout/js/lib/jquery.easing.1.3.js"></script>
+    <script src="src/layout/js/lib/slidebars.js"></script>
     <script src="src/layout/js/scripts.js"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
 

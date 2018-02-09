@@ -36,4 +36,7 @@ $( document ).ready(function() {
     $( "#dob" ).datepicker();
 
     new Clipboard('#copyToClipboardBtn')
+
+    // Animation of the forms.
+    $('.loginForm, .registerForm, .registerPost').animate({ top: '+=30em' }, 600, 'easeOutBack');
 });
