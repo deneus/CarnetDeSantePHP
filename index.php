@@ -209,7 +209,7 @@ foreach ($obj as $e) {
                 <ul class="mm-listview">
                     <li class="mm-listitem"><a href="<?php echo $directory; ?>/home.html"><i class="fa fa-home mr-3"></i>Home</a></li>
                     <li class="mm-listitem"><a href="<?php echo $directory; ?>/newEntry.html"><i class="fa fa-plus mr-3"></i>New entry</a></li>
-                    <li class="mm-listitem"><a href="<?php echo $directory; ?>/?q=accessDelegation"><i class="fa fa-user-md mr-3"></i>Access delegation</a></li>
+                    <li class="mm-listitem"><a href="<?php echo $directory; ?>/accessDelegation.html"><i class="fa fa-user-md mr-3"></i>Access delegation</a></li>
                     <li class="mm-listitem"><a href="<?php echo $directory; ?>/logout.html"><i class="fa fa-sign-out-alt mr-3"></i>Sign out</a></li>
                 </ul>
             </div>

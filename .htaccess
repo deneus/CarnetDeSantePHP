@@ -6,6 +6,7 @@ RewriteRule    ^loginPost.html/?$   ?q=loginPost        [NC,L]
 
 RewriteRule    ^home.html/?$   ?q=home        [NC,L]
 RewriteRule    ^newEntry.html/?$   ?q=newEntry        [NC,L]
+RewriteRule    ^accessDelegation.html/?$   ?q=accessDelegation        [NC,L]
 RewriteRule    ^logout.html/?$   ?q=logout        [NC,L]
 
 SetEnv BLOCKCHAIN_ENV dev

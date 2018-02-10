@@ -53,6 +53,8 @@ class Home implements ApplicationView
      *   The html.
      */
     private function generateTable() {
+        global $directory;
+
         if (count($this->hashes) === 0 || ($this->hashes[0] === NULL)) {
             $html = '<div class="row border highlight-background pt-3 pb-3 pl-3">
                 You don\'t have any medical entry at the moment. <br /><br />
@@ -61,7 +63,13 @@ class Home implements ApplicationView
             return $html;
         }
 
-        $html = '<table id="listOfNotes" class="table table-sm table-hover table-striped">';
+        $html = '<div class="mb-4 text-right">
+                    <a href="' . $directory . '/newEntry.html" class="btn btn-primary pl-2"><i class="fa fa-plus mr-1"></i>Add new entry</a>
+                    &nbsp;
+                    <a href="' . $directory . '/accessDelegation.html" class="btn btn-primary pl-2"><i class="fa fa-user-md mr-1"></i>Delegate the access</a>
+                 </div>';
+        
+        $html .= '<table id="listOfNotes" class="table table-sm table-hover table-striped">';
         $html .= '<thead class="thead-dark">
             <tr>
                 <th class="col-1">Date</th>
