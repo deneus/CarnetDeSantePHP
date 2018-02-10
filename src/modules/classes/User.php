@@ -55,7 +55,10 @@ class User
             if (empty($passphrase)) {
                 $wallet = new NeoWallet($privateKey);
                 if ($wallet->getAddress()) {
-                    $_SESSION['user'] = $wallet->getWIF();
+                    $_SESSION['user']['wallet'] = $wallet->getWIF();
+                    // @todo denis: update that with KEY/VALUE pair stored within the wallet.
+                    $json = file_get_contents('src/test/master.json');
+                    $_SESSION['user']['master'] = json_decode($json);
                     $this->_user = $_SESSION['user'];
                 }
              }

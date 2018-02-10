@@ -33,16 +33,14 @@ class Tests {
 
             if(count($explode) === 2
                 && $explode[1] === 'json'
-                && is_int((int)$explode[0]) ) {
+                && $explode[0] === 'master' ) {
 
                 $filename = $directory .'/'.$file;
                 $text = file_get_contents($filename);
                 /* @var $json StdClass */
-                $json = json_decode($text);
+                $master = json_decode($text);
 
-                $fullEntry = json_encode($json);
-
-                $hash[] = $this->ipfs->add($fullEntry);
+                $hash = $master->records;
             }
 
         }

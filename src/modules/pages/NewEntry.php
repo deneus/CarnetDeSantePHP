@@ -14,6 +14,10 @@ class NewEntry implements ApplicationView
 
     public $ipfs;
     public $entry;
+    private $_action;
+
+    const ACTION_DISPLAY_FORM = 'display';
+    const ACTION_SUBMIT_FORM = 'submit';
 
     public function __construct()
     {
@@ -21,6 +25,8 @@ class NewEntry implements ApplicationView
 
         $this->ipfs = $ipfs;
         $this->entry = new Entry();
+
+        $this->_action = self::ACTION_DISPLAY_FORM;
     }
 
     /**
@@ -49,19 +55,19 @@ class NewEntry implements ApplicationView
      */
     public function processPost() {
         $post = $this->sanitize($_POST);
+        if (count($post) > 0) {
+            $this->_action = self::ACTION_SUBMIT_FORM;
+        }
 
         $html = '';
-        if (isset($_GET['action'])) {
-            if ($_GET['action'] === 'fields-storage') {
+        if ($this->_action === self::ACTION_SUBMIT_FORM) {
+            if ($post['action'] === 'fields-storage') {
                 $html .= $this->processForm($post);
             }
-
-            if ($_GET['action'] === 'file-upload') {
-                $this->processFile($_FILES['file']);
-            }
         }
-        else {
-            $_SESSION['uploaded_file'] = NULL;
+
+        if (count($_FILES)> 0) {
+            $this->processFile($_FILES['file']);
         }
         return $html;
     }
@@ -74,7 +80,7 @@ class NewEntry implements ApplicationView
      */
     public function renderAddForm() {
         $html = <<<EOS
-<form action="?q=newEntry&action=fields-storage"  id="new_entry" method="post">
+<form action="newEntry.html" id="new_entry" method="post">
     <div class="form-group required ">
         <label for="doctor_name">Doctor Name *</label>
         <input type="text" class="form-control" id="doctor_name" name="doctor_name" placeholder="Dr Schmidt">
@@ -105,11 +111,12 @@ class NewEntry implements ApplicationView
         <br /><br />
     </div>
 
+    <input type="hidden" name="action" value="fields-storage" /> 
     <button type="submit" class="btn btn-primary">Submit</button>
 
 </form>
 
-<form action="?q=newEntry&action=file-upload" class="dropzone mt-4" id="my-awesome-dropzone">
+<form  action="newEntry.html" class="dropzone mt-4" id="my-awesome-dropzone" >
       <div class="fallback">
         <input name="file" type="file" multiple />
       </div>
@@ -145,11 +152,12 @@ EOS;
                 $this->entry->attachments[] = $file;
             }
             $_SESSION['uploaded_file'] = '';
-
         }
+
         $hash = $this->entry->storeEntry();
 
         if ($hash !== NULL) {
+            $_SESSION['uploaded_file'] = NULL;
             $html = $this->generateSuccessMessage('Your entry has been saved!');
         }
         else {
@@ -170,7 +178,7 @@ EOS;
             $_SESSION['uploaded_file'][] = [
                 'hash' => $this->ipfs->add($textFromImage),
                 'mimetype' => $file['type'],
-                'type' => 'prescription',
+                'type' => 'attachment',
             ];
         }
     }
@@ -194,7 +202,7 @@ EOS;
     public function isPostFull($post) {
         return !($post['doctor_name'] === ''
             || $post['doctor_speciality'] === 'default'
-            || $post['comment']);
+            || $post['comment'] === '');
     }
 
     /**

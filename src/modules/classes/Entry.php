@@ -111,16 +111,29 @@ class Entry
      * @return mixed
      */
     public function storeEntry() {
-        // Store the entry locally. >> DEBUG PURPOSE.
+        // Store the entry in ipfs.
         $json = json_encode($this);
-        $fileName = 'src/test/' . $this->date . '.json';
+        $hash = $this->ipfs->add($json);
+
+        // Add the entry into master.
+        $_SESSION['user']['master']->records[] = $hash;
+        // Save master.
+        $json = json_encode($_SESSION['user']['master']);
+        $this->ipfs->add($json);
+
+        // Store the New Entry locally. >> DEBUG PURPOSE.
+        $json = json_encode($this);
+        $fileName = 'src/test/' . $hash . '.json';
         $myFile = fopen($fileName, 'w+');
         fwrite($myFile, $json);
         fclose($myFile);
 
-        // Store the entry in ipfs.
-        $json = json_encode($this);
-        $hash = $this->ipfs->add($json);
+        // Override the master locally >> DEBUG PURPOSE.
+        $json = json_encode($_SESSION['user']['master']);
+        $fileName = 'src/test/master.json';
+        $myFile = fopen($fileName, 'w+');
+        fwrite($myFile, $json);
+        fclose($myFile);
 
         return $hash;
     }

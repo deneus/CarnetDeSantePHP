@@ -12,8 +12,7 @@ class Home implements ApplicationView
 
     public function __construct()
     {
-        $testsHashes = new Tests();
-        $this->hashes = $testsHashes->generateTestHashes();
+        $this->hashes = $this->getRecords();
     }
 
     /**
@@ -54,6 +53,14 @@ class Home implements ApplicationView
      *   The html.
      */
     private function generateTable() {
+        if (count($this->hashes) === 0 || ($this->hashes[0] === NULL)) {
+            $html = '<div class="row border highlight-background pt-3 pb-3 pl-3">
+                You don\'t have any medical entry at the moment. <br /><br />
+                Either create an entry yourself by using New Entry, either delegate access to your doctor.
+            </div>';
+            return $html;
+        }
+
         $html = '<table id="listOfNotes" class="table table-sm table-hover table-striped">';
         $html .= '<thead class="thead-dark">
             <tr>
@@ -94,6 +101,17 @@ class Home implements ApplicationView
 
     public function cssClassForContent() {
         return '';
+    }
+
+    /**
+     * Generate test hash.
+     *
+     * @return array
+     *   An array of hash.
+     */
+    public function getRecords()
+    {
+        return array_reverse($_SESSION['user']['master']->records);
     }
 }
 
