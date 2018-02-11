@@ -61,6 +61,7 @@ class Register implements ApplicationView
         <input type="text" class="form-control col-9" id="dob" name="dob" placeholder="Date of Birth">
     </div>
     
+    <!--
     <div class="form-group required row">
         <label for="type" class="col-2 text-center mt-2"><i class="fa fa-user"></i> / <i class="fa fa-user-md"></i> *</label>
         <select class="form-control custom-select col-9" id="type" name="type">
@@ -69,7 +70,9 @@ class Register implements ApplicationView
             <option value="$typeDoctor">Doctor</option>
         </select>
     </div>    
-
+    -->
+    <input type="hidden" name="type" value="$typePatient">
+    
     <div class="form-group required row">
         <label for="pass_phrase" class="col-2 text-center mt-2"><i class="fa fa-lock"></i> *</label>
         <input type="password" class="form-control col-9" id="pass_phrase" name="passPhrase" placeholder="Your password">
@@ -151,6 +154,12 @@ EOS;
                     return $html;
                 }
 
+                if (!filter_var($post['email'], FILTER_VALIDATE_EMAIL)) {
+                    $html = $this->generateFailMessage('The email is in a wrong format.');
+                    $this->_action = self::ACTION_DISPLAY_FORM;
+                    return $html;
+                }
+
                 // Generate user key.
                 $user = new User();
                 $user->createUser($post);
@@ -206,11 +215,10 @@ EOS;
         <div class="col-10 offset-1">
             <div class="row">
                 <p>Thank you for registering into your Health Booklet.</p>
-                <p>Your access: ???</p>
                 <p>Your login is an unique identifier.</p>
                 
-                <p> Your backup code is used if you lost your password.
-                <br /> Those information are private and should never be shared with everyone.
+                <p><!-- Your backup code is used if you lost your password.
+                <br /> --> Those information are private and should never be shared with everyone.
                 <br /> We will never ask you such information by email or in the phone.
                 <br /> Please save carefully the following information.</p>
             </div>
@@ -281,9 +289,12 @@ EOS;
             $explode = explode('/', $date);
             $dateTime = new \DateTime();
             $dateTime->format('d/m/Y');
+            if (count($explode) !== 3) {
+                return FALSE;
+            }
             if (!$dateTime->setDate($explode[2], $explode['1'], $explode[0])) {
                 return FALSE;
-            };
+            }
             return TRUE;
         }
         catch (\Exception $e) {
