@@ -52,8 +52,15 @@ switch ($query) {
         break;
     case 'loginPost':
         $login = new Login();
-        $login->loginPost($_POST);
-        header('Location: '.$directory.'/');
+        $loginStatus = $login->loginPost($_POST);
+        if ($loginStatus) {
+            header('Location: '.$directory.'/');
+        }
+        else {
+            // @todo anthony: please update that as well.
+            header('Location: '.$directory.'/?q=login&error=1');
+        }
+
     break;
     case 'register':
         $page = new Register(Register::ACTION_DISPLAY_FORM);
@@ -230,3 +237,7 @@ foreach ($obj as $e) {
 
 </body>
 </html>
+
+<!--
+    KzMyUi75jeYeCmibVy74aN2k3y7n2PmdQnmje1B7e4be2cajhNGL
+-->

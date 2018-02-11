@@ -39,4 +39,23 @@ $( document ).ready(function() {
 
     // Animation of the forms.
     $('.loginForm, .registerForm, .registerPost').animate({ top: '+=30em' }, 600, 'easeOutBack');
+
+    // Auto submit the login when you have a login parameter set.
+    if (findGetParameter('login') !== null){
+        $('#loginForm').submit();
+    }
+
 });
+
+function findGetParameter(parameterName) {
+    var result = null,
+        tmp = [];
+    location.search
+        .substr(1)
+        .split("&")
+        .forEach(function (item) {
+            tmp = item.split("=");
+            if (tmp[0] === parameterName) result = decodeURIComponent(tmp[1]);
+        });
+    return result;
+}
