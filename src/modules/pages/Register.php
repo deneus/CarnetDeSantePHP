@@ -161,7 +161,9 @@ EOS;
                  * I used Google api to do it, for security reason, I need to process it as follow.
                  * @todo denis: the QrCode is a path to the site + the key, not just the key.
                  */
-                $path = $this->userKey;
+                //@todo denis: google api cannot use & in the string >> what should we do ?
+                global $directory;
+                $path = urlencode($_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'].$directory.'/?q=login&login='.$this->userKey);
                 $this->qrCode = base64_encode(file_get_contents('https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl='.$path.'&choe=UTF-8'));
 
                 $user->key = $this->qrCode;
