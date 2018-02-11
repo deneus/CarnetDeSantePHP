@@ -41,21 +41,24 @@ $( document ).ready(function() {
     $('.loginForm, .registerForm, .registerPost').animate({ top: '+=30em' }, 600, 'easeOutBack');
 
     // Auto submit the login when you have a login parameter set.
-    if (findGetParameter('login') !== null){
+    if (findLoginParameter() !== null){
+        $('#login').val(findLoginParameter());
         $('#loginForm').submit();
     }
 
 });
 
-function findGetParameter(parameterName) {
-    var result = null,
-        tmp = [];
-    location.search
-        .substr(1)
-        .split("&")
-        .forEach(function (item) {
-            tmp = item.split("=");
-            if (tmp[0] === parameterName) result = decodeURIComponent(tmp[1]);
-        });
-    return result;
+/**
+ * Find the login from the url after the # sign.
+ * @returns {*}
+ */
+function findLoginParameter() {
+    var query = window.location.toString().split('%%');
+    var parameters = query[1].split('=');
+    if (parameters[0] == 'login' && parameters[1].length > 0) {
+        return parameters[1]
+    }
+    else {
+        return null;
+    }
 }
