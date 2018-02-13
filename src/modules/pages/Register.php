@@ -5,11 +5,13 @@ use HealthChain\interfaces\ApplicationView;
 use HealthChain\layout\MessagesTraits;
 use HealthChain\modules\classes\User;
 use HealthChain\modules\traits\PostTrait;
+use HealthChain\modules\traits\QrCodeTrait;
 
 class Register implements ApplicationView
 {
     use PostTrait;
     use MessagesTraits;
+    use QrCodeTrait;
 
     const ACTION_DISPLAY_FORM = 'display';
     const ACTION_SUBMIT_FORM = 'submit';
@@ -143,21 +145,9 @@ EOS;
         if ($_GET['q'] === 'registerPost') {
             try{
 
-                if (!$this->isPostFull($post)) {
-                    $html = $this->generateFailMessage('All fields are mandatory.');
-                    $this->_action = self::ACTION_DISPLAY_FORM;
-                    return $html;
-                }
-                if (!$this->isDateValid($post['dob'])) {
-                    $html = $this->generateFailMessage('The date of birth field should follow the format dd/mm/yyyy.');
-                    $this->_action = self::ACTION_DISPLAY_FORM;
-                    return $html;
-                }
-
-                if (!filter_var($post['email'], FILTER_VALIDATE_EMAIL)) {
-                    $html = $this->generateFailMessage('The email is in a wrong format.');
-                    $this->_action = self::ACTION_DISPLAY_FORM;
-                    return $html;
+                $postIntegrity = $this->verifyPostIntegrity($post);
+                if ($postIntegrity !== NULL) {
+                    return $postIntegrity;
                 }
 
                 // Generate user key.
@@ -170,9 +160,7 @@ EOS;
                  * I used Google api to do it, for security reason, I need to process it as follow.
                  * @todo denis: the QrCode is a path to the site + the key, not just the key.
                  */
-                global $directory;
-                $path = urlencode($_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['HTTP_HOST'].$directory.'/?q=login%%login='.$this->userKey);
-                $this->qrCode = base64_encode(file_get_contents('https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl='.$path.'&choe=UTF-8'));
+                $this->qrCode = $this->generateQrCode($this->userKey);
 
                 $user->key = $this->qrCode;
                 $user->storeUser();
@@ -205,6 +193,7 @@ EOS;
      */
     public function renderRegistrationComplete() {
         global $directory;
+        $qrCode = $this->displayQrCode($this->qrCode);
 
         $html = <<<EOS
 <div class="registerPost col-md-8 col-lg-6">
@@ -235,7 +224,7 @@ EOS;
                     <br/>Your key is also available as a QRCode for storage purpose.
                 </div>
                 <div class="margin-0-auto">
-                    <img src="data:image/png;base64, $this->qrCode">
+                    $qrCode
                 </div>
             </div>
             
@@ -301,4 +290,27 @@ EOS;
         }
 
     }
+
+    public function verifyPostIntegrity($post) {
+        $output = NULL;
+        if (!$this->isPostFull($post)) {
+            $html = $this->generateFailMessage('All fields are mandatory.');
+            $this->_action = self::ACTION_DISPLAY_FORM;
+            return $html;
+        }
+        if (!$this->isDateValid($post['dob'])) {
+            $html = $this->generateFailMessage('The date of birth field should follow the format dd/mm/yyyy.');
+            $this->_action = self::ACTION_DISPLAY_FORM;
+            return $html;
+        }
+
+        if (!filter_var($post['email'], FILTER_VALIDATE_EMAIL)) {
+            $html = $this->generateFailMessage('The email is in a wrong format.');
+            $this->_action = self::ACTION_DISPLAY_FORM;
+            return $html;
+        }
+        return $output;
+
+    }
+
 }

@@ -98,6 +98,19 @@ class User
         $this->type = $post['type'];
         $this->passPhrase = $post['passPhrase'];
     }
+    /**
+     * Create a user from registration form post.
+     *
+     * @param $post
+     *   The post data from registration form.
+     */
+    public function createDoctor($post) {
+        $this->fullName = $post['doctor_name'];
+        $this->email = '';
+        $this->dob = '';
+        $this->type = User::TYPE_USER_DOCTOR;
+        $this->passPhrase = '';
+    }
 
     /**
      * Store the user in ipfs as master document.
