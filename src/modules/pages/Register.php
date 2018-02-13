@@ -117,10 +117,22 @@ EOS;
     public function outputHtmlContent()
     {
         $post = $this->sanitize($_POST);
-        $html = $this->processPost($post);
+        $this->defineAction($post);
+
+        $html = '';
+        $errorMessage = '';
+
+        if (count($post) > 0) {
+            $errorFromPost = $this->verifyPostIntegrity($post);
+            if ($errorFromPost !== NULL) {
+                $errorMessage = $errorFromPost;
+                $this->_action = self::ACTION_DISPLAY_FORM;
+            }
+        }
 
         switch($this->_action){
             case self::ACTION_SUBMIT_FORM:
+                $html .= $this->processPost($post);
                 $html .= $this->renderRegistrationComplete();
             break;
             case self::ACTION_DISPLAY_FORM:
@@ -128,7 +140,15 @@ EOS;
                 $html .= $this->renderRegistrationForm();
             break;
         }
-        return $html;
+        return $errorMessage . $html;
+    }
+
+    public function defineAction($post) {
+        if (count($post) > 0) {
+            $this->_action = self::ACTION_SUBMIT_FORM;
+        } else {
+            $this->_action = self::ACTION_DISPLAY_FORM;
+        }
     }
 
     /**
@@ -142,13 +162,7 @@ EOS;
      */
     public function processPost($post)
     {
-        if ($_GET['q'] === 'registerPost') {
             try{
-
-                $postIntegrity = $this->verifyPostIntegrity($post);
-                if ($postIntegrity !== NULL) {
-                    return $postIntegrity;
-                }
 
                 // Generate user key.
                 $user = new User();
@@ -168,7 +182,6 @@ EOS;
             catch (\Exception $e){
                 echo 'An error occurred when trying to create the account. Please retry later';
             }
-        }
     }
 
     /**
