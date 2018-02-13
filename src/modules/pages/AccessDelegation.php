@@ -40,7 +40,8 @@ class AccessDelegation implements ApplicationView
         $this->defineAction($post);
 
         $errorMessage = '';
-        if(!$this->isPostFull($post)){
+        if(count($post) > 0
+            && !$this->isPostFull($post)){
             $errorMessage = $this->generateFailMessage('All fields are mandatory.');
             $this->_action = self::ACTION_DISPLAY_FORM;
         }
@@ -161,8 +162,13 @@ EOS;
      *   The verification status.
      */
     public function isPostFull($post) {
-        return !($post['doctor_name'] === ''
-            || $post['doctor_speciality'] === ''
-            || $post['delegation_time'] === '');
+        if (count($post) > 0 ) {
+            return !($post['doctor_name'] === ''
+                || $post['doctor_speciality'] === ''
+                || $post['delegation_time'] === '');
+        }
+        else {
+            return TRUE;
+        }
     }
 }
