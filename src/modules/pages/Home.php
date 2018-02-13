@@ -4,6 +4,7 @@ namespace HealthChain\modules\pages;
 
 use HealthChain\interfaces\ApplicationView;
 use HealthChain\modules\classes\Entry;
+use HealthChain\modules\classes\User;
 use HealthChain\test\Tests;
 
 class Home implements ApplicationView
@@ -55,11 +56,19 @@ class Home implements ApplicationView
     private function generateTable() {
         global $directory;
 
-        $html = '<div class="mb-4 text-right">
-                    <a href="' . $directory . '/newEntry.html" class="btn btn-primary pl-2"><i class="fa fa-plus mr-1"></i>Add new entry</a>
-                    &nbsp;
-                    <a href="' . $directory . '/accessDelegation.html" class="btn btn-primary pl-2"><i class="fa fa-user-md mr-1"></i>Delegate the access</a>
-                 </div>';
+        if (User::isUserDoctor()) {
+            $delegationLink = '<a href="' . $directory . '/logout.html" class="btn btn-danger pl-2"><i class="fa fa-user-md mr-1"></i>Terminate your access</a>';;
+        }
+        else {
+            $delegationLink = '<a href="' . $directory . '/accessDelegation.html" class="btn btn-primary pl-2"><i class="fa fa-user-md mr-1"></i>Delegate the access</a>';
+        }
+        $html = '<div class="row text-right">
+                    <div class="mb-4 w-100">
+                        <a href="' . $directory . '/newEntry.html" class="btn btn-primary pl-2"><i class="fa fa-plus mr-1"></i>Add new entry</a>
+                        &nbsp;
+                        '.$delegationLink.'
+                    </div>
+                </div>';
 
         if (count($this->hashes) === 0 || ($this->hashes[0] === NULL)) {
             $html .= '<div class="row border highlight-background pt-3 pb-3 pl-3">

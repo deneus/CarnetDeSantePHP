@@ -5,12 +5,14 @@ namespace HealthChain\modules\pages;
 use HealthChain\interfaces\ApplicationView;
 use HealthChain\layout\MessagesTraits;
 use HealthChain\modules\classes\Entry;
+use HealthChain\modules\traits\FormTrait;
 use HealthChain\modules\traits\PostTrait;
 
 class NewEntry implements ApplicationView
 {
     use MessagesTraits;
     use PostTrait;
+    use FormTrait;
 
     public $ipfs;
     public $entry;
@@ -79,40 +81,26 @@ class NewEntry implements ApplicationView
      *   The Html.
      */
     public function renderAddForm() {
+        $fieldDoctorName = $this->renderFieldDoctorName();
+        $fieldDoctorSpeciality = $this->renderFieldDoctorSpeciality();
+        $fieldComment = $this->renderFieldComment();
+        $starIsMandatory = $this->renderStarIsMandatory();
+        $submitButton = $this->renderSubmitButton('Submit');
+
         $html = <<<EOS
 <form action="newEntry.html" id="new_entry" method="post">
-    <div class="form-group required ">
-        <label for="doctor_name">Doctor Name *</label>
-        <input type="text" class="form-control" id="doctor_name" name="doctor_name" placeholder="Dr Schmidt">
-    </div>
+    
+    $fieldDoctorName
+    
+    $fieldDoctorSpeciality
 
-    <div class="form-group required ">
-        <label for="doctor_speciality">Speciality *</label>
-        <select class="form-control custom-select" id="doctor_speciality" name="doctor_speciality">
-            <option value="default">-- Please Choose --</option>
-            <optgroup label="Type of doctor">
-                <option>General Medicine</option>
-                <option>Other</option>
-            </optgroup>
-            <optgroup label="Relatives">
-                <option>Parent</option>
-                <option>Me</option>
-            </optgroup>
-        </select>
-    </div>
+    $fieldComment
     
-    <div class="form-group required ">
-        <label for="comment">Comment *</label>
-        <textarea class="form-control" id="comment" name="comment" rows="3"></textarea>
-    </div>
-    
-    <div>
-        <i>Fields marked with a (*) are mandatory.</i>
-        <br /><br />
-    </div>
+    $starIsMandatory
 
     <input type="hidden" name="action" value="fields-storage" /> 
-    <button type="submit" class="btn btn-primary">Submit</button>
+    
+    $submitButton
 
 </form>
 

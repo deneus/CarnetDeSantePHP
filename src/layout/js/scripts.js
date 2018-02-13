@@ -45,7 +45,6 @@ $( document ).ready(function() {
         $('#login').val(findLoginParameter());
         $('#loginForm').submit();
     }
-
 });
 
 /**

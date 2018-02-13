@@ -124,5 +124,14 @@ class User
 
     }
 
+    public static function isUserDoctor() {
+        if ($_SESSION['user']['master']->type === User::TYPE_USER_DOCTOR) {
+            return TRUE;
+        }
+        else {
+            return FALSE;
+        }
+    }
+
 
 }

@@ -5,6 +5,7 @@ session_start();
 require __DIR__ . '/vendor/autoload.php';
 
 use Cloutier\PhpIpfsApi\IPFS;
+use HealthChain\modules\classes\User;
 use HealthChain\modules\pages\accessDelegation;
 use HealthChain\modules\pages\Home ;
 use HealthChain\modules\pages\NewEntry;
@@ -79,6 +80,7 @@ switch ($query) {
     case 'accessDelegation':
         $page = new AccessDelegation();
         break;
+    case 'terminateAccess':
         break;
     case 'home':
         $page = new Home();
@@ -216,7 +218,11 @@ foreach ($obj as $e) {
                 <ul class="mm-listview">
                     <li class="mm-listitem"><a href="<?php echo $directory; ?>/home.html"><i class="fa fa-home mr-3"></i>Home</a></li>
                     <li class="mm-listitem"><a href="<?php echo $directory; ?>/newEntry.html"><i class="fa fa-plus mr-3"></i>New entry</a></li>
-                    <li class="mm-listitem"><a href="<?php echo $directory; ?>/accessDelegation.html"><i class="fa fa-user-md mr-3"></i>Access delegation</a></li>
+                    <?php if(User::isUserDoctor()): ?>
+                        <li class="mm-listitem text-danger"><a href="<?php echo $directory; ?>/terminateAccess.html"><i class="fa fa-user-md mr-3"></i>Terminate access</a></li>
+                    <?php else : ?>
+                        <li class="mm-listitem"><a href="<?php echo $directory; ?>/accessDelegation.html"><i class="fa fa-user-md mr-3"></i>Access delegation</a></li>
+                    <?php endif; ?>
                     <li class="mm-listitem"><a href="<?php echo $directory; ?>/logout.html"><i class="fa fa-sign-out-alt mr-3"></i>Sign out</a></li>
                 </ul>
             </div>
