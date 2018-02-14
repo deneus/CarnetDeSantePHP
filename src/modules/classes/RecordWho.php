@@ -2,7 +2,7 @@
 
 namespace HealthChain\modules\classes;
 
-class EntryWho {
+class RecordWho {
 
     public $name;
     public $speciality;

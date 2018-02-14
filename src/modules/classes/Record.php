@@ -5,7 +5,7 @@ namespace HealthChain\modules\classes;
 use DateTime;
 use HealthChain\layout\MessagesTraits;
 
-class Entry
+class Record
 {
     use MessagesTraits;
 
@@ -22,15 +22,15 @@ class Entry
 
         $this->ipfs = $ipfs;
         $this->attachments = [];
-        $this->who = new EntryWho();
+        $this->who = new RecordWho();
     }
 
     /**
-     * Populate an entry from an hash.
+     * Populate arecord from an hash.
      *
      * @param $hash
      */
-    public function getEntryFromHash($hash)
+    public function getRecordFromHash($hash)
     {
         $this->hash = $hash;
 
@@ -98,7 +98,7 @@ class Entry
     }
 
     /**
-     * Set entry date to now().
+     * Set record date to now().
      */
     public function setDateToNow() {
         $date = new DateTime();
@@ -106,22 +106,22 @@ class Entry
     }
 
     /**
-     * Store the entry in ipfs.
+     * Store the record in ipfs.
      *
      * @return mixed
      */
-    public function storeEntry() {
-        // Store the entry in ipfs.
+    public function storeRecord() {
+        // Store the record in ipfs.
         $json = json_encode($this);
         $hash = $this->ipfs->add($json);
 
-        // Add the entry into master.
+        // Add the record into master.
         $_SESSION['user']['master']->records[] = $hash;
         // Save master.
         $json = json_encode($_SESSION['user']['master']);
         $this->ipfs->add($json);
 
-        // Store the New Entry locally. >> DEBUG PURPOSE.
+        // Store the New Record locally. >> DEBUG PURPOSE.
         $json = json_encode($this);
         $fileName = 'src/test/' . $hash . '.json';
         $myFile = fopen($fileName, 'w+');

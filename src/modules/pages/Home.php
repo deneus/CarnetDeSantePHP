@@ -3,7 +3,7 @@
 namespace HealthChain\modules\pages;
 
 use HealthChain\interfaces\ApplicationView;
-use HealthChain\modules\classes\Entry;
+use HealthChain\modules\classes\Record;
 use HealthChain\modules\classes\User;
 use HealthChain\test\Tests;
 
@@ -72,8 +72,8 @@ class Home implements ApplicationView
 
         if (count($this->hashes) === 0 || ($this->hashes[0] === NULL)) {
             $html .= '<div class="row border highlight-background pt-3 pb-3 pl-3">
-                You don\'t have any medical entry at the moment. <br /><br />
-                Either create an entry yourself by using New Entry, either delegate access to your doctor.
+                You don\'t have any medical record at the moment. <br /><br />
+                Either create a record yourself by using New Record, either delegate access to your doctor.
             </div>';
             return $html;
         }
@@ -95,14 +95,14 @@ class Home implements ApplicationView
                 continue;
             }
 
-            $entry = new Entry();
-            $entry->getEntryFromHash($hash);
+            $record = new Record();
+            $record->getRecordFromHash($hash);
 
             $html .= '<tr>';
-            $html .= '<td>' . $entry->renderDate() . '</td>';
-            $html .= '<td>' . $entry->renderWho() . '</td>';
-            $html .= '<td>' . $entry->comment . '</td>';
-            $html .= '<td>' . $entry->renderAttachments() . '</td>';
+            $html .= '<td>' . $record->renderDate() . '</td>';
+            $html .= '<td>' . $record->renderWho() . '</td>';
+            $html .= '<td>' . $record->comment . '</td>';
+            $html .= '<td>' . $record->renderAttachments() . '</td>';
             $html .= '</tr>';
         }
 

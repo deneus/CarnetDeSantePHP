@@ -118,14 +118,14 @@ class User
      * @return mixed
      */
     public function storeUser() {
-        // Store the entry locally. >> DEBUG PURPOSE.
+        // Store the record locally. >> DEBUG PURPOSE.
         $json = json_encode($this);
         $fileName = 'src/test/master.json';
         $myFile = fopen($fileName, 'w+');
         fwrite($myFile, $json);
         fclose($myFile);
 
-        // Store the entry in ipfs.
+        // Store the record in ipfs.
         $json = json_encode($this);
         $hash = $this->ipfs->add($json);
 

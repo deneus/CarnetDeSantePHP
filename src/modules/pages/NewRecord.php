@@ -4,7 +4,7 @@ namespace HealthChain\modules\pages;
 
 use HealthChain\interfaces\ApplicationView;
 use HealthChain\layout\MessagesTraits;
-use HealthChain\modules\classes\Entry;
+use HealthChain\modules\classes\Record;
 use HealthChain\modules\traits\FormTrait;
 use HealthChain\modules\traits\PostTrait;
 
@@ -15,7 +15,7 @@ class NewRecord implements ApplicationView
     use FormTrait;
 
     public $ipfs;
-    public $entry;
+    public $record;
     private $_action;
 
     const ACTION_DISPLAY_FORM = 'display';
@@ -26,7 +26,7 @@ class NewRecord implements ApplicationView
         global $ipfs;
 
         $this->ipfs = $ipfs;
-        $this->entry = new Entry();
+        $this->record = new Record();
 
         $this->_action = self::ACTION_DISPLAY_FORM;
     }
@@ -75,7 +75,7 @@ class NewRecord implements ApplicationView
     }
 
     /**
-     * Render the form to add an entry.
+     * Render the form to add an record.
      *
      * @return string
      *   The Html.
@@ -88,7 +88,7 @@ class NewRecord implements ApplicationView
         $submitButton = $this->renderSubmitButton('Submit');
 
         $html = <<<EOS
-<form action="newRecord.html" id="new_entry" method="post">
+<form action="newRecord.html" id="new_record" method="post">
     
     $fieldDoctorName
     
@@ -130,23 +130,23 @@ EOS;
              return $html;
          }
 
-        $this->entry->setDateToNow();
-        $this->entry->who->name = $post['doctor_name'];
-        $this->entry->who->speciality = $post['doctor_speciality'];
-        $this->entry->comment = $post['comment'];
+        $this->record->setDateToNow();
+        $this->record->who->name = $post['doctor_name'];
+        $this->record->who->speciality = $post['doctor_speciality'];
+        $this->record->comment = $post['comment'];
 
         if (!empty($_SESSION['uploaded_file'])) {
             foreach($_SESSION['uploaded_file'] as $file) {
-                $this->entry->attachments[] = $file;
+                $this->record->attachments[] = $file;
             }
             $_SESSION['uploaded_file'] = '';
         }
 
-        $hash = $this->entry->storeEntry();
+        $hash = $this->record->storeRecord();
 
         if ($hash !== NULL) {
             $_SESSION['uploaded_file'] = NULL;
-            $html = $this->generateSuccessMessage('Your entry has been saved!');
+            $html = $this->generateSuccessMessage('Your record has been saved!');
         }
         else {
             $html = $this->generateFailMessage();
@@ -175,7 +175,7 @@ EOS;
      * {@inheritdoc}
      */
     public function outputTitle() {
-        return 'New Entry';
+        return 'New Record';
     }
 
     /**
