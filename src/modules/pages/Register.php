@@ -176,7 +176,7 @@ EOS;
                  */
                 $this->qrCode = $this->generateQrCode($this->userKey);
 
-                $user->key = $this->qrCode;
+                $user->key = $this->userKey;
                 $user->storeUser();
             }
             catch (\Exception $e){
