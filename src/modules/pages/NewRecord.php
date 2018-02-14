@@ -8,7 +8,7 @@ use HealthChain\modules\classes\Entry;
 use HealthChain\modules\traits\FormTrait;
 use HealthChain\modules\traits\PostTrait;
 
-class NewEntry implements ApplicationView
+class NewRecord implements ApplicationView
 {
     use MessagesTraits;
     use PostTrait;
@@ -88,7 +88,7 @@ class NewEntry implements ApplicationView
         $submitButton = $this->renderSubmitButton('Submit');
 
         $html = <<<EOS
-<form action="newEntry.html" id="new_entry" method="post">
+<form action="newRecord.html" id="new_entry" method="post">
     
     $fieldDoctorName
     
@@ -104,7 +104,7 @@ class NewEntry implements ApplicationView
 
 </form>
 
-<form  action="newEntry.html" class="dropzone mt-4" id="my-awesome-dropzone" >
+<form  action="newRecord.html" class="dropzone mt-4" id="my-awesome-dropzone" >
       <div class="fallback">
         <input name="file" type="file" multiple />
       </div>

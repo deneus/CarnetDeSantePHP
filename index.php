@@ -8,7 +8,7 @@ use Cloutier\PhpIpfsApi\IPFS;
 use HealthChain\modules\classes\User;
 use HealthChain\modules\pages\accessDelegation;
 use HealthChain\modules\pages\Home ;
-use HealthChain\modules\pages\NewEntry;
+use HealthChain\modules\pages\NewRecord;
 use HealthChain\modules\pages\Register;
 use HealthChain\modules\pages\Login;
 use HealthChain\modules\pages\Logout;
@@ -79,8 +79,8 @@ switch ($query) {
     case 'logout':
         unset($_SESSION['user']);
         header('Location: '.$directory.'/');
-    case 'newEntry':
-        $page = new NewEntry();
+    case 'newRecord':
+        $page = new NewRecord();
         break;
     case 'accessDelegation':
         $page = new AccessDelegation();
@@ -222,7 +222,7 @@ foreach ($obj as $e) {
 
                 <ul class="mm-listview">
                     <li class="mm-listitem"><a href="<?php echo $directory; ?>/home.html"><i class="fa fa-home mr-3"></i>Home</a></li>
-                    <li class="mm-listitem"><a href="<?php echo $directory; ?>/newEntry.html"><i class="fa fa-plus mr-3"></i>New record</a></li>
+                    <li class="mm-listitem"><a href="<?php echo $directory; ?>/newRecord.html"><i class="fa fa-plus mr-3"></i>New record</a></li>
                     <?php if(User::isUserDoctor()): ?>
                         <li class="mm-listitem text-danger"><a href="<?php echo $directory; ?>/terminateAccess.html"><i class="fa fa-user-md mr-3"></i>Terminate access</a></li>
                     <?php else : ?>
