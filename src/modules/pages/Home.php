@@ -64,7 +64,7 @@ class Home implements ApplicationView
         }
         $html = '<div class="row text-right">
                     <div class="mb-4 w-100">
-                        <a href="' . $directory . '/newEntry.html" class="btn btn-primary pl-2"><i class="fa fa-plus mr-1"></i>Add new entry</a>
+                        <a href="' . $directory . '/newEntry.html" class="btn btn-primary pl-2"><i class="fa fa-plus mr-1"></i>Add new record</a>
                         &nbsp;
                         '.$delegationLink.'
                     </div>

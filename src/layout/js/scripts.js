@@ -41,9 +41,13 @@ $( document ).ready(function() {
     $('.loginForm, .registerForm, .registerPost').animate({ top: '+=30em' }, 600, 'easeOutBack');
 
     // Auto submit the login when you have a login parameter set.
-    if ($('#login').val() !== '') {
-        $('#loginForm').submit();
+    var split = window.location.toString().split('__');
+    if (split.length > 1) {
+        if ($('#login').val() !== '') {
+            $('#loginForm').submit();
+        }
     }
+
 
 });
 
