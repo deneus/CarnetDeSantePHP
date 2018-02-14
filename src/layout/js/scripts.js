@@ -47,19 +47,3 @@ $( document ).ready(function() {
 
 });
 
-/**
- * Find the login from the url after the # sign.
- * @returns {*}
- */
-function findLoginParameter() {
-    console.log(window.location.toString().split('__'));
-    var queryString = window.location.toString().split('__');
-    console.log(queryString);
-    var parameters = queryString[1].split('=');
-    if (parameters[0] == 'login' && parameters[1].length > 0) {
-        return parameters[1]
-    }
-    else {
-        return null;
-    }
-}

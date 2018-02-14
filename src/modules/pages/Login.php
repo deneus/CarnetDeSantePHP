@@ -46,7 +46,8 @@ class Login implements ApplicationView
 
     public function loginPost($post)
     {
-        if (isset($post['login'])) {
+        if (isset($post['login'])
+            && $post['login'] !== '') {
             $user = new User();
             return $user->login($post['login']);
         }
