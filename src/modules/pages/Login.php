@@ -21,8 +21,11 @@ class Login implements ApplicationView
     {
         // @todo anthony: please update htaccess to process url like ?q=login&login=aaa
         $login = '';
-        if (isset($_GET['login'])) {
-            $login = $_GET['login'];
+        if (isset($_GET['q'])) {
+            $explode = explode('__', $_GET['q']);
+            if (count($explode) > 1) {
+                $login = $explode[1];
+            }
         }
         $errorMessage = '';
         if (isset($_GET['error'])) {

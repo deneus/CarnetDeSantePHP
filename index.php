@@ -41,6 +41,11 @@ else {
     if ($query === '') {
         $query = 'login';
     }
+    // Process autologin from QrCode.
+    if (substr($query, 0, 6)) {
+        $explode = explode('__', $query);
+        $query = $explode[0];
+    }
     if (!in_array($query,$availablePages) ) {
         header('Location: '.$directory.'/');
     }

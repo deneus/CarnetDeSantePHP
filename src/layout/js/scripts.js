@@ -41,10 +41,10 @@ $( document ).ready(function() {
     $('.loginForm, .registerForm, .registerPost').animate({ top: '+=30em' }, 600, 'easeOutBack');
 
     // Auto submit the login when you have a login parameter set.
-    if (findLoginParameter() !== null){
-        $('#login').val(findLoginParameter());
+    if ($('#login').val() !== '') {
         $('#loginForm').submit();
     }
+
 });
 
 /**
@@ -52,8 +52,10 @@ $( document ).ready(function() {
  * @returns {*}
  */
 function findLoginParameter() {
-    var query = window.location.toString().split('%%');
-    var parameters = query[1].split('=');
+    console.log(window.location.toString().split('__'));
+    var queryString = window.location.toString().split('__');
+    console.log(queryString);
+    var parameters = queryString[1].split('=');
     if (parameters[0] == 'login' && parameters[1].length > 0) {
         return parameters[1]
     }
