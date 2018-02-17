@@ -54,6 +54,8 @@ else {
 switch ($query) {
     // Not logged pages.
     case 'login':
+        unset($_SESSION['user']);
+        unset($_SESSION['uploaded_file']);
         $page = new Login();
         break;
     case 'loginPost':
@@ -78,6 +80,7 @@ switch ($query) {
     // Logged pages.
     case 'logout':
         unset($_SESSION['user']);
+        unset($_SESSION['uploaded_file']);
         header('Location: '.$directory.'/');
     case 'newRecord':
         $page = new NewRecord();
@@ -230,6 +233,7 @@ foreach ($obj as $e) {
                     <?php endif; ?>
                     <li class="mm-listitem"><a href="<?php echo $directory; ?>/logout.html"><i class="fa fa-sign-out-alt mr-3"></i>Sign out</a></li>
                 </ul>
+            </div>
             </div>
         </div>
     </nav>
