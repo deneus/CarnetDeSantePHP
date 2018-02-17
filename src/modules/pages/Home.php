@@ -40,7 +40,7 @@ class Home implements ApplicationView
         <script type="application/javascript">
         $( document ).ready(function() {
             // Documentation; https://www.dynatable.com/
-            var dynatable = $("#listOfNotes").dynatable();
+            var dynatable = $("#listOfRecords").dynatable();
         });
         </script>';
 
@@ -78,8 +78,8 @@ class Home implements ApplicationView
             return $html;
         }
 
-        $html .= '<table id="listOfNotes" class="table table-sm table-hover table-striped">';
-        $html .= '<thead class="thead-dark">
+        $html .= '<table id="listOfRecords" class="list-of-records">';
+        $html .= '<thead class="">
             <tr>
                 <th class="col-1">Date</th>
                 <th class="col-2">Who</th>
@@ -89,20 +89,17 @@ class Home implements ApplicationView
          </thead>';
         $html .= '<tbody>';
 
+        /** @var $record Record*/
         foreach ($this->records as $record) {
             // The hash is broken.
             if ($record === NULL) {
                 continue;
             }
 
-            //$record = new Record();
-            //$record->getRecordFromHash($record);
-            //$record->setRecord($stdClass);
-
             $html .= '<tr>';
             $html .= '<td>' . $record->renderDate() . '</td>';
             $html .= '<td>' . $record->renderWho() . '</td>';
-            $html .= '<td>' . $record->comment . '</td>';
+            $html .= '<td>' . $record->renderComment() . '</td>';
             $html .= '<td>' . $record->renderAttachments() . '</td>';
             $html .= '</tr>';
         }

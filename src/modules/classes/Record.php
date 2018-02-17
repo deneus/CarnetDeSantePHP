@@ -71,9 +71,12 @@ class Record
      *   The html.
      */
     public function renderDate() {
-        $html = date('d/m/o', $this->date);
-        $html .= '<br /> at ';
-        $html .= date('G:i', $this->date);
+        $html = '<div class="mx-1 mx-sm-2">
+                    '.date('d/m/o', $this->date).'
+                    <span class="d-none d-lg-inline"><br />
+                    '.date('G:i', $this->date).'</span>
+                </div>';
+
         return $html;
     }
 
@@ -88,17 +91,37 @@ class Record
             return '';
         }
 
-        $html = '<ul>';
+        $html = '<ul class="attachments pl-0">';
         foreach ($this->attachments as $key => $attachment) {
             if (is_array($attachment)) {
                 $attachment = (object)$attachment;
             }
-            $html .='<li><a target="_blank" href="attachment.php?hash='.$attachment->hash.'&type='.$attachment->mimetype.'">'.$attachment->type.'</a></li>';
+            $url = 'attachment.php?hash='.$attachment->hash.'&type='.$attachment->mimetype;
+            $html .='<li class="mx-1 mx-sm-2">
+                        <a target="_blank" href="'.$url.'">
+                            <i class="fa fa-file-alt mr-2"></i>
+                            <span class="d-none d-lg-inline">'.$attachment->type.'</span>
+                            <span class="d-inline d-lg-none">'.substr($attachment->type, 0, 3).'...</span>
+                        </a>
+                     </li>';
         }
         $html .= '</ul>';
 
         return $html;
 
+    }
+
+    /**
+     * Render comments.
+     *
+     * @return string
+     *   The html.
+     */
+    public function renderComment() {
+        $html = '<div class="d-none d-lg-block mx-1 mx-sm-2"><span>'.$this->comment.'</span></div>
+                <div class="d-block d-lg-none mx-1 mx-sm-2"><span>'.substr($this->comment, 0, 100).'...</span></div>';
+
+        return $html;
     }
 
     /**
@@ -108,11 +131,15 @@ class Record
      *   Who formatted.
      */
     public function renderWho() {
-        $output = $this->who_name . ' <br /><i>' . $this->who_speciality .'</i>';
         if ($this->who_speciality === '') {
-            $output = $this->who_name;
+            $who = $this->who_name;
+        }else {
+            $who = $this->who_name . ' <br /><i>' . $this->who_speciality .'</i>';
         }
-        return $output;
+
+        $html = '<div class="d-block mx-1 mx-sm-2"><span>'.$who.'</span></div>';
+
+        return $html;
     }
 
     /**

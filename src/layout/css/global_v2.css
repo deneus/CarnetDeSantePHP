@@ -1,0 +1,50 @@
+body,
+.main-color {
+    color: #6C6E71;
+}
+.bg-light-grey{
+    background-color: #F0F1F1;
+}
+.bg-dark-blue {
+    background-color: #00335B;
+}
+body .bg-info,
+body .btn-primary{
+    background-color: #0071BE !important;
+}
+body .btn-primary:hover {
+    background-color: #0062a5 !important;
+}
+.h-45 {
+    height:45px;
+}
+.h-200{
+    height:200px;
+}
+.main-menu ul{
+    list-style-type: none;
+    display: inline-flex;
+}
+.dropzone {
+    border: 2px dashed #0071BE;
+}
+.attachments {
+    list-style-type: none;
+}
+
+.list-of-records th {
+    border-bottom: 1px solid #B6B7B8;
+    line-height: 20px;
+    font-weight: normal;
+}
+.list-of-records td {
+    height: 75px;
+    border-right: 1px solid #E9E9EA;
+    border-bottom: 1px solid #E9E9EA;
+}
+.list-of-records td:last-of-type {
+    border-right: none;
+}
+.list-of-records tr:hover{
+    background-color: #F2F2F2;
+}
