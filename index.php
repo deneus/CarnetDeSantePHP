@@ -69,7 +69,7 @@ switch ($query) {
             header('Location: '.$directory.'/?q=login&error=1');
         }
 
-    break;
+        break;
     case 'register':
         $page = new Register(Register::ACTION_DISPLAY_FORM);
         break;
@@ -148,73 +148,74 @@ foreach ($obj as $e) {
 
 <!DOCTYPE html>
 <html>
-    <head>
-        <title><?php echo $title; ?> | Your Health Booklet</title>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-        <!-- Bootstrap -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css"
-              integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
-        <!-- Dynatable -->
-        <link  rel="stylesheet" href="src/lib/dynatable/jquery.dynatable.css" />
-        <!-- dropzone -->
-        <link  rel="stylesheet" href="src/layout/css/dropzone.css" />
-        <!-- menu -->
-        <link rel="stylesheet" href="src/layout/css/slidebars.css" />
-        <link rel="stylesheet" href="src/layout/css/jquery.mmenu.all.css" />
-        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
-        <link rel="stylesheet" href="/resources/demos/style.css" />
-        <!-- custom -->
-        <link rel="stylesheet" href="src/layout/css/global.css" />
-    </head>
+<head>
+    <title><?php echo $title; ?> | Your Health Booklet</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css"
+          integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
+    <!-- Dynatable -->
+    <link  rel="stylesheet" href="src/lib/dynatable/jquery.dynatable.css" />
+    <!-- dropzone -->
+    <link  rel="stylesheet" href="src/layout/css/dropzone.css" />
+    <!-- menu -->
+    <link rel="stylesheet" href="src/layout/css/slidebars.css" />
+    <link rel="stylesheet" href="src/layout/css/jquery.mmenu.all.css" />
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
+    <link rel="stylesheet" href="/resources/demos/style.css" />
+    <!-- custom -->
+    <link rel="stylesheet" href="src/layout/css/anonymous.css" />
+    <link rel="stylesheet" href="src/layout/css/global_v1.css" />
+</head>
 
 <body class="page-<?php echo strtolower($title); ?>">
 
-    <div canvas="container" class="overflow-x-hidden  <?php echo $cssClass ?>">
-        <!-- header -->
-        <div class="text-white bg-info pt-2 pb-2">
-            <?php if ($userLoggedIn): ?>
+<div canvas="container" class="overflow-x-hidden  <?php echo $cssClass ?>">
+    <!-- header -->
+    <div class="text-white bg-info pt-2 pb-2">
+        <?php if ($userLoggedIn): ?>
             <div class="ml-3 float-left">
                 <div class="open-menu"><i class="fa fa-bars fa-3x"></i></div>
                 <div class="close-menu"><i class="fa fa-times fa-3x"></i></div>
             </div>
-            <?php endif ?>
-            <div style="text-align: center">
-                <h1 class="font-weight-bold">Your Health Booklet!</h1>
-            </div>
+        <?php endif ?>
+        <div style="text-align: center">
+            <h1 class="font-weight-bold">Your Health Booklet!</h1>
         </div>
-        <!-- end: header -->
+    </div>
+    <!-- end: header -->
 
-        <!-- content -->
-        <div class="row no-gutters pt-5 pb-5">
-            <div class="col-10 offset-1">
-                <?php echo $content; ?>
-            </div>
+    <!-- content -->
+    <div class="row no-gutters pt-5 pb-5">
+        <div class="col-10 offset-1">
+            <?php echo $content; ?>
         </div>
-        <!-- end: content -->
+    </div>
+    <!-- end: content -->
 
-        <!-- footer -->
-        <footer class="row bg-info pt-3 pb-3 no-gutters small">
-            <?php if ($userLoggedIn) : ?>
-                <div class="col-10 offset-1 text-right">
+    <!-- footer -->
+    <footer class="row bg-info pt-3 pb-3 no-gutters small">
+        <?php if ($userLoggedIn) : ?>
+            <div class="col-10 offset-1 text-right">
+                <div>Proudly developed by deneus and Pug. </i></div>
+                <div><i class="far fa-copyright"></i> 2018 All right reserved</div>
+            </div>
+        <?php else : ?>
+            <div class="col-10 offset-1 text-center">
+                <div class="margin-0-auto col-md-8 col-lg-6">
                     <div>Proudly developed by deneus and Pug. </i></div>
                     <div><i class="far fa-copyright"></i> 2018 All right reserved</div>
                 </div>
-            <?php else : ?>
-                <div class="col-10 offset-1 text-center">
-                    <div class="margin-0-auto col-md-8 col-lg-6">
-                        <div>Proudly developed by deneus and Pug. </i></div>
-                        <div><i class="far fa-copyright"></i> 2018 All right reserved</div>
-                    </div>
-                </div>
-            <?php endif ?>
+            </div>
+        <?php endif ?>
 
 
-        </footer>
-        <!-- end footer -->
-    </div>
+    </footer>
+    <!-- end footer -->
+</div>
 
-    <?php if ($userLoggedIn): ?>
+<?php if ($userLoggedIn): ?>
     <!-- navigation -->
     <nav off-canvas="main-menu left shift" id="menu" class="mm-menu mm-menu_offcanvas mm-menu_opened">
         <div class="mm-panels">
@@ -234,21 +235,21 @@ foreach ($obj as $e) {
                     <li class="mm-listitem"><a href="<?php echo $directory; ?>/logout.html"><i class="fa fa-sign-out-alt mr-3"></i>Sign out</a></li>
                 </ul>
             </div>
-            </div>
+        </div>
         </div>
     </nav>
     <!-- end: navigation -->
-    <?php endif ?>
+<?php endif ?>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="src/lib/dynatable/jquery.dynatable.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <script src="src/layout/js/lib/dropzone.js"></script>
-    <script src="src/layout/js/lib/clipboard.js"></script>
-    <script src="src/layout/js/lib/jquery.easing.1.3.js"></script>
-    <script src="src/layout/js/lib/slidebars.js"></script>
-    <script src="src/layout/js/scripts.js"></script>
-    <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="src/lib/dynatable/jquery.dynatable.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="src/layout/js/lib/dropzone.js"></script>
+<script src="src/layout/js/lib/clipboard.js"></script>
+<script src="src/layout/js/lib/jquery.easing.1.3.js"></script>
+<script src="src/layout/js/lib/slidebars.js"></script>
+<script src="src/layout/js/scripts.js"></script>
+<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
 
 </body>
 </html>
