@@ -53,16 +53,17 @@ class Home implements ApplicationView
     private function generateTable() {
         global $directory;
 
+        $delegationLinkClasses = 'btn pl-2 mb-4 ml-2';
+        $delegationLinkIcon = '<i class="fa fa-user-md mr-1"></i>';
         if (User::isUserDoctor()) {
-            $delegationLink = '<a href="' . $directory . '/logout.html" class="btn btn-danger pl-2"><i class="fa fa-user-md mr-1"></i>Terminate your access</a>';;
+            $delegationLink = '<a href="' . $directory . '/logout.html" class="btn-danger '.$delegationLinkClasses.'">'.$delegationLinkIcon.'Terminate your access</a>';;
         }
         else {
-            $delegationLink = '<a href="' . $directory . '/accessDelegation.html" class="btn btn-primary pl-2"><i class="fa fa-user-md mr-1"></i>Delegate the access</a>';
+            $delegationLink = '<a href="' . $directory . '/accessDelegation.html" class="btn-primary '.$delegationLinkClasses.'">'.$delegationLinkIcon.'Delegate the access</a>';
         }
-        $html = '<div class="row text-right">
-                    <div class="mb-4 w-100">
-                        <a href="' . $directory . '/newRecord.html" class="btn btn-primary pl-2"><i class="fa fa-plus mr-1"></i>Add new record</a>
-                        &nbsp;
+        $html = '<div class="text-right">
+                    <div class="w-100">
+                        <a href="' . $directory . '/newRecord.html" class="btn btn-primary pl-2 mb-4"><i class="fa fa-plus mr-1"></i>Add new record</a>
                         '.$delegationLink.'
                     </div>
                 </div>';
@@ -75,7 +76,7 @@ class Home implements ApplicationView
             return $html;
         }
 
-        $html .= '<table id="listOfRecords" class="list-of-records">';
+        $html .= '<table id="listOfRecords" class="list-of-records col-12">';
         $html .= '<thead class="">
             <tr>
                 <th class="col-1">Date</th>
