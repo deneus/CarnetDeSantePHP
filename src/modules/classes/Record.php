@@ -4,6 +4,7 @@ namespace HealthChain\modules\classes;
 
 use DateTime;
 use HealthChain\layout\MessagesTraits;
+use stdClass;
 
 class Record
 {
@@ -11,7 +12,8 @@ class Record
 
     private $ipfs;
     private $hash;
-    public $who;
+    public $who_name;
+    public $who_speciality;
     public $date;
     private $size;
     public $comment;
@@ -22,11 +24,10 @@ class Record
 
         $this->ipfs = $ipfs;
         $this->attachments = [];
-        $this->who = new RecordWho();
     }
 
     /**
-     * Populate arecord from an hash.
+     * Populate a record from an hash.
      *
      * @param $hash
      */
@@ -41,12 +42,26 @@ class Record
         $this->size = $this->ipfs->size($hash);
 
         $this->comment = $json->comment;
-        $this->who = $json->who;
+        $this->who_name = $json->who_name;
+        $this->who_speciality = $json->who_speciality;
 
         $date = new DateTime();
         $this->date = $date->setTimestamp($json->date);
 
         $this->attachments = $json->attachments;
+    }
+
+    /**
+     * Populate a record from a StdClass.
+     *
+     * @param stdClass $record
+     */
+    public function setRecord(StdClass $record) {
+        $this->who_name = $record->who_name;
+        $this->who_speciality = $record->who_speciality;
+        $this->date = $record->date;
+        $this->comment = $record->comment;
+        $this->attachments = $record->attachments;
     }
 
     /**
@@ -56,9 +71,9 @@ class Record
      *   The html.
      */
     public function renderDate() {
-        $html = $this->date->format('d/m/o');
+        $html = date('d/m/o', $this->date);
         $html .= '<br /> at ';
-        $html .= $this->date->format('G:i');
+        $html .= date('G:i', $this->date);
         return $html;
     }
 
@@ -75,7 +90,7 @@ class Record
 
         $html = '<ul>';
         foreach ($this->attachments as $key => $attachment) {
-            $html .='<li><a target="_blank" href="attachment.php?hash='.$attachment->hash.'&type='.$attachment->mimetype.'">'.$attachment->type.'</a></li>';
+            $html .='<li><a target="_blank" href="attachment.php?hash='.$attachment['hash'].'&type='.$attachment['mimetype'].'">'.$attachment['type'].'</a></li>';
         }
         $html .= '</ul>';
 
@@ -90,9 +105,9 @@ class Record
      *   Who formatted.
      */
     public function renderWho() {
-        $output = $this->who->name . ' <br /><i>' . $this->who->speciality .'</i>';
-        if ($this->who->speciality === '') {
-            $output = $this->who->name;
+        $output = $this->who_name . ' <br /><i>' . $this->who_speciality .'</i>';
+        if ($this->who_speciality === '') {
+            $output = $this->who_name;
         }
         return $output;
     }
@@ -111,6 +126,33 @@ class Record
      * @return mixed
      */
     public function storeRecord() {
+        $_SESSION['user']['master']->records[] = $this->prepareRecord();
+        $json = json_encode($_SESSION['user']['master']);
+        $hash = $this->ipfs->add($json);
+
+        // Override the master locally >> DEBUG PURPOSE.
+        $json = json_encode($_SESSION['user']['master']);
+        $fileName = 'src/test/master.json';
+        $myFile = fopen($fileName, 'w+');
+        fwrite($myFile, $json);
+        fclose($myFile);
+
+        return $hash;
+    }
+
+    public function prepareRecord() {
+        $stdClass = new StdClass();
+        $stdClass->who_name = $this->who_name;;
+        $stdClass->who_speciality = $this->who_speciality;
+        $stdClass->date = $this->date;
+        $stdClass->comment = $this->comment;
+        $stdClass->attachments = $this->attachments;
+
+        return $stdClass;
+    }
+
+
+    public function storeRecordAsSplitFiles() {
         // Store the record in ipfs.
         $json = json_encode($this);
         $hash = $this->ipfs->add($json);

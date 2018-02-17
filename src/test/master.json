@@ -5,6 +5,27 @@
   "type": "0",
   "passPhrase": "denis",
   "qrCode": null,
-  "records": [],
+  "records": [
+    {
+      "who_name": "doctor 1",
+      "who_speciality": "Other",
+      "date": 1518850067,
+      "comment": "record 1",
+      "attachments": []
+    },
+    {
+      "who_name": "doc 2",
+      "who_speciality": "Other",
+      "date": 1518850166,
+      "comment": "record 2",
+      "attachments": [
+        {
+          "hash": "QmUScpFhCyfkWwinmhE1Mv6S9HruFL3asLqcUhB3kHCz5y",
+          "mimetype": "image\/jpeg",
+          "type": "attachment"
+        }
+      ]
+    }
+  ],
   "key": "L1JQqSX4M1HS9nY3nMHs3w2DPzbMxcLo2dwXfk584jJx7GqnUMCM"
 }

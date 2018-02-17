@@ -9,11 +9,11 @@ use HealthChain\test\Tests;
 
 class Home implements ApplicationView
 {
-    private $hashes;
+    private $records;
 
     public function __construct()
     {
-        $this->hashes = $this->getRecords();
+        $this->records = $this->getRecords();
     }
 
     /**
@@ -70,7 +70,7 @@ class Home implements ApplicationView
                     </div>
                 </div>';
 
-        if (count($this->hashes) === 0 || ($this->hashes[0] === NULL)) {
+        if (count($this->records) === 0 || ($this->records[0] === NULL)) {
             $html .= '<div class="row border highlight-background pt-3 pb-3 pl-3">
                 You don\'t have any medical record at the moment. <br /><br />
                 Either create a record yourself by using New Record, either delegate access to your doctor.
@@ -89,14 +89,15 @@ class Home implements ApplicationView
          </thead>';
         $html .= '<tbody>';
 
-        foreach ($this->hashes as $hash) {
+        foreach ($this->records as $record) {
             // The hash is broken.
-            if ($hash === NULL) {
+            if ($record === NULL) {
                 continue;
             }
 
-            $record = new Record();
-            $record->getRecordFromHash($hash);
+            //$record = new Record();
+            //$record->getRecordFromHash($record);
+            //$record->setRecord($stdClass);
 
             $html .= '<tr>';
             $html .= '<td>' . $record->renderDate() . '</td>';
@@ -128,7 +129,13 @@ class Home implements ApplicationView
      */
     public function getRecords()
     {
-        return array_reverse($_SESSION['user']['master']->records);
+        $records = [];
+        foreach($_SESSION['user']['master']->records as $stdClass) {
+            $record = new Record();
+            $record->setRecord($stdClass);
+            $records[] = $record;
+        }
+        return array_reverse($records);
     }
 }
 

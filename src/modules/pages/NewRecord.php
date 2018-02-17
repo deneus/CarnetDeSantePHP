@@ -62,15 +62,16 @@ class NewRecord implements ApplicationView
         }
 
         $html = '';
+        if (count($_FILES)> 0) {
+            $this->processFile($_FILES['file']);
+        }
+
         if ($this->_action === self::ACTION_SUBMIT_FORM) {
             if ($post['action'] === 'fields-storage') {
                 $html .= $this->processForm($post);
             }
         }
 
-        if (count($_FILES)> 0) {
-            $this->processFile($_FILES['file']);
-        }
         return $html;
     }
 
@@ -125,33 +126,33 @@ EOS;
      *   The message in html.
      */
     public function processForm($post) {
-         if (!$this->isPostFull($post)) {
-             $html = $this->generateFailMessage('All fields are mandatory.');
-             return $html;
-         }
+        if (!$this->isPostFull($post)) {
+            $html = $this->generateFailMessage('All fields are mandatory.');
+            return $html;
+        }
 
-        $this->record->setDateToNow();
-        $this->record->who->name = $post['doctor_name'];
-        $this->record->who->speciality = $post['doctor_speciality'];
-        $this->record->comment = $post['comment'];
+         $this->record->setDateToNow();
+         $this->record->who_name = $post['doctor_name'];
+         $this->record->who_speciality = $post['doctor_speciality'];
+         $this->record->comment = $post['comment'];
 
-        if (!empty($_SESSION['uploaded_file'])) {
+         if (!empty($_SESSION['uploaded_file'])) {
             foreach($_SESSION['uploaded_file'] as $file) {
                 $this->record->attachments[] = $file;
             }
-            $_SESSION['uploaded_file'] = '';
-        }
+            $_SESSION['uploaded_file'] = [];
+         }
 
-        $hash = $this->record->storeRecord();
+         $hash = $this->record->storeRecord();
 
-        if ($hash !== NULL) {
-            $_SESSION['uploaded_file'] = NULL;
+         if ($hash !== NULL) {
+            $_SESSION['uploaded_file'] = [];
             $html = $this->generateSuccessMessage('Your record has been saved!');
-        }
-        else {
+         }
+         else {
             $html = $this->generateFailMessage();
-        }
-        return $html;
+         }
+         return $html;
     }
 
     /**
@@ -162,6 +163,10 @@ EOS;
 
         if ($file !== NULL) {
             $textFromImage = file_get_contents($file['tmp_name']);
+
+            if($_SESSION['uploaded_file'] === '') {
+                $_SESSION['uploaded_file'] = [];
+            }
 
             $_SESSION['uploaded_file'][] = [
                 'hash' => $this->ipfs->add($textFromImage),
