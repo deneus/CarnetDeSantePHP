@@ -90,7 +90,10 @@ class Record
 
         $html = '<ul>';
         foreach ($this->attachments as $key => $attachment) {
-            $html .='<li><a target="_blank" href="attachment.php?hash='.$attachment['hash'].'&type='.$attachment['mimetype'].'">'.$attachment['type'].'</a></li>';
+            if (is_array($attachment)) {
+                $attachment = (object)$attachment;
+            }
+            $html .='<li><a target="_blank" href="attachment.php?hash='.$attachment->hash.'&type='.$attachment->mimetype.'">'.$attachment->type.'</a></li>';
         }
         $html .= '</ul>';
 
