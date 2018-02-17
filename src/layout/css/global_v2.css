@@ -1,6 +1,9 @@
 body,
-.main-color {
+.main-color,
+body th a,
+body th a:hover{
     color: #6C6E71;
+    text-decoration: none;
 }
 .bg-light-grey{
     background-color: #F0F1F1;
@@ -12,8 +15,11 @@ body .bg-info,
 body .btn-primary{
     background-color: #0071BE !important;
 }
-body .btn-primary:hover {
+body .btn-primary:hover{
     background-color: #0062a5 !important;
+}
+a:hover {
+    color: #0062a5;
 }
 .h-45 {
     height:45px;
@@ -47,4 +53,10 @@ body .btn-primary:hover {
 }
 .list-of-records tr:hover{
     background-color: #F2F2F2;
+}
+.list-of-records tr:first-of-type:hover {
+    background-color: #ffffff;
+}
+body .dynatable-active-page{
+    background-color: #0071BE;
 }

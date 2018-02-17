@@ -48,6 +48,7 @@ $( document ).ready(function() {
         }
     }
 
+    var dynatable = $(".list-of-records").dynatable();
 
 });
 

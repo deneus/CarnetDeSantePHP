@@ -36,13 +36,10 @@ class Home implements ApplicationView
      */
     private function generateFilters()
     {
-        $html = '
-        <script type="application/javascript">
-        $( document ).ready(function() {
-            // Documentation; https://www.dynatable.com/
-            var dynatable = $("#listOfRecords").dynatable();
-        });
-        </script>';
+        /**
+         * See scripts.js.
+         * var dynatable = $(".list-of-records").dynatable();
+         */
 
         return '';
     }
