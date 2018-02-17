@@ -60,3 +60,17 @@ a:hover {
 body .dynatable-active-page{
     background-color: #0071BE;
 }
+
+.bg-banner {
+     background: #00335B;
+ }
+@media (min-width: 768px) {
+    .bg-banner-image-1 {
+        background: url('../images/banner/1.gif') no-repeat right #00335B;
+        background-size: 70% auto;
+    }
+    .bg-banner-image-2 {
+        background: url('../images/banner/2.gif') no-repeat right #00335B;
+        background-size: 70% auto;
+    }
+}

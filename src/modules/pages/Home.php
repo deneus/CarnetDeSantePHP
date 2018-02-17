@@ -132,5 +132,15 @@ class Home implements ApplicationView
         }
         return array_reverse($records);
     }
+
+    /**
+     * Return the CSS class for the banner > display a background image.
+     *
+     * @return mixed
+     */
+    public function cssClassForBanner()
+    {
+        return 'bg-banner-image-2';
+    }
 }
 

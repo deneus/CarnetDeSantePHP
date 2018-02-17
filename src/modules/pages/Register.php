@@ -326,4 +326,13 @@ EOS;
 
     }
 
+    /**
+     * Return the CSS class for the banner > display a background image.
+     *
+     * @return mixed
+     */
+    public function cssClassForBanner()
+    {
+        return '';
+    }
 }

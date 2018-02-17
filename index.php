@@ -98,6 +98,7 @@ switch ($query) {
 
 $title = $page->outputTitle();
 $cssClass = $page->cssClassForContent();
+$cssClassForBanner = $page->cssClassForBanner();
 $content = $page->outputHtmlContent();
 
 /*
@@ -232,8 +233,8 @@ foreach ($obj as $e) {
             <!-- menu below sm to -->
         </div>
 
-        <div class="row h-200">
-            <div class="bg-dark-blue col-12 text-white">
+        <div class="row h-200 bg-banner <?php echo $cssClassForBanner; ?>">
+            <div class="col-12 text-white">
                 <div class="col-11 offset-0 mt-2"><a class="text-white" href="<?php echo $directory; ?>/dashboard.html"><i class="fa fa-long-arrow-alt-left mr-2"></i>Dashboard</a></div>
                 <h1 class="col-10 offset-1 pl-0 mt-4"><?php echo $title; ?></h1>
             </div>
