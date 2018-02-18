@@ -179,6 +179,6 @@ EOS;
      */
     public function cssClassForBanner()
     {
-        return '';
+        return 'bg-banner-image-3';
     }
 }

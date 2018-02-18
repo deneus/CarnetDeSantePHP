@@ -73,4 +73,8 @@ body .dynatable-active-page{
         background: url('../images/banner/2.gif') no-repeat right #00335B;
         background-size: 70% auto;
     }
+    .bg-banner-image-3 {
+        background: url('../images/banner/3.gif') no-repeat top right #00335B;
+        background-size: 70% auto;
+    }
 }
