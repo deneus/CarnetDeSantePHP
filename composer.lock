@@ -4,8 +4,35 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "50215c2896a8d769b78432bbd82a0f41",
+    "content-hash": "3511e4e5f3a66759bee64c4853a9aa29",
     "packages": [
+        {
+            "name": "cityofzion/neo-php",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/CityOfZion/neo-php.git",
+                "reference": "03a7fb88719169b516feb1a92fba9cb786954b09"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/CityOfZion/neo-php/zipball/03a7fb88719169b516feb1a92fba9cb786954b09",
+                "reference": "03a7fb88719169b516feb1a92fba9cb786954b09",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "NeoPHP\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Make requests to Neo RPC nodes on the Neo blockchain. Make asset transactions, read data from the Blockchain etc.",
+            "time": "2017-11-27T13:50:14+00:00"
+        },
         {
             "name": "cloutier/php-ipfs-api",
             "version": "0.0.6",
@@ -48,40 +75,13 @@
                 "ipfs"
             ],
             "time": "2016-09-11T15:34:38+00:00"
-        },
-        {
-            "name": "neo-php/neo-php",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/CityOfZion/neo-php.git",
-                "reference": "816d6350ae0c34237d73777a72ebee0809e93618"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/CityOfZion/neo-php/zipball/816d6350ae0c34237d73777a72ebee0809e93618",
-                "reference": "816d6350ae0c34237d73777a72ebee0809e93618",
-                "shasum": ""
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "NeoPHP\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "description": "Make requests to Neo RPC nodes on the Neo blockchain. Make asset transactions, read data from the Blockchain etc.",
-            "time": "2017-11-26T01:51:46+00:00"
         }
     ],
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "neo-php/neo-php": 20
+        "cityofzion/neo-php": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
