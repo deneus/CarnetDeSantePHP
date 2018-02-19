@@ -138,7 +138,8 @@ class User
     }
 
     public static function isUserDoctor() {
-        if ($_SESSION['user']['master']->type === User::TYPE_USER_DOCTOR) {
+        if (isset($_SESSION['user']['master'])
+            && $_SESSION['user']['master']->type === User::TYPE_USER_DOCTOR) {
             return TRUE;
         }
         else {
