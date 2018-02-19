@@ -76,7 +76,7 @@ class Home implements ApplicationView
             return $html;
         }
 
-        $html .= '<table id="listOfRecords" class="list-of-records col-12">';
+        $html .= '<table id="listOfRecords" class="list-of-records row w-100 no-gutters">';
         $html .= '<thead class="">
             <tr>
                 <th class="col-1">Date</th>
@@ -143,4 +143,3 @@ class Home implements ApplicationView
         return 'bg-banner-image-2';
     }
 }
-
