@@ -2,6 +2,8 @@
 
 session_start();
 
+date_default_timezone_set('Australia/Sydney');
+
 require __DIR__ . '/vendor/autoload.php';
 
 use Cloutier\PhpIpfsApi\IPFS;
@@ -98,6 +100,7 @@ switch ($query) {
 
 $title = $page->outputTitle();
 $cssClass = $page->cssClassForContent();
+$cssClassForBanner = $page->cssClassForBanner();
 $content = $page->outputHtmlContent();
 
 /*
@@ -166,28 +169,221 @@ foreach ($obj as $e) {
     <link rel="stylesheet" href="/resources/demos/style.css" />
     <!-- custom -->
     <link rel="stylesheet" href="src/layout/css/anonymous.css" />
-    <link rel="stylesheet" href="src/layout/css/global_v1.css" />
+    <link rel="stylesheet" href="src/layout/css/global_v2.css" />
 </head>
 
 <body class="page-<?php echo strtolower($title); ?>">
 
+
+<script src="src/lib/chartjs/Chart.bundle.min.js"></script>
+
+<canvas id="myChart" width="400" height="400"></canvas>
+<script>
+    var ctx = document.getElementById("myChart");
+    var config = {              //configure the chart
+        type: 'line',
+        data: {
+            labels: [1, 2, 3, 4],
+            datasets: [{
+                label: "Min",
+                backgroundColor: 'rgba(55, 173, 221,  0.6)',
+                borderColor: 'rgba(55, 173, 221, 1.0)',
+                fill: false,  //no fill here
+                data: [5, 5, 3, 2]
+            },
+                {
+                    label: "Max",
+                    backgroundColor: 'rgba(55, 173, 221, 0.6)',
+                    borderColor: 'rgba(55, 173, 221, 1.0)',
+                    fill: '-1', //fill until previous dataset
+                    data: [8, 7, 6, 5]
+                }]
+        },
+        options: {
+            maintainAspectRatio: false,
+            spanGaps: false,
+            elements: {
+                line: {
+                    tension: 0.000001
+                }
+            },
+            plugins: {
+                filler: {
+                    propagate: false
+                }
+            },
+            scales: {
+                xAxes: [{
+                    ticks: {
+                        autoSkip: false
+                    }
+                }]
+            }
+        }
+    };
+    var chart = new Chart(ctx, config);
+    /*var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18],
+            datasets: [
+                {
+                    label: 'Min average height (male)',
+                    backgroundColor: 'rgba(55, 173, 221,  0.6)',
+                    borderColor: 'rgba(55, 173, 221, 1.0)',
+                    fill: false,
+                    data:[70,80,87,94,99,106,110,114,120,125,129,134,138,144,151,158,161,162],
+                    pointRadius: 0,
+
+                },
+                {
+                    label: 'Max average height (male)',
+                    backgroundColor: 'rgba(55, 173, 221, 0.6)',
+                    borderColor: 'rgba(55, 173, 221, 1.0)',
+                    data:[80,91,101,109,116,122,129,135,141,146,152,158,166,176,182,184,185,186],
+                    pointRadius: 0,
+                    fill: '-1',
+                },
+
+            ]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        min: 0,
+                        max: 200
+                    }
+                }]
+            },
+            plugins: {
+                filler: {
+                    propagate: false,
+                }
+            },
+        }
+    });*/
+
+    // var myChart = new Chart(ctx, {
+    //     type: 'bar',
+    //     data: {
+    //         labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+    //         datasets: [{
+    //             label: '# of Votes',
+    //             data: [12, 19, 3, 5, 2, 3],
+    //             backgroundColor: [
+    //                 'rgba(255, 99, 132, 0.2)',
+    //                 'rgba(54, 162, 235, 0.2)',
+    //                 'rgba(255, 206, 86, 0.2)',
+    //                 'rgba(75, 192, 192, 0.2)',
+    //                 'rgba(153, 102, 255, 0.2)',
+    //                 'rgba(255, 159, 64, 0.2)'
+    //             ],
+    //             borderColor: [
+    //                 'rgba(255,99,132,1)',
+    //                 'rgba(54, 162, 235, 1)',
+    //                 'rgba(255, 206, 86, 1)',
+    //                 'rgba(75, 192, 192, 1)',
+    //                 'rgba(153, 102, 255, 1)',
+    //                 'rgba(255, 159, 64, 1)'
+    //             ],
+    //             borderWidth: 1
+    //         }]
+    //     },
+    //     options: {
+    //         scales: {
+    //             yAxes: [{
+    //                 ticks: {
+    //                     min: 0,
+    //                     max: 200
+    //                 }
+    //             }],
+    //             xAxes: [{
+    //                 ticks: {
+    //                     min: 0,
+    //                     max: 18
+    //                 }
+    //             }]
+    //         }
+    //     }
+    // });
+</script>
+
+
 <div canvas="container" class="overflow-x-hidden  <?php echo $cssClass ?>">
-    <!-- header -->
-    <div class="text-white bg-info pt-2 pb-2">
-        <?php if ($userLoggedIn): ?>
-            <div class="ml-3 float-left">
-                <div class="open-menu"><i class="fa fa-bars fa-3x"></i></div>
-                <div class="close-menu"><i class="fa fa-times fa-3x"></i></div>
+    <?php if ($userLoggedIn): ?>
+        <!-- header -->
+        <header>
+            <div class="row bg-light-grey">
+                <div class="col-12 col-sm-7 col-lg-8 pt-2 col-xl-9 h-45">
+                    <span class="ml-3">Your health booklet</span>
+                </div>
+                <div class="col-12 col-sm-5 col-lg-4 col-xl-3 pt-2 bg-info text-white h-45">
+                    <span class="ml-3"><i class="fa fa-user mr-3"></i><?php echo $_SESSION['user']['master']->fullName; ?></span>
+                </div>
             </div>
-        <?php endif ?>
-        <div style="text-align: center">
-            <h1 class="font-weight-bold">Your Health Booklet!</h1>
-        </div>
-    </div>
-    <!-- end: header -->
+
+
+            <div class="row main-menu pt-3 pb-3">
+                <!-- menu from sm to xl -->
+                <ul class="margin-0-auto pl-0 d-none d-sm-flex">
+                    <li class="text-center mx-4">
+                        <a class="main-color" href="<?php echo $directory; ?>/home.html"><i class="fa fa-home fa-3x"></i><br />Home</a>
+                    </li>
+                    <li class="text-center mx-4">
+                        <a class="main-color" href="<?php echo $directory; ?>/newRecord.html"><i class="fa fa-plus fa-3x"></i><br />New record</a>
+                    </li>
+                    <?php if(User::isUserDoctor()): ?>
+                        <li class="text-center mx-4 text-danger">
+                            <a href="<?php echo $directory; ?>/terminateAccess.html"><i class="fa fa-user-md fa-3x"></i><br />Terminate access</a>
+                        </li>
+                    <?php else : ?>
+                        <li class="text-center mx-4">
+                            <a class="main-color" href="<?php echo $directory; ?>/accessDelegation.html"><i class="fa fa-user-md fa-3x"></i><br />Access delegation</a>
+                        </li>
+                    <?php endif; ?>
+                    <li class="text-center mx-sm-4">
+                        <a class="main-color" href="<?php echo $directory; ?>/logout.html"><i class="fa fa-sign-out-alt fa-3x"></i><br />Sign out</a>
+                    </li>
+                </ul>
+                <!-- menu from sm to xl -->
+                <!-- menu below sm to -->
+                <ul class="d-block d-sm-none w-100 pl-0 list-group">
+                    <li class="list-group-item text-left d-block">
+                        <a class="main-color pl-4" href="<?php echo $directory; ?>/home.html"><i class="fa fa-home fa-2x mr-4"></i>Home</a>
+                    </li>
+                    <li class="list-group-item text-left d-block">
+                        <a class="main-color pl-4" href="<?php echo $directory; ?>/newRecord.html"><i class="fa fa-plus fa-2x mr-4"></i>New record</a>
+                    </li>
+                    <?php if(User::isUserDoctor()): ?>
+                        <li class="list-group-item text-left d-block text-danger">
+                            <a class=" pl-4" href="<?php echo $directory; ?>/terminateAccess.html"><i class="fa fa-user-md fa-2x mr-4"></i>Terminate access</a>
+                        </li>
+                    <?php else : ?>
+                        <li class="list-group-item text-left d-block">
+                            <a class="main-color pl-4" href="<?php echo $directory; ?>/accessDelegation.html"><i class="fa fa-user-md fa-2x mr-4"></i>Access delegation</a>
+                        </li>
+                    <?php endif; ?>
+                    <li class="list-group-item text-left d-block">
+                        <a class="main-color pl-4" href="<?php echo $directory; ?>/logout.html"><i class="fa fa-sign-out-alt fa-2x mr-4"></i>Sign out</a>
+                    </li>
+                </ul>
+                <!-- menu below sm to -->
+            </div>
+
+            <div class="row h-200 bg-banner <?php echo $cssClassForBanner; ?>">
+                <div class="col-12 text-white">
+                    <div class="col-11 offset-0 mt-2"><a class="text-white" href="<?php echo $directory; ?>/dashboard.html"><i class="fa fa-long-arrow-alt-left mr-2"></i>Dashboard</a></div>
+                    <h1 class="col-10 offset-1 pl-0 mt-4"><?php echo $title; ?></h1>
+                </div>
+            </div>
+
+        </header>
+        <!-- end: header -->
+    <?php endif ?>
 
     <!-- content -->
-    <div class="row no-gutters pt-5 pb-5">
+    <div class="row no-gutters pt-4 pb-4">
         <div class="col-10 offset-1">
             <?php echo $content; ?>
         </div>
@@ -195,7 +391,7 @@ foreach ($obj as $e) {
     <!-- end: content -->
 
     <!-- footer -->
-    <footer class="row bg-info pt-3 pb-3 no-gutters small">
+    <footer class="row bg-info pt-3 pb-3 no-gutters small text-white">
         <?php if ($userLoggedIn) : ?>
             <div class="col-10 offset-1 text-right">
                 <div>Proudly developed by deneus and Pug. </i></div>
@@ -216,29 +412,7 @@ foreach ($obj as $e) {
 </div>
 
 <?php if ($userLoggedIn): ?>
-    <!-- navigation -->
-    <nav off-canvas="main-menu left shift" id="menu" class="mm-menu mm-menu_offcanvas mm-menu_opened">
-        <div class="mm-panels">
-            <div id="panel-menu" class="mm-panel mm-panel_opened">
-                <div class="">
-                    <img src="src/layout/images/logo.png" />
-                </div>
 
-                <ul class="mm-listview">
-                    <li class="mm-listitem"><a href="<?php echo $directory; ?>/home.html"><i class="fa fa-home mr-3"></i>Home</a></li>
-                    <li class="mm-listitem"><a href="<?php echo $directory; ?>/newRecord.html"><i class="fa fa-plus mr-3"></i>New record</a></li>
-                    <?php if(User::isUserDoctor()): ?>
-                        <li class="mm-listitem text-danger"><a href="<?php echo $directory; ?>/terminateAccess.html"><i class="fa fa-user-md mr-3"></i>Terminate access</a></li>
-                    <?php else : ?>
-                        <li class="mm-listitem"><a href="<?php echo $directory; ?>/accessDelegation.html"><i class="fa fa-user-md mr-3"></i>Access delegation</a></li>
-                    <?php endif; ?>
-                    <li class="mm-listitem"><a href="<?php echo $directory; ?>/logout.html"><i class="fa fa-sign-out-alt mr-3"></i>Sign out</a></li>
-                </ul>
-            </div>
-        </div>
-        </div>
-    </nav>
-    <!-- end: navigation -->
 <?php endif ?>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
