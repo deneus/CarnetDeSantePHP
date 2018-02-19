@@ -132,11 +132,10 @@ class User
         return $hash;
     }
 
-    public function getListDocs()
-    {
-
-    }
-
+    /**
+     * Test if the user is doctor or patient.
+     * @return bool
+     */
     public static function isUserDoctor() {
         if (isset($_SESSION['user']['master'])
             && $_SESSION['user']['master']->type === User::TYPE_USER_DOCTOR) {
