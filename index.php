@@ -2,6 +2,8 @@
 
 session_start();
 
+date_default_timezone_set('Australia/Sydney');
+
 require __DIR__ . '/vendor/autoload.php';
 
 use Cloutier\PhpIpfsApi\IPFS;
