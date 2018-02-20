@@ -179,7 +179,99 @@ foreach ($obj as $e) {
 
 <canvas id="myChart" width="400" height="400"></canvas>
 <script>
-    var ctx = document.getElementById("myChart");
+var red = '#FF0000';
+var redbg = '#ffcccc'
+var orange = '#FFA500';
+var orangebg = '#ffedcc';
+var yellow = '#ffff00';
+var yellowbg = '#ffffcc';
+var green = '#00ff00';
+var greebg = '#ccffcc'
+var blue = '#0000ff';
+var bluebg = '#ccccff';
+var grey = '#cccccc';
+var greybg = '#eaeaea'
+var purple = '#551a8b';
+var purplebg = '#ddd1e7';
+
+var data = {
+			labels: ['a','b','c'],
+			datasets: [{
+				backgroundColor: orangebg,
+				borderColor: orange,
+				data: [50,50,50],
+				label: 'D1',
+				//fill: '-1'
+			}, {
+				backgroundColor: yellowbg,
+				borderColor: yellow,
+				data: [10,10,10],
+				hidden: true,
+				label: 'D2',
+				fill: 1
+			}, {
+				backgroundColor: greebg,
+				borderColor: green,
+				data: [60,60,60],
+				label: 'D3',
+				fill: '-1'
+			}, {
+				backgroundColor: bluebg,
+				borderColor: blue,
+				data: [150, 150, 150],
+				label: 'D4',
+				fill: '-1'
+			}, {
+				backgroundColor: greybg,
+				borderColor: grey,
+				data: [200,200,200],
+				label: 'D5',
+				fill: '+2'
+			}, {
+				backgroundColor: purplebg,
+				borderColor: purple,
+				data: [210,210,201],
+				label: 'D6',
+				fill: false
+			}, {
+				backgroundColor: redbg,
+				borderColor: red,
+				data: [340,340,340],
+				label: 'D7',
+				fill: 8
+			}]
+		};
+
+		var options = {
+			maintainAspectRatio: false,
+			spanGaps: false,
+			elements: {
+				line: {
+					tension: 0.000001
+				}
+			},
+			scales: {
+				yAxes: [{
+					stacked: true
+				}]
+			},
+			plugins: {
+				filler: {
+					propagate: false
+				},
+				samples_filler_analyser: {
+					target: 'chart-analyser'
+				}
+			}
+		};
+
+
+		var chart = new Chart('myChart', {
+			type: 'line',
+			data: data,
+			options: options
+		});
+    /*var ctx = document.getElementById("myChart");
     var config = {              //configure the chart
         type: 'line',
         data: {
@@ -310,7 +402,7 @@ foreach ($obj as $e) {
 </script>
 
 
-<div canvas="container" class="overflow-x-hidden  <?php echo $cssClass ?>">
+<div canvas="container" class="overflow-x-hidden d-none  <?php echo $cssClass ?>">
     <?php if ($userLoggedIn): ?>
         <!-- header -->
         <header>
