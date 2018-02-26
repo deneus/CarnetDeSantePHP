@@ -1,7 +1,8 @@
 {
     "require": {
         "cloutier/php-ipfs-api": "^0.0.6",
-        "cityofzion/neo-php": "dev-master"
+        "cityofzion/neo-php": "dev-master",
+        "simplito/elliptic-php": "^1.0"
     },
     "autoload": {
         "psr-4": {"HealthChain\\": "src/"}
