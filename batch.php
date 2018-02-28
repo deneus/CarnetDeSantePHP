@@ -8,4 +8,3 @@ use HealthChain\modules\classes\Neo;
 //$wallet = new NeoWallet('L1JQqSX4M1HS9nY3nMHs3w2DPzbMxcLo2dwXfk584jJx7GqnUMCM');
 $contract = Neo\Contract::getInstance('L1JQqSX4M1HS9nY3nMHs3w2DPzbMxcLo2dwXfk584jJx7GqnUMCM', false);
 $signature = $contract->registerMaster('master');
-print_r($signature);
