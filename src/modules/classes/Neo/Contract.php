@@ -9,7 +9,7 @@ use NeoPHP\RPCRequest;
 
 class Contract
 {
-    const CONTRACT_HASH = '0x930505c79fd24411e854e93eec08f71b861731fdeb30217dbd0cbc52adc9dbf0';
+    const CONTRACT_HASH = '0x78d7ee954d56c382a422924b2398aa543917ee9f';
 //    const CONTRACT_HASH = 'dc675afc61a7c0f7b3d2682bf6e1d8ed865a0e5f';//TEST tuto
     const METHOD_REGISTER = 'register';
     const METHOD_DELEGATE = 'delegate';
@@ -18,14 +18,16 @@ class Contract
     protected $_neo;
     protected static $_instance;
     protected $_wallet;
-    protected $_hashContract;
+    protected $_scriptContract;
 
     private function __construct($wallet, $mainNet = true)
     {
         $this->neo = new \NeoPHP\NeoRPC($mainNet);
         $this->neo->setNode($this->neo->getFastestNode());
         $this->_wallet = $wallet;
-        $this->_hashContract = bin2hex(self::CONTRACT_HASH);
+        $this->_hashContract = self::CONTRACT_HASH;
+        $contractState = $this->neo->getContractState(self::CONTRACT_HASH);
+        $this->_scriptContract = $contractState['script'];
     }
 
     public static function getInstance($wallet, $mainNet = true)
@@ -55,16 +57,16 @@ class Contract
     {
         //TODO: Implement tx generation
         //Generation of the invoke to get the tx. This invoke does not create anything on the blockchain.
-        $invoke = RPCRequest::request($this->neo->active_node, "invokescript",[$this->_hashContract]);
+        $invoke = RPCRequest::request($this->neo->active_node, "invokescript", [$this->_scriptContract]);
         $tx = $invoke['script'];
-        foreach($invoke['stack'] as $stack){
-           $this->_unserializeValue($stack);
-        }
 
-
-
+        /*if(isset($invoke['stack'][0])){
+            $result = $this->_unserializeValue($invoke['stack'][0]);
+        }*/
+        var_dump($tx);
         $signature = $this->_generateSignature($tx, $key );
         //        $signature = $this->_generateSignature($tx, $this->_wallet->getPrivateKey());
+        var_dump($signature);
         return $signature;
 
 
@@ -98,18 +100,8 @@ class Contract
         $result = '';
         switch($stack['type']){
             case self::TYPE_BYTE_ARRAY:
-                var_dump(bin2hex($stack['value']));
-                $result = unpack('C*', substr($stack['value'] ,2));
-                foreach($result as $value){
-                    var_dump(bin2hex($value));
-                }
-                var_dump($result);
-//                $byteArray = unpack("N*",$stack['value']);
-//                foreach($byteArray as $value){
-//                    var_dump(hex2bin($value));
-//                }
+                return hex2bin($stack['value']);
             break;
-
         }
         return $result;
     }
