@@ -178,7 +178,7 @@ foreach ($obj as $e) {
     <?php if ($userLoggedIn): ?>
     <!-- header -->
     <header>
-        <div class="row bg-light-grey">
+        <div class="row no-gutters bg-light-grey">
             <div class="col-12 col-sm-7 col-lg-8 pt-2 col-xl-9 h-45">
                 <span class="ml-3">Your health booklet</span>
             </div>
@@ -188,7 +188,7 @@ foreach ($obj as $e) {
         </div>
 
 
-        <div class="row main-menu pt-3 pb-3">
+        <div class="row no-gutters main-menu pt-3 pb-3">
             <!-- menu from sm to xl -->
             <ul class="margin-0-auto pl-0 d-none d-sm-flex">
                 <li class="text-center mx-4">
@@ -235,7 +235,7 @@ foreach ($obj as $e) {
             <!-- menu below sm to -->
         </div>
 
-        <div class="row h-200 bg-banner <?php echo $cssClassForBanner; ?>">
+        <div class="row no-gutters h-200 bg-banner <?php echo $cssClassForBanner; ?>">
             <div class="col-12 text-white">
                 <div class="col-11 offset-0 mt-2"><a class="text-white" href="<?php echo $directory; ?>/dashboard.html"><i class="fa fa-long-arrow-alt-left mr-2"></i>Dashboard</a></div>
                 <h1 class="col-10 offset-1 pl-0 mt-4"><?php echo $title; ?></h1>
