@@ -36,17 +36,14 @@ class User
         if(isset($_SESSION['user']) && !empty($_SESSION['user'])){
             $this->_user = $_SESSION['user'];
         }
-        //TODO: Proper sanitize
-        /*if(isset($_POST) && !empty($_POST)){
-            $this->_formValues = $this->sanitize($_POST);
-        }*/
     }
 
     /**
      * User login form action.
-     * @param $privateKey: User's generated private KEY
-     * @param string $passphrase: Optionnal, use a passphrase to login with the generated private KEY
-     * @param string $useRealPrivateKey: Real NEO private KEY. Should not be used directly
+     * @param $privateKey : User's generated private KEY
+     * @param string $passphrase : Optionnal, use a passphrase to login with the generated private KEY
+     * @param string $useRealPrivateKey : Real NEO private KEY. Should not be used directly
+     * @return bool
      */
     public function login($privateKey, $passphrase ='', $useRealPrivateKey = false)
     {
@@ -58,7 +55,9 @@ class User
                     if ($wallet->getAddress()) {
                         $_SESSION['user']['wallet'] = $wallet->getWIF();
                         // @todo denis: update that with KEY/VALUE pair stored within the wallet.
-                        $json = file_get_contents('src/test/master.json');
+                        $json = file_get_contents('src/test/master_encrypted.json');
+                        $encryption = new Encryption();
+                        $json = $encryption->decrypt($json);
                         $_SESSION['user']['master'] = json_decode($json);
                         $this->_user = $_SESSION['user'];
                     }
@@ -75,6 +74,7 @@ class User
     /**
      * Register a new NEO wallet used for the dAPP
      * @return : TODO
+     * @throws \Exception
      */
     public function register($passphrase)
     {
@@ -120,7 +120,9 @@ class User
     public function storeUser() {
         // Store the record locally. >> DEBUG PURPOSE.
         $json = json_encode($this);
-        $fileName = 'src/test/master.json';
+        $encryption = new Encryption();
+        $json = $encryption->encrypt($json);
+        $fileName = 'src/test/master_encrypted.json';
         $myFile = fopen($fileName, 'w+');
         fwrite($myFile, $json);
         fclose($myFile);

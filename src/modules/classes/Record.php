@@ -158,11 +158,15 @@ class Record
     public function storeRecord() {
         $_SESSION['user']['master']->records[] = $this->prepareRecord();
         $json = json_encode($_SESSION['user']['master']);
+        $encryption = new Encryption();
+        $json = $encryption->encrypt($json);
         $hash = $this->ipfs->add($json);
 
         // Override the master locally >> DEBUG PURPOSE.
         $json = json_encode($_SESSION['user']['master']);
-        $fileName = 'src/test/master.json';
+        $encryption = new Encryption();
+        $json = $encryption->encrypt($json);
+        $fileName = 'src/test/master_encrypted.json';
         $myFile = fopen($fileName, 'w+');
         fwrite($myFile, $json);
         fclose($myFile);
@@ -181,32 +185,4 @@ class Record
         return $stdClass;
     }
 
-
-    public function storeRecordAsSplitFiles() {
-        // Store the record in ipfs.
-        $json = json_encode($this);
-        $hash = $this->ipfs->add($json);
-
-        // Add the record into master.
-        $_SESSION['user']['master']->records[] = $hash;
-        // Save master.
-        $json = json_encode($_SESSION['user']['master']);
-        $this->ipfs->add($json);
-
-        // Store the New Record locally. >> DEBUG PURPOSE.
-        $json = json_encode($this);
-        $fileName = 'src/test/' . $hash . '.json';
-        $myFile = fopen($fileName, 'w+');
-        fwrite($myFile, $json);
-        fclose($myFile);
-
-        // Override the master locally >> DEBUG PURPOSE.
-        $json = json_encode($_SESSION['user']['master']);
-        $fileName = 'src/test/master.json';
-        $myFile = fopen($fileName, 'w+');
-        fwrite($myFile, $json);
-        fclose($myFile);
-
-        return $hash;
-    }
 }
