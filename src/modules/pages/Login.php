@@ -19,7 +19,6 @@ class Login implements ApplicationView
      */
     public function outputHtmlContent()
     {
-        // @todo anthony: please update htaccess to process url like ?q=login&login=aaa
         $login = '';
         if (isset($_GET['q'])) {
             $explode = explode('__', $_GET['q']);

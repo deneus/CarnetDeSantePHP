@@ -172,7 +172,6 @@ EOS;
                 /*
                  * Generate QRCode.
                  * I used Google api to do it, for security reason, I need to process it as follow.
-                 * @todo denis: the QrCode is a path to the site + the key, not just the key.
                  */
                 $this->qrCode = $this->generateQrCode($this->userKey);
 
