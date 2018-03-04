@@ -125,12 +125,19 @@ class Home implements ApplicationView
     public function getRecords()
     {
         $records = [];
-        foreach($_SESSION['user']['master']->records as $stdClass) {
-            $record = new Record();
-            $record->setRecord($stdClass);
-            $records[] = $record;
+
+        if ($_SESSION['user']['master'] !== NULL) {
+            foreach($_SESSION['user']['master']->records as $stdClass) {
+                $record = new Record();
+                $record->setRecord($stdClass);
+                $records[] = $record;
+            }
+            return array_reverse($records);
         }
-        return array_reverse($records);
+        else {
+            return [];
+        }
+
     }
 
     /**

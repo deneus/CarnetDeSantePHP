@@ -7,6 +7,7 @@ use HealthChain\layout\MessagesTraits;
 use HealthChain\modules\classes\Record;
 use HealthChain\modules\traits\FormTrait;
 use HealthChain\modules\traits\PostTrait;
+use stdClass;
 
 class NewRecord implements ApplicationView
 {
@@ -110,6 +111,7 @@ class NewRecord implements ApplicationView
         <input name="file" type="file" multiple />
       </div>
 </form>
+<br /><i>Accept only *.jpg, *.jpeg, *.pdf./</i>
 
 EOS;
 
@@ -165,14 +167,14 @@ EOS;
             $textFromImage = file_get_contents($file['tmp_name']);
 
             if($_SESSION['uploaded_file'] === '') {
-                $_SESSION['uploaded_file'] = [];
+                $_SESSION['uploaded_file'] = new StdClass();
             }
 
-            $_SESSION['uploaded_file'][] = [
-                'hash' => $this->ipfs->add($textFromImage),
-                'mimetype' => $file['type'],
-                'type' => 'attachment',
-            ];
+            $std = new StdClass();
+            $std->hash = $this->ipfs->add($textFromImage);
+            $std->mimetype = $file['type'];
+            $std->type = 'attachment';
+            $_SESSION['uploaded_file'][] = $std;
         }
     }
 
