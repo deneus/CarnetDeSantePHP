@@ -16,7 +16,7 @@ use HealthChain\modules\pages\Logout;
 
 $GLOBALS['ipfs'] = new IPFS("localhost", "8080", "5001");
 $GLOBALS['instance_id'] = 'a831rwxi1a3gzaorw1w2z49dlsor';
-$GLOBALS['directory'] = '/HealthChainPHP';
+$GLOBALS['directory'] = '/';
 
 // --------------------------------------------------
 // Router.

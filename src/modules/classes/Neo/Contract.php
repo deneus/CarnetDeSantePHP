@@ -22,12 +22,12 @@ class Contract
 
     private function __construct($wallet, $mainNet = true)
     {
-        $this->neo = new \NeoPHP\NeoRPC($mainNet);
+        /*$this->neo = new \NeoPHP\NeoRPC($mainNet);
         $this->neo->setNode($this->neo->getFastestNode());
         $this->_wallet = $wallet;
         $this->_hashContract = self::CONTRACT_HASH;
         $contractState = $this->neo->getContractState(self::CONTRACT_HASH);
-        $this->_scriptContract = $contractState['script'];
+        $this->_scriptContract = $contractState['script'];*/
     }
 
     public static function getInstance($wallet, $mainNet = true)
@@ -45,12 +45,6 @@ class Contract
 
     public function registerMaster($master)
     {
-
-        $rawTransaction = $this->_generateRawTx(self::METHOD_REGISTER, ['master' => 'masterHash'], $this->_wallet);
-        return $rawTransaction;
-        //$rawTransaction = $this->_ge
-//        $this->neo->sendRawTransaction();
-        //TODO: Implement proper trigger to the Smart Contract;
     }
 
     protected function _generateRawTx($method, $params, $key)
