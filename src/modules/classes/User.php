@@ -3,6 +3,7 @@
 namespace HealthChain\modules\classes;
 
 
+use HealthChain\modules\classes\Neo\Contract;
 use HealthChain\modules\classes\Neo\NeoAPI;
 use HealthChain\modules\traits\PostTrait;
 use NeoPHP\NeoWallet;
@@ -27,6 +28,7 @@ class User
 
     const NEO_METHOD_REGISTER = 'register';
     const NEO_METHOD_LOGIN = 'login';
+    const NEO_METHOD_MASTER = 'getMaster';
 
     public function __construct()
     {
@@ -54,14 +56,24 @@ class User
                 if (empty($passphrase)) {
                     $response = NeoAPI::call(self::NEO_METHOD_LOGIN, NeoAPI::METHOD_POST, ['key' =>$privateKey]);
                     $response = json_decode($response);
-
-                    /*if ($wallet->getAddress()) {
-                        $_SESSION['user']['wallet'] = $wallet->getWIF();
+                    if (!empty($response->address)) {
+                        $_SESSION['user']['wallet'] = $response->wif;
+                        $_SESSION['user']['address'] = $response->address;
                         // @todo denis: update that with KEY/VALUE pair stored within the wallet.
+                        //Neon-Js does not have an updated database of RPC's node. Let's get it with PHP
+
+                        $neo = new \NeoPHP\NeoRPC($GLOBALS['mainnet']);
+                        $url = $neo->getFastestNode();
+
+                        $params = array('hash' => Contract::CONTRACT_HASH);
+
+                        $masterResponse = NeoAPI::call(self::NEO_METHOD_MASTER, NeoAPI::METHOD_POST, $params);
+
+
                         $json = file_get_contents('src/test/master.json');
                         $_SESSION['user']['master'] = json_decode($json);
                         $this->_user = $_SESSION['user'];
-                    }*/
+                    }
                 }
             }
             return $this->_user !== false;
@@ -69,7 +81,6 @@ class User
         catch(\Exception $e) {
             return false;
         }
-
     }
 
     /**

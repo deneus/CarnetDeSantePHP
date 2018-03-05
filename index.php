@@ -16,7 +16,13 @@ use HealthChain\modules\pages\Logout;
 
 $GLOBALS['ipfs'] = new IPFS("localhost", "8080", "5001");
 $GLOBALS['instance_id'] = 'a831rwxi1a3gzaorw1w2z49dlsor';
-$GLOBALS['directory'] = '/';
+
+$protocol = empty($_SERVER['HTTPS']) ? 'http' : 'https';
+$domain = $_SERVER['SERVER_NAME'];
+$port = $_SERVER['SERVER_PORT'];
+$GLOBALS['directory'] = "${protocol}://${domain}";
+$GLOBALS['mainnet'] = false; // Mainnet = prod, testnet = dev
+$GLOBALS['version'] = "2.6.0";
 
 // --------------------------------------------------
 // Router.
