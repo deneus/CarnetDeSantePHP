@@ -1,4 +1,5 @@
 var Neon = require('@cityofzion/neon-js');
+var neonjs = Neon.default
 
 module.exports = function(app, db) {
     app.post('/login', (req, res) => {
@@ -25,15 +26,30 @@ module.exports = function(app, db) {
 
     app.post('/getMaster', (req, res) => {
         res.setHeader('Content-Type', 'application/json');
-        const pubAddress = req.body.address;
-        const version = req.body.version;
-        const url = req.body.url;
         const hash = req.body.hash;
-       // const rpc = new Neon.rpc.RPCClient('testnet');
-        //const storage = rpc.getStorage(hash, 'Key');
-        console.log(storage);
+        const key =  req.body.key;
 
-       // res.send(JSON.stringify(storage));
+        const props = {
+            scriptHash: hash// Scripthash for the contract
+        }
+
+        const script = Neon.default.create.script(props);
+
+        const client = new Neon.rpc.RPCClient('testnet', '2.6.0');
+        //const storage = rpc.getStorage(hash, 'Key'); //TODO: Debug the call
+        const sb = new Neon.sc.ScriptBuilder();
+        // Build script to call 'name' from contract at 5b7074e873973a6ed3708862f219a6fbf4d1c411
+        sb.emitAppCall(hash);
+
+        console.log(sb.str);
+        console.log(script);
+
+
+        // Test the script with invokescript
+        console.log('test');
+        client.invokeScript(hash).then(res =>{
+            console.log(res);
+        });
     });
 
 

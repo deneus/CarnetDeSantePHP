@@ -9,7 +9,7 @@ use NeoPHP\RPCRequest;
 
 class Contract
 {
-    const CONTRACT_HASH = '0x78d7ee954d56c382a422924b2398aa543917ee9f';
+    const CONTRACT_HASH = '78d7ee954d56c382a422924b2398aa543917ee9f';
 //    const CONTRACT_HASH = 'dc675afc61a7c0f7b3d2682bf6e1d8ed865a0e5f';//TEST tuto
     const METHOD_REGISTER = 'register';
     const METHOD_DELEGATE = 'delegate';
