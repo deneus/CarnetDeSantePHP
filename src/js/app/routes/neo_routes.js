@@ -29,27 +29,40 @@ module.exports = function(app, db) {
         const hash = req.body.hash;
         const key =  req.body.key;
 
-        const props = {
-            scriptHash: hash// Scripthash for the contract
-        }
+    const invoke = Neon.sc.scriptParams = {
+        scriptHash: hash,
+        method: 'register',
+        args: [
+            Neon.sc.ContractParam.string('maclef'),
+            Neon.sc.ContractParam.string('mavaleur')
+        ]
+    }
 
-        const script = Neon.default.create.script(props);
+    const sb = new Neon.sc.ScriptBuilder();
+    sb.emitAppCall(invoke.scriptHash, invoke.method, invoke.args, false);
 
-        const client = new Neon.rpc.RPCClient('testnet', '2.6.0');
-        //const storage = rpc.getStorage(hash, 'Key'); //TODO: Debug the call
-        const sb = new Neon.sc.ScriptBuilder();
-        // Build script to call 'name' from contract at 5b7074e873973a6ed3708862f219a6fbf4d1c411
-        sb.emitAppCall(hash);
+    console.log(sb.str);
+    //const param1 = Neon.default.create.contractParam('String', 'register')
+    // This is a convenient way to convert an address to a reversed scriptHash that smart contracts use.
+    //const param2 = Neon.default.create.contractParam('Array', ['clef', 'valeur'])
 
-        console.log(sb.str);
-        console.log(script);
+    //console.log(param1);
+    //console.log(param2);
 
 
-        // Test the script with invokescript
-        console.log('test');
-        client.invokeScript(hash).then(res =>{
-            console.log(res);
-        });
+        const client = new Neon.rpc.RPCClient('http://test5.cityofzion.io:8880', '2.6.0');
+        client.invokeScript(sb.str).then(response =>{
+            res.send(response);
+        }).catch(function (error) {
+             console.error(error)
+         });
+
+        const storages = client.getStorage(hash, Neon.u.str2hexstring('clef')).then(response =>{
+                console.log(response);
+            }).catch(function(error){
+                console.log(error);
+            });
+
     });
 
 
