@@ -92,8 +92,6 @@ class User
         $response = NeoAPI::call(self::NEO_METHOD_REGISTER);
         $response = json_decode($response);
 
-        var_dump($response);
-        var_dump($response->address);
         //Now that the WIF have been generated, we need to generate the master for the user
         if(isset($response->wif)){
             $params = array('hash' => Neo\Contract::CONTRACT_HASH,
