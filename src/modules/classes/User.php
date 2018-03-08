@@ -28,7 +28,7 @@ class User
 
     const NEO_METHOD_REGISTER = 'register';
     const NEO_METHOD_LOGIN = 'login';
-    const NEO_METHOD_MASTER = 'getMaster';
+    const NEO_METHOD_REGMASTER = 'registerMaster';
 
     public function __construct()
     {
@@ -91,6 +91,19 @@ class User
     {
         $response = NeoAPI::call(self::NEO_METHOD_REGISTER);
         $response = json_decode($response);
+
+        var_dump($response);
+        var_dump($response->address);
+        //Now that the WIF have been generated, we need to generate the master for the user
+        if(isset($response->wif)){
+            $params = array('hash' => Neo\Contract::CONTRACT_HASH,
+                'NEOaddress' => $response->address,
+                'ipfsMaster' => 'DENIS TO INTEGRATE');
+
+            $result = Neo\NeoAPI::call(\HealthChain\modules\classes\User::NEO_METHOD_REGMASTER, Neo\NeoAPI::METHOD_POST,
+                $params);
+            //TODO: Proper handling of exceptions
+        }
         return $response->wif;
     }
 
