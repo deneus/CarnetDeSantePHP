@@ -4,18 +4,19 @@ namespace HealthChain\modules\pages;
 
 use HealthChain\interfaces\ApplicationView;
 use HealthChain\layout\MessagesTraits;
-use HealthChain\modules\classes\Entry;
+use HealthChain\modules\classes\Record;
 use HealthChain\modules\traits\FormTrait;
 use HealthChain\modules\traits\PostTrait;
+use stdClass;
 
-class NewEntry implements ApplicationView
+class NewRecord implements ApplicationView
 {
     use MessagesTraits;
     use PostTrait;
     use FormTrait;
 
     public $ipfs;
-    public $entry;
+    public $record;
     private $_action;
 
     const ACTION_DISPLAY_FORM = 'display';
@@ -26,7 +27,7 @@ class NewEntry implements ApplicationView
         global $ipfs;
 
         $this->ipfs = $ipfs;
-        $this->entry = new Entry();
+        $this->record = new Record();
 
         $this->_action = self::ACTION_DISPLAY_FORM;
     }
@@ -62,20 +63,21 @@ class NewEntry implements ApplicationView
         }
 
         $html = '';
+        if (count($_FILES)> 0) {
+            $this->processFile($_FILES['file']);
+        }
+
         if ($this->_action === self::ACTION_SUBMIT_FORM) {
             if ($post['action'] === 'fields-storage') {
                 $html .= $this->processForm($post);
             }
         }
 
-        if (count($_FILES)> 0) {
-            $this->processFile($_FILES['file']);
-        }
         return $html;
     }
 
     /**
-     * Render the form to add an entry.
+     * Render the form to add an record.
      *
      * @return string
      *   The Html.
@@ -88,7 +90,7 @@ class NewEntry implements ApplicationView
         $submitButton = $this->renderSubmitButton('Submit');
 
         $html = <<<EOS
-<form action="newEntry.html" id="new_entry" method="post">
+<form action="newRecord.html" id="new_record" method="post">
     
     $fieldDoctorName
     
@@ -104,11 +106,12 @@ class NewEntry implements ApplicationView
 
 </form>
 
-<form  action="newEntry.html" class="dropzone mt-4" id="my-awesome-dropzone" >
+<form  action="newRecord.html" class="dropzone mt-4" id="my-awesome-dropzone" >
       <div class="fallback">
         <input name="file" type="file" multiple />
       </div>
 </form>
+<br /><i>Accept only *.jpg, *.jpeg, *.pdf./</i>
 
 EOS;
 
@@ -125,33 +128,33 @@ EOS;
      *   The message in html.
      */
     public function processForm($post) {
-         if (!$this->isPostFull($post)) {
-             $html = $this->generateFailMessage('All fields are mandatory.');
-             return $html;
+        if (!$this->isPostFull($post)) {
+            $html = $this->generateFailMessage('All fields are mandatory.');
+            return $html;
+        }
+
+         $this->record->setDateToNow();
+         $this->record->who_name = $post['doctor_name'];
+         $this->record->who_speciality = $post['doctor_speciality'];
+         $this->record->comment = $post['comment'];
+
+         if (!empty($_SESSION['uploaded_file'])) {
+            foreach($_SESSION['uploaded_file'] as $file) {
+                $this->record->attachments[] = $file;
+            }
+            $_SESSION['uploaded_file'] = [];
          }
 
-        $this->entry->setDateToNow();
-        $this->entry->who->name = $post['doctor_name'];
-        $this->entry->who->speciality = $post['doctor_speciality'];
-        $this->entry->comment = $post['comment'];
+         $hash = $this->record->storeRecord();
 
-        if (!empty($_SESSION['uploaded_file'])) {
-            foreach($_SESSION['uploaded_file'] as $file) {
-                $this->entry->attachments[] = $file;
-            }
-            $_SESSION['uploaded_file'] = '';
-        }
-
-        $hash = $this->entry->storeEntry();
-
-        if ($hash !== NULL) {
-            $_SESSION['uploaded_file'] = NULL;
-            $html = $this->generateSuccessMessage('Your entry has been saved!');
-        }
-        else {
+         if ($hash !== NULL) {
+            $_SESSION['uploaded_file'] = [];
+            $html = $this->generateSuccessMessage('Your record has been saved!');
+         }
+         else {
             $html = $this->generateFailMessage();
-        }
-        return $html;
+         }
+         return $html;
     }
 
     /**
@@ -163,11 +166,15 @@ EOS;
         if ($file !== NULL) {
             $textFromImage = file_get_contents($file['tmp_name']);
 
-            $_SESSION['uploaded_file'][] = [
-                'hash' => $this->ipfs->add($textFromImage),
-                'mimetype' => $file['type'],
-                'type' => 'attachment',
-            ];
+            if($_SESSION['uploaded_file'] === '') {
+                $_SESSION['uploaded_file'] = new StdClass();
+            }
+
+            $std = new StdClass();
+            $std->hash = $this->ipfs->add($textFromImage);
+            $std->mimetype = $file['type'];
+            $std->type = 'attachment';
+            $_SESSION['uploaded_file'][] = $std;
         }
     }
 
@@ -175,7 +182,7 @@ EOS;
      * {@inheritdoc}
      */
     public function outputTitle() {
-        return 'New Entry';
+        return 'New Record';
     }
 
     /**
@@ -198,5 +205,15 @@ EOS;
      */
     public function cssClassForContent() {
         return '';
+    }
+
+    /**
+     * Return the CSS class for the banner > display a background image.
+     *
+     * @return mixed
+     */
+    public function cssClassForBanner()
+    {
+        return 'bg-banner-image-1';
     }
 }

@@ -43,9 +43,10 @@ class User
 
     /**
      * User login form action.
-     * @param $privateKey: User's generated private KEY
-     * @param string $passphrase: Optionnal, use a passphrase to login with the generated private KEY
-     * @param string $useRealPrivateKey: Real NEO private KEY. Should not be used directly
+     * @param $privateKey : User's generated private KEY
+     * @param string $passphrase : Optionnal, use a passphrase to login with the generated private KEY
+     * @param string $useRealPrivateKey : Real NEO private KEY. Should not be used directly
+     * @return bool
      */
     public function login($privateKey, $passphrase ='', $useRealPrivateKey = false)
     {
@@ -60,6 +61,9 @@ class User
                         $_SESSION['user']['wallet'] = $response->wif;
                         $_SESSION['user']['address'] = $response->address;
                         // @todo denis: update that with KEY/VALUE pair stored within the wallet.
+                        $json = file_get_contents('src/test/master_encrypted.json');
+                        $encryption = new Encryption();
+                        $json = $encryption->decrypt($json);
                         //Neon-Js does not have an updated database of RPC's node. Let's get it with PHP
 
                         $neo = new \NeoPHP\NeoRPC($GLOBALS['mainnet']);
@@ -86,6 +90,7 @@ class User
     /**
      * Register a new NEO wallet used for the dAPP
      * @return : TODO
+     * @throws \Exception
      */
     public function register($passphrase)
     {
@@ -111,8 +116,7 @@ class User
      * @param $post
      *   The post data from registration form.
      */
-    public function createUser($post)
-    {
+    public function createUser($post) {
         $this->fullName = $post['fullName'];
         $this->email = $post['email'];
         $this->dob = $post['dob'];
@@ -139,27 +143,29 @@ class User
      * @return mixed
      */
     public function storeUser() {
-        // Store the entry locally. >> DEBUG PURPOSE.
+        // Store the record locally. >> DEBUG PURPOSE.
         $json = json_encode($this);
-        $fileName = 'src/test/master.json';
+        $encryption = new Encryption();
+        $json = $encryption->encrypt($json);
+        $fileName = 'src/test/master_encrypted.json';
         $myFile = fopen($fileName, 'w+');
         fwrite($myFile, $json);
         fclose($myFile);
 
-        // Store the entry in ipfs.
+        // Store the record in ipfs.
         $json = json_encode($this);
         $hash = $this->ipfs->add($json);
 
         return $hash;
     }
 
-    public function getListDocs()
-    {
-
-    }
-
+    /**
+     * Test if the user is doctor or patient.
+     * @return bool
+     */
     public static function isUserDoctor() {
-        if ($_SESSION['user']['master']->type === User::TYPE_USER_DOCTOR) {
+        if (isset($_SESSION['user']['master'])
+            && $_SESSION['user']['master']->type === User::TYPE_USER_DOCTOR) {
             return TRUE;
         }
         else {

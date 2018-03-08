@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 require __DIR__ . '/vendor/autoload.php';
 
 use Cloutier\PhpIpfsApi\IPFS;
@@ -10,16 +12,45 @@ if (!isset($_GET['hash'])) {
 
 // @todo : How do we know the file type ?
 // For now I will limit the file type to JPG.
+$mimeType = NULL;
+foreach ($_SESSION['user']['master']->records as $record) {
+    foreach ($record->attachments as $attachment) {
+        if ($attachment->hash === $_GET['hash']) {
+            $mimeType = $attachment->mimetype;
+        }
+    }
+}
 
-// Read the hash.
-$ipfs = new IPFS("localhost", "8080", "5001");
-$binaries = $ipfs->cat($_GET['hash']);
+if ($mimeType === NULL) {
+    echo '<h2>An error occurred.</h2>';
+}
+else {
 
-// Transform the binary stream into an image.
-$imageData = base64_encode($binaries);
+    // Read the hash.
+    $ipfs = new IPFS("localhost", "8080", "5001");
+    $binaries = $ipfs->cat($_GET['hash']);
 
-// Format the image SRC:  data:{mime};base64,{data};
-$src = 'data: image/jpg;base64,'.$imageData;
+    // Transform the binary stream into an image.
+    $fileData = base64_encode($binaries);
 
-// Echo out a sample image
-echo '<img src="' . $src . '">';
+    switch ($mimeType) {
+        case 'image/jpeg':
+            $src = 'data: image/jpg;base64,'.$fileData;
+            $output =  '<img src="' . $src . '">';
+            echo $output;
+            break;
+
+        case 'application/pdf':
+            header('Content-type: application/pdf');
+            header('Content-Disposition: inline;');
+            echo $binaries;
+            break;
+
+        default:
+            $output = '';
+            break;
+    }
+
+}
+
+

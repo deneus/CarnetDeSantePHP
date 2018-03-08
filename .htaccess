@@ -5,7 +5,7 @@ RewriteRule    ^login.html/?$   ?q=login        [NC,L]
 RewriteRule    ^loginPost.html/?$   ?q=loginPost        [NC,L]
 
 RewriteRule    ^home.html/?$   ?q=home        [NC,L]
-RewriteRule    ^newEntry.html/?$   ?q=newEntry        [NC,L]
+RewriteRule    ^newRecord.html/?$   ?q=newRecord        [NC,L]
 RewriteRule    ^accessDelegation.html/?$   ?q=accessDelegation        [NC,L]
 RewriteRule    ^terminateAccess.html/?$   ?q=terminateAccess        [NC,L]
 RewriteRule    ^logout.html/?$   ?q=logout        [NC,L]

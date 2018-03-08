@@ -26,4 +26,11 @@ interface ApplicationView {
      * @return mixed
      */
     public function cssClassForContent();
+
+    /**
+     * Return the CSS class for the banner > display a background image.
+     *
+     * @return mixed
+     */
+    public function cssClassForBanner();
 }

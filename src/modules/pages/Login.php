@@ -19,7 +19,6 @@ class Login implements ApplicationView
      */
     public function outputHtmlContent()
     {
-        // @todo anthony: please update htaccess to process url like ?q=login&login=aaa
         $login = '';
         if (isset($_GET['q'])) {
             $explode = explode('__', $_GET['q']);
@@ -104,4 +103,13 @@ EOS;
         return $html;
     }
 
+    /**
+     * Return the CSS class for the banner > display a background image.
+     *
+     * @return mixed
+     */
+    public function cssClassForBanner()
+    {
+        return '';
+    }
 }

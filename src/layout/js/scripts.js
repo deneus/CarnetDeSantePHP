@@ -1,6 +1,6 @@
 Dropzone.options.myAwesomeDropzone = {
     //maxFilesize: 2, // MB
-    acceptedFiles: '.jpg',
+    acceptedFiles: '.jpg, .jpeg,  .pdf',
 };
 
 ( function ( $ ) {
@@ -48,6 +48,7 @@ $( document ).ready(function() {
         }
     }
 
+    var dynatable = $(".list-of-records").dynatable();
 
 });
 

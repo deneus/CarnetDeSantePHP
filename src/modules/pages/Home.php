@@ -3,17 +3,17 @@
 namespace HealthChain\modules\pages;
 
 use HealthChain\interfaces\ApplicationView;
-use HealthChain\modules\classes\Entry;
+use HealthChain\modules\classes\Record;
 use HealthChain\modules\classes\User;
 use HealthChain\test\Tests;
 
 class Home implements ApplicationView
 {
-    private $hashes;
+    private $records;
 
     public function __construct()
     {
-        $this->hashes = $this->getRecords();
+        $this->records = $this->getRecords();
     }
 
     /**
@@ -36,13 +36,10 @@ class Home implements ApplicationView
      */
     private function generateFilters()
     {
-        $html = '
-        <script type="application/javascript">
-        $( document ).ready(function() {
-            // Documentation; https://www.dynatable.com/
-            var dynatable = $("#listOfNotes").dynatable();
-        });
-        </script>';
+        /**
+         * See scripts.js.
+         * var dynatable = $(".list-of-records").dynatable();
+         */
 
         return '';
     }
@@ -56,30 +53,31 @@ class Home implements ApplicationView
     private function generateTable() {
         global $directory;
 
+        $delegationLinkClasses = 'btn pl-2 mb-4 ml-2';
+        $delegationLinkIcon = '<i class="fa fa-user-md mr-1"></i>';
         if (User::isUserDoctor()) {
-            $delegationLink = '<a href="' . $directory . '/logout.html" class="btn btn-danger pl-2"><i class="fa fa-user-md mr-1"></i>Terminate your access</a>';;
+            $delegationLink = '<a href="' . $directory . '/logout.html" class="btn-danger '.$delegationLinkClasses.'">'.$delegationLinkIcon.'Terminate your access</a>';;
         }
         else {
-            $delegationLink = '<a href="' . $directory . '/accessDelegation.html" class="btn btn-primary pl-2"><i class="fa fa-user-md mr-1"></i>Delegate the access</a>';
+            $delegationLink = '<a href="' . $directory . '/accessDelegation.html" class="btn-primary '.$delegationLinkClasses.'">'.$delegationLinkIcon.'Delegate the access</a>';
         }
-        $html = '<div class="row text-right">
-                    <div class="mb-4 w-100">
-                        <a href="' . $directory . '/newEntry.html" class="btn btn-primary pl-2"><i class="fa fa-plus mr-1"></i>Add new record</a>
-                        &nbsp;
+        $html = '<div class="text-right">
+                    <div class="w-100">
+                        <a href="' . $directory . '/newRecord.html" class="btn btn-primary pl-2 mb-4"><i class="fa fa-plus mr-1"></i>Add new record</a>
                         '.$delegationLink.'
                     </div>
                 </div>';
 
-        if (count($this->hashes) === 0 || ($this->hashes[0] === NULL)) {
+        if (count($this->records) === 0 || ($this->records[0] === NULL)) {
             $html .= '<div class="row border highlight-background pt-3 pb-3 pl-3">
-                You don\'t have any medical entry at the moment. <br /><br />
-                Either create an entry yourself by using New Entry, either delegate access to your doctor.
+                You don\'t have any medical record at the moment. <br /><br />
+                Either create a record yourself by using New Record, either delegate access to your doctor.
             </div>';
             return $html;
         }
 
-        $html .= '<table id="listOfNotes" class="table table-sm table-hover table-striped">';
-        $html .= '<thead class="thead-dark">
+        $html .= '<table id="listOfRecords" class="list-of-records row w-100 no-gutters">';
+        $html .= '<thead class="">
             <tr>
                 <th class="col-1">Date</th>
                 <th class="col-2">Who</th>
@@ -89,20 +87,18 @@ class Home implements ApplicationView
          </thead>';
         $html .= '<tbody>';
 
-        foreach ($this->hashes as $hash) {
+        /** @var $record Record*/
+        foreach ($this->records as $record) {
             // The hash is broken.
-            if ($hash === NULL) {
+            if ($record === NULL) {
                 continue;
             }
 
-            $entry = new Entry();
-            $entry->getEntryFromHash($hash);
-
             $html .= '<tr>';
-            $html .= '<td>' . $entry->renderDate() . '</td>';
-            $html .= '<td>' . $entry->renderWho() . '</td>';
-            $html .= '<td>' . $entry->comment . '</td>';
-            $html .= '<td>' . $entry->renderAttachments() . '</td>';
+            $html .= '<td>' . $record->renderDate() . '</td>';
+            $html .= '<td>' . $record->renderWho() . '</td>';
+            $html .= '<td>' . $record->renderComment() . '</td>';
+            $html .= '<td>' . $record->renderAttachments() . '</td>';
             $html .= '</tr>';
         }
 
@@ -128,7 +124,29 @@ class Home implements ApplicationView
      */
     public function getRecords()
     {
-        return array_reverse($_SESSION['user']['master']->records);
+        $records = [];
+
+        if ($_SESSION['user']['master'] !== NULL) {
+            foreach($_SESSION['user']['master']->records as $stdClass) {
+                $record = new Record();
+                $record->setRecord($stdClass);
+                $records[] = $record;
+            }
+            return array_reverse($records);
+        }
+        else {
+            return [];
+        }
+
+    }
+
+    /**
+     * Return the CSS class for the banner > display a background image.
+     *
+     * @return mixed
+     */
+    public function cssClassForBanner()
+    {
+        return 'bg-banner-image-2';
     }
 }
-
