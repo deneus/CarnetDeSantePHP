@@ -29,39 +29,57 @@ module.exports = function(app, db) {
         const hash = req.body.hash;
         const key =  req.body.key;
 
-    const invoke = Neon.sc.scriptParams = {
-        scriptHash: hash,
-        method: 'register',
-        args: [
-            Neon.sc.ContractParam.string('maclef'),
-            Neon.sc.ContractParam.string('mavaleur')
-        ]
-    }
+        var testnet = 'http://test5.cityofzion.io:8880';
+        var account = new Neon.wallet.Account("PRIVATE KEY");
 
-    const sb = new Neon.sc.ScriptBuilder();
-    sb.emitAppCall(invoke.scriptHash, invoke.method, invoke.args, false);
-
-    console.log(sb.str);
-    //const param1 = Neon.default.create.contractParam('String', 'register')
-    // This is a convenient way to convert an address to a reversed scriptHash that smart contracts use.
-    //const param2 = Neon.default.create.contractParam('Array', ['clef', 'valeur'])
-
-    //console.log(param1);
-    //console.log(param2);
+        var fromAddrScriptHash = Neon.wallet.getScriptHashFromAddress(account.address);
+        console.log(account.address);
 
 
-        const client = new Neon.rpc.RPCClient('http://test5.cityofzion.io:8880', '2.6.0');
-        client.invokeScript(sb.str).then(response =>{
-            res.send(response);
-        }).catch(function (error) {
-             console.error(error)
-         });
 
-        const storages = client.getStorage(hash, Neon.u.str2hexstring('clef')).then(response =>{
-                console.log(response);
-            }).catch(function(error){
-                console.log(error);
-            });
+        const filledBalance = Neon.api.neonDB.getBalance('TestNet', account.address).then(balance => {
+            console.log(balance);
+
+            const invoke = Neon.sc.scriptParams = {
+                scriptHash: hash,
+                method: 'register',
+                args: [
+                    Neon.sc.ContractParam.string('maclef2'),
+                    Neon.sc.ContractParam.string('mavaleur2')
+                ]
+            }
+
+            const sb = new Neon.sc.ScriptBuilder();
+            sb.emitAppCall(invoke.scriptHash, invoke.method, invoke.args, false);
+            const vm_script = sb.str;
+
+            const intents         = [
+                {
+                    assetId     : Neon.CONST.ASSET_ID.GAS,
+                    value     : 2,
+                    scriptHash: hash
+                }
+            ];
+            const transaction     = Neon.create.invocationTx(balance, intents, vm_script, 1);
+
+            let signed_tx                 = tx.signTransaction(transaction, 'PRIVATE KEY');
+            let serialized_transaction     = tx.serializeTransaction(signed_tx)
+
+            rpc.Query.sendRawTransaction(serialized_transaction).execute(testnet).then(data => console.log(data));
+        })
+        // const client = new Neon.rpc.RPCClient(testnet, '2.6.0');
+        // client.invokeScript(sb.str).then(response =>{
+        //     res.send(response);
+        // }).catch(function (error) {
+        //      console.error(error)
+        //  });
+
+        // const storages = client.getStorage(hash, Neon.u.str2hexstring('clef')).then(response =>{
+        //         console.log(response);
+        //     }).catch(function(error){
+        //         console.log(error);
+        //     });
+        res.send('test');
 
     });
 
