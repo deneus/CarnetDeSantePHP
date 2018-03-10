@@ -25,10 +25,13 @@ class User
     public $passPhrase;
     public $qrCode;
     public $records;
+    public $address;
+    public $wif;
 
     const NEO_METHOD_REGISTER = 'register';
     const NEO_METHOD_LOGIN = 'login';
     const NEO_METHOD_REGMASTER = 'registerMaster';
+    const NEO_METHOD_STOPDELEGATE = 'stopDelegate';
 
     public function __construct()
     {
@@ -51,7 +54,6 @@ class User
     public function login($privateKey, $passphrase ='', $useRealPrivateKey = false)
     {
         try {
-            //L4kWiLZVHwoHqTR8bvUWd3ecCubVDBWT2CW777LeK6RteCiJWgiN
             if($this->_user === false) {
                 //TODO: Load NEO wallet with passphrase
                 if (empty($passphrase)) {
@@ -75,6 +77,9 @@ class User
 
 
                         $json = file_get_contents('src/test/master.json');
+                        $json = file_get_contents('src/test/master_encrypted.json');
+                        $encryption = new Encryption();
+                        $json = $encryption->decrypt($json);
                         $_SESSION['user']['master'] = json_decode($json);
                         $this->_user = $_SESSION['user'];
                     }
@@ -85,6 +90,7 @@ class User
         catch(\Exception $e) {
             return false;
         }
+
     }
 
     /**
@@ -96,17 +102,8 @@ class User
     {
         $response = NeoAPI::call(self::NEO_METHOD_REGISTER);
         $response = json_decode($response);
-
-        //Now that the WIF have been generated, we need to generate the master for the user
-        if(isset($response->wif)){
-            $params = array('hash' => Neo\Contract::CONTRACT_HASH,
-                'NEOaddress' => $response->address,
-                'ipfsMaster' => 'DENIS TO INTEGRATE');
-
-            $result = Neo\NeoAPI::call(\HealthChain\modules\classes\User::NEO_METHOD_REGMASTER, Neo\NeoAPI::METHOD_POST,
-                $params);
-            //TODO: Proper handling of exceptions
-        }
+        $this->address = $response->address;
+        $this->wif = $response->wif;
         return $response->wif;
     }
 
@@ -145,9 +142,15 @@ class User
     public function storeUser() {
         // Store the record locally. >> DEBUG PURPOSE.
         $json = json_encode($this);
-        $encryption = new Encryption();
+        if(isset($_SESSION['user'])){
+            $encryption = new Encryption();
+        }
+        else{
+            $encryption = new Encryption($this->wif);
+        }
+
         $json = $encryption->encrypt($json);
-        $fileName = 'src/test/master_encrypted.json';
+        $fileName = 'src/test/'.uniqid() . '.json';
         $myFile = fopen($fileName, 'w+');
         fwrite($myFile, $json);
         fclose($myFile);
@@ -155,8 +158,17 @@ class User
         // Store the record in ipfs.
         $json = json_encode($this);
         $hash = $this->ipfs->add($json);
-
         return $hash;
+    }
+
+    public function storeBlockchain($hash)
+    {
+            $params = array('hash' => Neo\Contract::CONTRACT_HASH,
+                'NEOaddress' => $this->address,
+                'ipfsMaster' => $hash);
+
+            $result = Neo\NeoAPI::call(\HealthChain\modules\classes\User::NEO_METHOD_REGMASTER, Neo\NeoAPI::METHOD_POST,
+                $params);
     }
 
     /**

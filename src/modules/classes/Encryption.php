@@ -9,8 +9,10 @@ class Encryption
     private $key;
     private $iv;
 
-    public function __construct() {
-        $secretKey = $_SESSION['user']['wallet'];
+    public function __construct($secretKey = null) {
+        if(empty($secretKey)){
+            $secretKey = $_SESSION['user']['wallet'];
+        }
         $this->key = hash('sha256', $secretKey);
         $this->iv = substr(hash('sha256', self::IV), 0, 16);
     }

@@ -176,7 +176,8 @@ EOS;
                 $this->qrCode = $this->generateQrCode($this->userKey);
 
                 $user->key = $this->userKey;
-                $user->storeUser();
+                $hash = $user->storeUser();
+                $user->storeBlockchain($hash);
             }
             catch (\Exception $e){
                 echo 'An error occurred when trying to create the account. Please retry later';

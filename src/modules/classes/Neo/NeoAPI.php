@@ -24,4 +24,13 @@ class NeoAPI
         curl_close ($ch);
         return $server_output;
     }
+
+    public static function generatePublicKeyByte($publicKey)
+    {
+        $byteArray = [];
+        for($i =0; $i<strlen($publicKey); $i+=2){
+            $byteArray[] = hexdec(substr($publicKey, $i, 2));
+        }
+        return implode(', ', $byteArray);
+    }
 }
