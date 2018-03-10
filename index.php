@@ -28,11 +28,6 @@ $GLOBALS['directory'] = "${protocol}://${domain}";
 $GLOBALS['mainnet'] = false; // Mainnet = prod, testnet = dev
 $GLOBALS['version'] = "2.6.0";
 
-$params = [
-    'hash' => Contract::CONTRACT_HASH,
-    'NEOaddress' => $_SESSION['user']['address'],
-];
-
 function storeIntoBlockchain($hash, $address)
 {
     $params = array('hash' => Contract::CONTRACT_HASH,
