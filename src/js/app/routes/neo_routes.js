@@ -77,12 +77,6 @@ module.exports = function (app, db) {
     //      console.error(error)
     //  });
 
-    /*const storage = client.getStorage(hash, Neon.u.str2hexstring('maclef2')).then(response =>{
-     console.log(response);
-     }).catch(function(error){
-     console.log(error);
-     });*/
-
 })
     ;
 
@@ -150,5 +144,20 @@ module.exports = function (app, db) {
 
 })
     ;
+
+
+    app.post('/getMaster', (req, res) => {
+        res.setHeader('Content-Type', 'application/json');
+    const address = req.body.NEOaddress;
+    const hash = req.body.hash;
+    const testnet = 'http://test5.cityofzion.io:8880';
+    const client = new Neon.rpc.RPCClient(testnet, '2.6.0');
+    const storage = client.getStorage(hash, Neon.u.str2hexstring(address)).then(response =>{
+            res.send(JSON.stringify(response));
+        }).catch(function(error){
+        console.log(error);
+     });
+    });
+
 
 };

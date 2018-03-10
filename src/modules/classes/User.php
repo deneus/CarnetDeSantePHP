@@ -32,6 +32,7 @@ class User
     const NEO_METHOD_LOGIN = 'login';
     const NEO_METHOD_REGMASTER = 'registerMaster';
     const NEO_METHOD_STOPDELEGATE = 'stopDelegate';
+    const NEO_METHOD_GETMASTER = 'getMaster';
 
     public function __construct()
     {
@@ -68,9 +69,10 @@ class User
                         $url = $neo->getFastestNode();
 
                         $params = array('hash' => Contract::CONTRACT_HASH);
-                        $masterResponse = NeoAPI::call(self::NEO_METHOD_MASTER, NeoAPI::METHOD_POST, $params);
 
+                        $masterResponse = NeoAPI::call(self::NEO_METHOD_GETMASTER, NeoAPI::METHOD_POST, $params);
                         $encryptedJson = $this->ipfs->cat($masterResponse);
+
                         $encryption = new Encryption();
                         $json = $encryption->decrypt($encryptedJson);
                         $_SESSION['user']['master'] = json_decode($json);
@@ -142,14 +144,9 @@ class User
             $encryption = new Encryption($this->wif);
         }
 
-        $json = $encryption->encrypt($json);
-        $fileName = 'src/test/'.uniqid() . '.json';
-        $myFile = fopen($fileName, 'w+');
-        fwrite($myFile, $json);
-        fclose($myFile);
 
         // Store the record in ipfs.
-        $json = json_encode($this);
+        $json = $encryption->encrypt($json);
         $hash = $this->ipfs->add($json);
         return $hash;
     }
@@ -176,6 +173,16 @@ class User
         else {
             return FALSE;
         }
+    }
+
+    public function loadMaster()
+    {
+        $params = array('hash' => Contract::CONTRACT_HASH,
+            'NEOaddress' => $this->address);
+
+        $response =  NeoAPI::call(self::NEO_METHOD_GETMASTER, NeoAPI::METHOD_POST, $params);
+        $hashMaster = json_decode($response);
+        return $hashMaster;
     }
 
 
