@@ -6,8 +6,6 @@ namespace HealthChain\modules\classes;
 use HealthChain\modules\classes\Neo\Contract;
 use HealthChain\modules\classes\Neo\NeoAPI;
 use HealthChain\modules\traits\PostTrait;
-use NeoPHP\NeoWallet;
-use NeoPHP\NeoPHP;
 
 class User
 {
@@ -156,16 +154,6 @@ class User
         $json = $encryption->encrypt($json);
         $hash = $this->ipfs->add($json);
         return $hash;
-    }
-
-    public function storeBlockchain($hash)
-    {
-            $params = array('hash' => Neo\Contract::CONTRACT_HASH,
-                'NEOaddress' => $this->address,
-                'ipfsMaster' => $hash);
-
-            $result = Neo\NeoAPI::call(\HealthChain\modules\classes\User::NEO_METHOD_REGMASTER, Neo\NeoAPI::METHOD_POST,
-                $params);
     }
 
     /**

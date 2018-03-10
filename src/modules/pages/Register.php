@@ -177,11 +177,13 @@ EOS;
 
                 $user->key = $this->userKey;
                 $hash = $user->storeUser();
-                $user->storeBlockchain($hash);
+
+                storeIntoBlockchain($hash, $this->address);
             }
             catch (\Exception $e){
                 echo 'An error occurred when trying to create the account. Please retry later';
             }
+
     }
 
     /**
