@@ -63,6 +63,7 @@ class User
                     if (!empty($response->address)) {
                         $_SESSION['user']['wallet'] = $response->wif;
                         $_SESSION['user']['address'] = $response->address;
+                        $this->address = $response->address;
                         // @todo denis: update that with KEY/VALUE pair stored within the wallet.
                         $json = file_get_contents('src/test/master_encrypted.json');
                         $encryption = new Encryption();
