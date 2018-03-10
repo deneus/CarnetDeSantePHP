@@ -24,7 +24,8 @@ class Encryption
     }
 
     public function decrypt($string){
-        $output = openssl_decrypt(base64_decode($string), self::ENCRYPT_METHOD, $this->key, 0, $this->iv);
+        $explode = explode(' ', $string);
+        $output = openssl_decrypt(base64_decode($explode[0]), self::ENCRYPT_METHOD, $this->key, 0, $this->iv);
         return $output;
     }
 

@@ -64,10 +64,6 @@ class User
                         $_SESSION['user']['wallet'] = $response->wif;
                         $_SESSION['user']['address'] = $response->address;
                         $this->address = $response->address;
-                        // @todo denis: update that with KEY/VALUE pair stored within the wallet.
-                        $json = file_get_contents('src/test/master_encrypted.json');
-                        $encryption = new Encryption();
-                        $json = $encryption->decrypt($json);
 
                         //Neon-Js does not have an updated database of RPC's node. Let's get it with PHP
                         $neo = new \NeoPHP\NeoRPC($GLOBALS['mainnet']);
@@ -76,6 +72,9 @@ class User
                         $params = array('NEOaddress' => $this->address, 'hash' => Contract::CONTRACT_HASH);
 
                         $masterResponse = NeoAPI::call(self::NEO_METHOD_GETMASTER, NeoAPI::METHOD_POST, $params);
+                        $masterResponse = trim($masterResponse, '"');
+                        $masterResponse = hex2bin($masterResponse);
+
                         $encryptedJson = $this->ipfs->cat($masterResponse);
 
                         $encryption = new Encryption();
@@ -83,6 +82,10 @@ class User
                         $_SESSION['user']['master'] = json_decode($json);
                         $this->_user = $_SESSION['user'];
                     }
+                }
+                if ($_SESSION['user']['master'] === NULL) {
+                    $_SESSION['user'] == NULL;
+                    header ('Location: /');
                 }
             }
             return $this->_user !== false;
@@ -148,7 +151,6 @@ class User
         else{
             $encryption = new Encryption($this->wif);
         }
-
 
         // Store the record in ipfs.
         $json = $encryption->encrypt($json);
