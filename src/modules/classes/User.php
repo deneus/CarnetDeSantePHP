@@ -70,8 +70,9 @@ class User
                         $params = array('hash' => Contract::CONTRACT_HASH);
                         $masterResponse = NeoAPI::call(self::NEO_METHOD_MASTER, NeoAPI::METHOD_POST, $params);
 
+                        $encryptedJson = $this->ipfs->cat($masterResponse);
                         $encryption = new Encryption();
-                        $json = $encryption->decrypt($masterResponse);
+                        $json = $encryption->decrypt($encryptedJson);
                         $_SESSION['user']['master'] = json_decode($json);
                         $this->_user = $_SESSION['user'];
                     }
