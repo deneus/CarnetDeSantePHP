@@ -68,21 +68,18 @@ class User
                         $json = file_get_contents('src/test/master_encrypted.json');
                         $encryption = new Encryption();
                         $json = $encryption->decrypt($json);
-                        //Neon-Js does not have an updated database of RPC's node. Let's get it with PHP
 
+                        //Neon-Js does not have an updated database of RPC's node. Let's get it with PHP
                         $neo = new \NeoPHP\NeoRPC($GLOBALS['mainnet']);
                         $url = $neo->getFastestNode();
 
                         $params = array('hash' => Contract::CONTRACT_HASH);
 
-                        //TODO DENIS: Load Hash from IPFS
-                        $hash = $this->loadMaster();
+                        $masterResponse = NeoAPI::call(self::NEO_METHOD_GETMASTER, NeoAPI::METHOD_POST, $params);
+                        $encryptedJson = $this->ipfs->cat($masterResponse);
 
-
-                       /* $json = file_get_contents('src/test/master.json');
-                        $json = file_get_contents('src/test/master_encrypted.json');*/
                         $encryption = new Encryption();
-                        $json = $encryption->decrypt($json);
+                        $json = $encryption->decrypt($encryptedJson);
                         $_SESSION['user']['master'] = json_decode($json);
                         $this->_user = $_SESSION['user'];
                     }
@@ -152,14 +149,9 @@ class User
             $encryption = new Encryption($this->wif);
         }
 
-        $json = $encryption->encrypt($json);
-        $fileName = 'src/test/'.uniqid() . '.json';
-        $myFile = fopen($fileName, 'w+');
-        fwrite($myFile, $json);
-        fclose($myFile);
 
         // Store the record in ipfs.
-        $json = json_encode($this);
+        $json = $encryption->encrypt($json);
         $hash = $this->ipfs->add($json);
         return $hash;
     }
