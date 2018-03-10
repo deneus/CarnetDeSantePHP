@@ -1,3 +1,4 @@
 vendor/
 .idea/
 src/test
+src/js/node_modules/
