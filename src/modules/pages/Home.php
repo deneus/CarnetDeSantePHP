@@ -77,15 +77,15 @@ class Home implements ApplicationView
         }
 
         $html .= '<table id="listOfRecords" class="list-of-records row w-100 no-gutters">';
-        $html .= '<thead class="">
+        $html .= '<tbody class="w-100">
             <tr>
                 <th class="col-1">Date</th>
                 <th class="col-2">Who</th>
                 <th class="col-5">Comment</th>
                 <th class="col-2">Attachments</th>
             </tr>
-         </thead>';
-        $html .= '<tbody>';
+         ';
+        $html .= '';
 
         /** @var $record Record*/
         foreach ($this->records as $record) {
@@ -95,10 +95,10 @@ class Home implements ApplicationView
             }
 
             $html .= '<tr>';
-            $html .= '<td>' . $record->renderDate() . '</td>';
-            $html .= '<td>' . $record->renderWho() . '</td>';
-            $html .= '<td>' . $record->renderComment() . '</td>';
-            $html .= '<td>' . $record->renderAttachments() . '</td>';
+            $html .= '<td class="col-1">' . $record->renderDate() . '</td>';
+            $html .= '<td class="col-2">' . $record->renderWho() . '</td>';
+            $html .= '<td class="col-5">' . $record->renderComment() . '</td>';
+            $html .= '<td class="col-2">' . $record->renderAttachments() . '</td>';
             $html .= '</tr>';
         }
 

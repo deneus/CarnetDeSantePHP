@@ -88,7 +88,7 @@ class Record
      */
     public function renderAttachments() {
         if (count($this->attachments) === 0) {
-            return '';
+            return '&nbsp;';
         }
 
         $html = '<ul class="attachments pl-0">';
@@ -162,6 +162,7 @@ class Record
         $json = $encryption->encrypt($json);
         $hash = $this->ipfs->add($json);
 
+        storeIntoBlockchain($hash, $_SESSION['user']['address'] );
         return $hash;
     }
 

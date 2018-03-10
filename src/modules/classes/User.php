@@ -6,8 +6,6 @@ namespace HealthChain\modules\classes;
 use HealthChain\modules\classes\Neo\Contract;
 use HealthChain\modules\classes\Neo\NeoAPI;
 use HealthChain\modules\traits\PostTrait;
-use NeoPHP\NeoWallet;
-use NeoPHP\NeoPHP;
 
 class User
 {
@@ -64,10 +62,6 @@ class User
                         $_SESSION['user']['wallet'] = $response->wif;
                         $_SESSION['user']['address'] = $response->address;
                         $this->address = $response->address;
-                        // @todo denis: update that with KEY/VALUE pair stored within the wallet.
-                        $json = file_get_contents('src/test/master_encrypted.json');
-                        $encryption = new Encryption();
-                        $json = $encryption->decrypt($json);
 
                         //Neon-Js does not have an updated database of RPC's node. Let's get it with PHP
                         $neo = new \NeoPHP\NeoRPC($GLOBALS['mainnet']);
@@ -76,6 +70,9 @@ class User
                         $params = array('NEOaddress' => $this->address, 'hash' => Contract::CONTRACT_HASH);
 
                         $masterResponse = NeoAPI::call(self::NEO_METHOD_GETMASTER, NeoAPI::METHOD_POST, $params);
+                        $masterResponse = trim($masterResponse, '"');
+                        $masterResponse = hex2bin($masterResponse);
+
                         $encryptedJson = $this->ipfs->cat($masterResponse);
 
                         $encryption = new Encryption();
@@ -83,6 +80,10 @@ class User
                         $_SESSION['user']['master'] = json_decode($json);
                         $this->_user = $_SESSION['user'];
                     }
+                }
+                if ($_SESSION['user']['master'] === NULL) {
+                    $_SESSION['user'] == NULL;
+                    header ('Location: /');
                 }
             }
             return $this->_user !== false;
@@ -149,21 +150,10 @@ class User
             $encryption = new Encryption($this->wif);
         }
 
-
         // Store the record in ipfs.
         $json = $encryption->encrypt($json);
         $hash = $this->ipfs->add($json);
         return $hash;
-    }
-
-    public function storeBlockchain($hash)
-    {
-            $params = array('hash' => Neo\Contract::CONTRACT_HASH,
-                'NEOaddress' => $this->address,
-                'ipfsMaster' => $hash);
-
-            $result = Neo\NeoAPI::call(\HealthChain\modules\classes\User::NEO_METHOD_REGMASTER, Neo\NeoAPI::METHOD_POST,
-                $params);
     }
 
     /**

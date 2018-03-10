@@ -7,6 +7,9 @@ date_default_timezone_set('Australia/Sydney');
 require __DIR__ . '/vendor/autoload.php';
 
 use Cloutier\PhpIpfsApi\IPFS;
+use HealthChain\modules\classes\Encryption;
+use HealthChain\modules\classes\Neo\Contract;
+use HealthChain\modules\classes\Neo\NeoAPI;
 use HealthChain\modules\classes\User;
 use HealthChain\modules\pages\accessDelegation;
 use HealthChain\modules\pages\Home ;
@@ -24,6 +27,16 @@ $port = $_SERVER['SERVER_PORT'];
 $GLOBALS['directory'] = "${protocol}://${domain}";
 $GLOBALS['mainnet'] = false; // Mainnet = prod, testnet = dev
 $GLOBALS['version'] = "2.6.0";
+
+function storeIntoBlockchain($hash, $address)
+{
+    $params = array('hash' => Contract::CONTRACT_HASH,
+        'NEOaddress' => $address,
+        'ipfsMaster' => $hash);
+
+    $result = NeoAPI::call(User::NEO_METHOD_REGMASTER, NeoAPI::METHOD_POST,
+        $params);
+}
 
 // --------------------------------------------------
 // Router.
