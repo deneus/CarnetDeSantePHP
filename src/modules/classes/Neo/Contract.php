@@ -17,7 +17,7 @@ class Contract
      * return 05
      */
 
-    const CONTRACT_HASH = '62824de5f723ee749a1a2fde04fd28420eff3348';
+    const CONTRACT_HASH = '73ea8ca5b36d84061780676238c187295151f6f7';
 //    const CONTRACT_HASH = 'dc675afc61a7c0f7b3d2682bf6e1d8ed865a0e5f';//TEST tuto
     const METHOD_REGISTER = 'register';
     const METHOD_DELEGATE = 'delegate';

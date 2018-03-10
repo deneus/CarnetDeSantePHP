@@ -32,6 +32,7 @@ class User
     const NEO_METHOD_LOGIN = 'login';
     const NEO_METHOD_REGMASTER = 'registerMaster';
     const NEO_METHOD_STOPDELEGATE = 'stopDelegate';
+    const NEO_METHOD_GETMASTER = 'getMaster';
 
     public function __construct()
     {
@@ -73,11 +74,12 @@ class User
 
                         $params = array('hash' => Contract::CONTRACT_HASH);
 
-                        $masterResponse = NeoAPI::call(self::NEO_METHOD_MASTER, NeoAPI::METHOD_POST, $params);
+                        //TODO DENIS: Load Hash from IPFS
+                        $hash = $this->loadMaster();
 
 
-                        $json = file_get_contents('src/test/master.json');
-                        $json = file_get_contents('src/test/master_encrypted.json');
+                       /* $json = file_get_contents('src/test/master.json');
+                        $json = file_get_contents('src/test/master_encrypted.json');*/
                         $encryption = new Encryption();
                         $json = $encryption->decrypt($json);
                         $_SESSION['user']['master'] = json_decode($json);
@@ -183,6 +185,16 @@ class User
         else {
             return FALSE;
         }
+    }
+
+    public function loadMaster()
+    {
+        $params = array('hash' => Contract::CONTRACT_HASH,
+            'NEOaddress' => $this->address);
+
+        $response =  NeoAPI::call(self::NEO_METHOD_GETMASTER, NeoAPI::METHOD_POST, $params);
+        $hashMaster = json_decode($response);
+        return $hashMaster;
     }
 
 
