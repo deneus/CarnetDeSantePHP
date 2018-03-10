@@ -73,7 +73,7 @@ class User
                         $neo = new \NeoPHP\NeoRPC($GLOBALS['mainnet']);
                         $url = $neo->getFastestNode();
 
-                        $params = array('hash' => Contract::CONTRACT_HASH);
+                        $params = array('NEOaddress' => $this->address, 'hash' => Contract::CONTRACT_HASH);
 
                         $masterResponse = NeoAPI::call(self::NEO_METHOD_GETMASTER, NeoAPI::METHOD_POST, $params);
                         $encryptedJson = $this->ipfs->cat($masterResponse);
