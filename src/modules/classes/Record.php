@@ -162,15 +162,6 @@ class Record
         $json = $encryption->encrypt($json);
         $hash = $this->ipfs->add($json);
 
-        // Override the master locally >> DEBUG PURPOSE.
-        $json = json_encode($_SESSION['user']['master']);
-        $encryption = new Encryption();
-        $json = $encryption->encrypt($json);
-        $fileName = 'src/test/master_encrypted.json';
-        $myFile = fopen($fileName, 'w+');
-        fwrite($myFile, $json);
-        fclose($myFile);
-
         return $hash;
     }
 

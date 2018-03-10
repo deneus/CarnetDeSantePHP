@@ -62,24 +62,16 @@ class User
                     if (!empty($response->address)) {
                         $_SESSION['user']['wallet'] = $response->wif;
                         $_SESSION['user']['address'] = $response->address;
-                        // @todo denis: update that with KEY/VALUE pair stored within the wallet.
-                        $json = file_get_contents('src/test/master_encrypted.json');
-                        $encryption = new Encryption();
-                        $json = $encryption->decrypt($json);
-                        //Neon-Js does not have an updated database of RPC's node. Let's get it with PHP
 
+                        //Neon-Js does not have an updated database of RPC's node. Let's get it with PHP
                         $neo = new \NeoPHP\NeoRPC($GLOBALS['mainnet']);
                         $url = $neo->getFastestNode();
 
                         $params = array('hash' => Contract::CONTRACT_HASH);
-
                         $masterResponse = NeoAPI::call(self::NEO_METHOD_MASTER, NeoAPI::METHOD_POST, $params);
 
-
-                        $json = file_get_contents('src/test/master.json');
-                        $json = file_get_contents('src/test/master_encrypted.json');
                         $encryption = new Encryption();
-                        $json = $encryption->decrypt($json);
+                        $json = $encryption->decrypt($masterResponse);
                         $_SESSION['user']['master'] = json_decode($json);
                         $this->_user = $_SESSION['user'];
                     }
