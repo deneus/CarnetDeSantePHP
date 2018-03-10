@@ -10,7 +10,7 @@ module.exports = function (app, db) {
     if (account == true) {
         const account = new Neon.wallet.Account(req.body.key);
         object.address = account.address;
-        object.wif = account.wif;
+        object.wif = req.body.key;
     }
     res.send(JSON.stringify(object));
     });
