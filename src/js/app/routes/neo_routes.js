@@ -35,8 +35,7 @@ module.exports = function (app, db) {
     const valueIPFS = req.body.ipfsMaster;
     const method = req.body.methodContract;
 
-
-    const testnet = 'http://test5.cityofzion.io:8880';
+    const testnet = 'http://test4.cityofzion.io:8880';
     const account = new Neon.wallet.Account(wif);
     const privateKey = Neon.wallet.getPrivateKeyFromWIF(wif);
 
@@ -91,7 +90,7 @@ module.exports = function (app, db) {
     const timestamp = req.body.timestamp;
 
 
-    const testnet = 'http://test5.cityofzion.io:8880';
+    const testnet = 'http://test4.cityofzion.io:8880';
     const account = new Neon.wallet.Account(wif);
     const privateKey = Neon.wallet.getPrivateKeyFromWIF(wif);
     const publicKey = Neon.wallet.getPublicKeyFromPrivateKey(privateKey);
@@ -150,7 +149,7 @@ module.exports = function (app, db) {
         res.setHeader('Content-Type', 'application/json');
     const address = req.body.NEOaddress;
     const hash = req.body.hash;
-    const testnet = 'http://test5.cityofzion.io:8880';
+    const testnet = 'http://test4.cityofzion.io:8880';
     const client = new Neon.rpc.RPCClient(testnet, '2.6.0');
     const storage = client.getStorage(hash, Neon.u.str2hexstring(address)).then(response =>{
             res.send(JSON.stringify(response));
